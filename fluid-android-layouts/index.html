@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+
+<!--
+Google IO 2012 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahe <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+
+<html>
+  <head>
+    <title>Fluid Android Layouts</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+  <script src="../javascripts/talks/popcorn-complete.min.js"></script>
+
+  <script>
+    function handleDomLoadedExtra() {
+      var pop = Popcorn.vimeo(
+        "player",
+        "http://player.vimeo.com/video/41823197");
+
+      var articles = document.getElementsByTagName('article');
+      for (var i = 0; i < articles.length; ++i) {
+        var article = articles[i];
+        var timings = article.getAttribute("data-timings");
+        if (timings != null) {
+          var starts = timings.split(",");
+          for (var j = 0; j < starts.length; ++j) {
+            pop.code({
+              start: parseInt(starts[j]),
+              slideNumber: i,
+              onStart: function(options) {
+                window.slidedeck.gotoSlide(options.slideNumber);
+              }
+            });
+          }
+        }
+      }
+    };
+  </script>
+
+
+    <link rel="stylesheet" media="all" href="../stylesheets/slides/default.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="../stylesheets/slides/phone.css">
+    <link rel="stylesheet" media="print" href="../stylesheets/slides/print.css">
+
+    <script data-main="../javascripts/slides/config/fluid-android-layouts.js"
+      src="../javascripts/require-1.0.8.min.js">
+    </script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=8788186; 
+var sc_invisible=1; 
+var sc_security="b999074c"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="click tracking"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/8788186/0/b999074c/1/"
+alt="click tracking"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+   <script type="text/javascript">
+     var clicky_site_ids = clicky_site_ids || [];
+     clicky_site_ids.push(66524020);
+     (function() {
+       var s = document.createElement('script');
+       s.type = 'text/javascript';
+       s.async = true;
+       s.src = '//static.getclicky.com/js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+      })();
+    </script>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-10372580-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+
+  <style>
+    section.video {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 1000;
+    }
+    span.highlight {
+      background-color: #ff0;
+    }
+    div.speakerrate {
+      position: absolute;
+      bottom: 100px;
+      right: 25px;
+    }
+    div.joindin {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      padding: 1em 1em 1.4em 1em;
+      background-color: #DBFD8C;
+    }
+    div.joindin div {
+      color: #3e5508;
+      font-size: 1.2em;
+    }
+  </style>
+
+  <body style="opacity: 0">
+    <slides class="layout-widescreen">
+      
+
+    <slide class="title-slide segue nobackground">
+      <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+      <hgroup class="auto-fadein">
+        <h1 data-config-title><!-- populated from slide_config.json --></h1>
+        <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+        <p>
+          <a href="http://chiuki.github.com/fluid-android-layouts">http://is.gd/FluidAndroidLayouts</a>
+        </p>
+        <p data-config-presenter><!-- populated from slide_config.json --></p>
+      </hgroup>
+      <article></article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Many devices</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="49">
+        <img width="640" height="480"
+          src="../images/fluid-android-layouts/many-devices.jpg" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Various size, resolution, density, ratio</h2>
+      </hgroup>
+      <article data-timings="72">
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Diagonal</th>
+            <th>Resolution</th>
+            <th>PPI</th>
+            <th>Ratio</th>
+          </tr>
+          <tr>
+            <td>HTC Magic</td>
+            <td>3.2"</td>
+            <td>320x480</td>
+            <td>181</td>
+            <td>2:3</td>
+          </tr>
+          <tr>
+            <td>Nexus One</td>
+            <td>3.7"</td>
+            <td>480x800</td>
+            <td>252</td>
+            <td>3:5</td>
+          </tr>
+          <tr>
+            <td>HTC Evo 3D</td>
+            <td>4.3"</td>
+            <td>960x540</td>
+            <td>256</td>
+            <td>16:9</td>
+          </tr>
+          <tr>
+            <td>Galaxy Note</td>
+            <td>5.3"</td>
+            <td>800x1280</td>
+            <td>285</td>
+            <td>5:8</td>
+          </tr>
+           <tr>
+            <td>Kindle Fire</td>
+            <td>7"</td>
+            <td>1024x600</td>
+            <td>169</td>
+            <td>16:9</td>
+          </tr>
+          <tr>
+            <td>NOOK Color</td>
+            <td>7"</td>
+            <td>1024x600</td>
+            <td>169</td>
+            <td>16:9</td>
+          </tr>
+          <tr>
+            <td>HTC JetStream</td>
+            <td>10.1"</td>
+            <td>1280x800</td>
+            <td>149</td>
+            <td>5:8</td>
+          </tr>
+        </table>
+        <footer class="source">http://en.wikipedia.org/wiki/List_of_displays_by_pixel_density</footer>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>No absolute co-ordinates</h2>
+      </hgroup>
+      <article data-timings="132">
+        <ul>
+          <li>Everything is relative</li>
+          <li>Think proportionally</li>
+          <li>Backgrounds: sketchable or tileable</li>
+          <li>Allow scrolling</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Initial implementation</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="191">
+        <img class="centered" width="800" height="500"
+          src="../images/fluid-android-layouts/unstyled-character-screen.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Flowchart with other screens</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="218">
+        <img class="centered" src="../images/fluid-android-layouts/flowchart.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Styled Character Screen</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="236">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/fluid-android-layouts/character-screen.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Actual Character Screen</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="263">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/fluid-android-layouts/character.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Divide by ratio</h2>
+      </hgroup>
+      <article class="vcenter" data-timings="273">
+        <div style="position: relative;">
+          <img class="centered alpha" width="800" height="500"
+            style="position: absolute;"
+            src="../images/fluid-android-layouts/character.png" />
+          <img class="centered" width="800"
+            style="position: absolute; top: 430px"
+            src="../images/fluid-android-layouts/character-thirds.png" />
+        </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>layout_weight</h2>
+      </hgroup>
+      <article data-timings="300">
+        <pre class="prettyprint" data-lang="xml">
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_height="match_parent"
+  android:layout_width="match_parent"
+  android:orientation="horizontal" &gt;
+  &lt;View
+    android:layout_height="match_parent"
+    <b><b><span class="highlight">android:layout_width="0dp"</span></b></b>
+    <b><b><span class="highlight">android:layout_weight="1"</span></b></b>
+    android:background="#c90" /&gt;
+  &lt;View
+    android:layout_height="match_parent"
+    <b><b><span class="highlight">android:layout_width="0dp"</span></b></b>
+    <b><b><span class="highlight">android:layout_weight="2"</span></b></b>
+    android:background="#630" /&gt;
+&lt;/LinearLayout&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Variable width background</h2>
+      </hgroup>
+      <article class="vcenter" data-timings="390">
+        <div style="position: relative;">
+          <img class="centered alpha" width="800" height="500"
+            style="position: absolute;"
+            src="../images/fluid-android-layouts/character.png" />
+          <img class="centered" width="800" height="500"
+            style="position: absolute;"
+            src="../images/fluid-android-layouts/character-background-xml.png" />
+        </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>res/drawable/box.xml</h2>
+      </hgroup>
+      <article data-timings="412,493">
+        <pre class="prettyprint" data-lang="xml">
+&lt;shape xmlns:android="http://schemas.android.com/apk/res/android"&gt;
+  &lt;corners android:radius="15dp" /&gt;
+  &lt;gradient
+    android:startColor="#7000"
+    android:centerColor="#3000"
+    android:endColor="#7000"
+    android:angle="270" /&gt;
+&lt;/shape&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>box.xml as background</h2>
+      </hgroup>
+      <article data-timings="486,496">
+        <pre class="prettyprint" data-lang="xml">
+&lt;TextView
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  <b><b><span class="highlight">android:background="@drawable/box"</span></b></b>
+/&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Variable height</h2>
+      </hgroup>
+      <article class="vcenter" data-timings="530">
+        <div style="position: relative;">
+          <img class="centered alpha" width="800" height="500"
+            style="position: absolute;"
+            src="../images/fluid-android-layouts/character.png" />
+          <img class="centered" width="800" height="500"
+            style="position: absolute;"
+            src="../images/fluid-android-layouts/character-description.png" />
+        </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Assign remaining height</h2>
+      </hgroup>
+      <article data-timings="542">
+        <pre class="prettyprint" data-lang="xml">
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical" &gt;
+  &lt;TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" /&gt;
+  &lt;TextView
+    android:layout_width="wrap_content"
+    <b><b><span class="highlight">android:layout_height="0dp"</span></b></b>
+    <b><b><span class="highlight">android:layout_weight="1"</span></b></b> /&gt;
+&lt;/LinearLayout&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Scroll</h2>
+      </hgroup>
+      <article data-timings="572">
+        <pre class="prettyprint" data-lang="xml">
+&lt;<b><b><span class="highlight">ScrollView</span></b></b>
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="<b><b><span class="highlight">match_parent</span></b></b>"&gt;
+  &lt;LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="<b><b><span class="highlight">wrap_content</span></b></b>"
+    android:orientation="vertical"&gt;
+    &lt;TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" /&gt;
+    &lt;TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" /&gt;
+  &lt;/LinearLayout&gt;
+&lt;/ScrollView&gt;</pre>
+      </article>
+    </slide>
+
+     <slide>
+      <hgroup>
+        <h2>Character tracing area</h2>
+      </hgroup>
+      <article class="vcenter" data-timings="638">
+        <div style="position: relative;">
+          <img class="centered alpha" width="800" height="500"
+            style="position: absolute;"
+            src="../images/fluid-android-layouts/character.png" />
+          <img class="centered" width="800" height="500"
+            style="position: absolute;"
+            src="../images/fluid-android-layouts/character-square.png" />
+        </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Weight sum</h2>
+      </hgroup>
+      <article data-timings="660">
+        <pre class="prettyprint" data-lang="xml">
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  <b><b><span class="highlight">android:weightSum="9"</span></b></b>&gt;
+  &lt;View
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    <b><b><span class="highlight">android:layout_weight="5"</span></b></b>
+    android:layout_gravity="center" /&gt;
+&lt;/LinearLayout&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>What about the height?</h2>
+      </hgroup>
+     <article data-timings="679">
+        <br/>
+        <div style="position: relative; border: solid #600 1px; background-color: #ff0; width: 540px; height: 450px; margin: 0 auto;">
+          <div style="background-color: #f90; width: 300px; height: 100%; position: absolute; left: 120px; top: 0px;">
+          </div>
+        </div>
+     </article>
+    </slide>
+
+<slide>
+      <hgroup>
+        <h2>Custom view</h2>
+      </hgroup>
+     <article data-timings="701">
+        <ul>
+          <li>
+            <code>onLayout()</code> <br/>
+            Where is the view?
+          </li>
+          <li>
+            <code>onMeasure()</code> <br/>
+            How big?
+          </li>
+          <li>
+            <code>onDraw()</code> <br/>
+            What is inside?
+          </li>
+        </ul>
+     </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>SquareView</h2>
+      </hgroup>
+     <article data-timings="747">
+        <pre class="prettyprint" data-lang="java">
+public class SquareView extends View {
+  // Constructors omitted
+
+  public void onMeasure(
+      int widthMeasureSpec, int heightMeasureSpec) {
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    int size = Math.min(getMeasuredWidth(), getMeasuredHeight());
+    setMeasuredDimension(size, size);
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Take the smaller dimension</h2>
+      </hgroup>
+      <article data-timings="793">
+        <br/>
+        <div style="position: relative; border: solid #600 1px; background-color: #ff0;  width: 540px; height: 450px; margin: 0 auto;">
+          <div style="background-color: #f90; width: 300px; height: 300px; position: absolute; left: 120px; top: 75px;">
+          </div>
+        </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Texture background</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="798">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/fluid-android-layouts/character.png" />
+       </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>res/drawable/wood_panel_background.xml</h2>
+      </hgroup>
+      <article data-timings="846">
+        <pre class="prettyprint" data-lang="xml">
+&lt;bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+  android:src="@drawable/wood_panel"
+  android:tileMode="mirror"
+  android:dither="true" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Tile mode</h2>
+      </hgroup>
+      <article data-timings="875">
+        <table>
+          <tr>
+            <td>
+              <code>clamp</code><br />
+              <small>Replicates the edge color</small>
+            </td>
+            <td style="padding: 0.2em">
+              <img
+                alt="android:tileMode=&quot;clamp&quot;"
+                title="android:tileMode=&quot;clamp&quot;"
+                src="../images/fluid-android-layouts/tilemode-clamp.png " />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>repeat</code><br />
+              <small>Repeats the bitmap in both direction</small>
+            </td>
+            <td style="padding: 0.2em">
+              <img
+                alt="android:tileMode=&quot;repeat&quot;"
+                title="android:tileMode=&quot;repeat&quot;"
+                src="../images/fluid-android-layouts/tilemode-repeat.png " />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>mirror</code><br />
+              <small>Repeats with alternating mirror images</small>
+            </td>
+            <td style="padding: 0.2em">
+              <img
+                alt="android:tileMode=&quot;mirror&quot;"
+                title="android:tileMode=&quot;mirror&quot;"
+                src="../images/fluid-android-layouts/tilemode-mirror.png " />
+            </td>
+          </tr>
+        </table>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>7-inch</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="919">
+        <img class="centered alpha" width="640" height="375"
+          src="../images/fluid-android-layouts/character-kindle.png" />
+       </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Workbook</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="973,1073">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/fluid-android-layouts/workbook.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Auto fit columns</h2>
+      </hgroup>
+      <article data-timings="1034,1096">
+        <pre class="prettyprint" data-lang="xml">
+&lt;GridView
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:numColumns="<b><span class="highlight">auto_fit</span></b>"
+  android:padding="@dimen/workbook_padding"
+  android:horizontalSpacing="@dimen/workbook_spacing"
+  android:verticalSpacing="@dimen/workbook_spacing"
+  android:columnWidth="@dimen/workbook_column_width"
+  android:scrollbarStyle="outsideOverlay" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>res/values/dimens.xml</h2>
+      </hgroup>
+      <article data-timings="1089,1102">
+        <pre class="prettyprint" data-lang="xml">
+&lt;resources&gt;
+  &lt;dimen name="workbook_spacing"&gt;13dp&lt;/dimen&gt;
+  &lt;dimen name="workbook_column_width"&gt;120dp&lt;/dimen&gt;
+&lt;resources&gt;
+</pre>
+       </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>7-inch</h2>
+      </hgroup>
+       <article class="flexbox vcenter" data-timings="1147">
+        <img class="centered alpha" width="640" height="375"
+          src="../images/fluid-android-layouts/workbook-kindle.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Bookshelf</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1167">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/fluid-android-layouts/bookshelf.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Bookshelf building blocks</h2>
+      </hgroup>
+      <article data-timings="1238">
+        <br/>
+
+        <img width="45" height="500"
+          src="../images/fluid-android-layouts/bookshelf-left.png" />
+        &nbsp;&nbsp;&nbsp;
+        <img width="157" height="500"
+          src="../images/fluid-android-layouts/bookshelf-panel.png" />
+        &nbsp;&nbsp;&nbsp;
+        <img
+          src="../images/fluid-android-layouts/bookshelf-shelf.png" />
+        &nbsp;&nbsp;&nbsp;
+        <img width="45" height="500"
+          src="../images/fluid-android-layouts/bookshelf-right.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>BookshelfGridView</h2>
+      </hgroup>
+      <article class="smaller" data-timings="1268">
+        <pre class="prettyprint" data-lang="xml">
+public class BookshelfGridView extends GridView {
+  // Constructors etc
+
+  protected void dispatchDraw(Canvas canvas) {
+    for (int y = top; y < height; y += mWoodPanelHeight) {
+      for (int x = mLeftWidth; x < width; x += mWoodPanelWidth) {
+        canvas.drawBitmap(mWoodPanelImage, x, y, null);
+      }
+    }
+
+    for (int y = top; y < height; y += mShelfHeight) {
+      // Draw left edge
+      // Draw shelf
+      // Draw right edge
+    }
+
+    super.dispatchDraw(canvas);
+  }
+}
+</pre>
+       </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Splash screen</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1352,1445">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/fluid-android-layouts/splash.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>RelativeLayout &amp; FrameLayout</h2>
+      </hgroup>
+      <article class="smaller" data-timings="1388,1474">
+        <pre class="prettyprint" data-lang="xml">
+&lt;FrameLayout&gt;
+
+  &lt;RelativeLayout&gt;
+    &lt;Button
+      android:id="@+id/start_button"
+      android:layout_centerInParent="true" /&gt;
+    &lt;ImageView
+      android:id="@+id/monkey"
+      android:layout_toLeftOf="@id/start_button"
+      android:layout_centerVertical="true" /&gt;
+  &lt;/RelativeLayout&gt;
+
+  &lt;ImageView
+    android:id="@+id/title"
+    android:layout_gravity="center_horizontal"
+    android:adjustViewBounds="true" /&gt;
+
+&lt;/FrameLayout&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>How about phones?</h2>
+      </hgroup>
+      <article data-timings="1495">
+        <ul>
+          <li>Smaller screen</li>
+          <li>Portrait vs landscape</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Too wide for a phone</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1527">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/fluid-android-layouts/character.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Portrait layout</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1540">
+        <center>
+        <img class="alpha" width="300" height="500"
+          src="../images/fluid-android-layouts/character-phone.png" />
+          &nbsp;&nbsp;&nbsp;
+        <img class="alpha" width="300" height="500"
+          src="../images/fluid-android-layouts/character-phone-info.png" />
+        </center>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>onClick in xml</h2>
+      </hgroup>
+      <article data-timings="1594">
+        <pre class="prettyprint" data-lang="xml">
+&lt;ImageView
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:src="@drawable/info"
+  android:onClick="toggleInfo" /&gt;</pre>
+        <pre class="prettyprint" data-lang="xml">
+public void toggleInfo(View v) {
+  // Switch between character tracing and info display
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Resource folders</h2>
+      </hgroup>
+      <article data-timings="1623">
+        <ul>
+          <li>res/layout</li>
+          <li>res/layout-land</li>
+          <li>res/values</li>
+          <li>res/values-large</li>
+          <li>res/drawable</li>
+          <li>res/drawable-hdpi</li>
+          <li>res/drawable-large-land</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>One orientation per device</h2>
+      </hgroup>
+      <article class="smaller" data-timings="1668">
+        <pre class="prettyprint" data-lang="java">
+public static boolean isLargeScreen(Activity activity) {
+  DisplayMetrics metrics
+      = activity.getResources().getDisplayMetrics();
+  int longSize = Math.max(metrics.widthPixels, metrics.heightPixels);
+  return (longSize / metrics.density > 960);
+}
+public static int getPreferredScreenOrientation(Activity activity) {
+  return isLargeScreen(activity) ?
+      ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
+      ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+}</pre>
+        <pre class="prettyprint" data-lang="java">
+// In activity
+public void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  setRequestedOrientation(Util.getPreferredScreenOrientation(this));
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>No sensor</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="xml">
+&lt;!-- AndroidManifest.xml --&gt;
+&lt;activity
+  android:name=".CharacterActivity"
+  android:screenOrientation="<b><span class="highlight">nosensor</span></b>" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Workbook</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1734">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/fluid-android-layouts/workbook-phone.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Bookshelf</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1770">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/fluid-android-layouts/bookshelf-phone.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Splash</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1822">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/fluid-android-layouts/splash-phone.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Tool box</h2>
+      </hgroup>
+      <article data-timings="1844">
+        <ul>
+          <li>RelativeLayout</li>
+          <li>Proportional width and height</li>
+          <li>Allow scrolling</li>
+          <li>
+            Resource folders
+            <small>(orientation, size, density)</small>
+          </li>
+          <li>Shape xml</li>
+          <li>9-patch</li>
+          <li>Background tiles</li>
+          <li>DisplayMetrics</li>
+          <li>Custom view</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Be flexible</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1966">
+        <img class="centered" width="425" height="480"
+          src="../images/fluid-android-layouts/flexible.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Thank you!</h2>
+      </hgroup>
+      <article data-timings="1992">
+        <ul>
+          <li>
+            <a href="http://chiuki.github.com/fluid-android-layouts">
+              http://is.gd/FluidAndroidLayouts
+            </a>
+          </li>
+          <li>
+            <a href="http://www.monkeywriteapp.com">
+              http://www.monkeywriteapp.com
+            </a>
+          </li>
+          <li>
+            <a href="http://blog.sqisland.com">
+              http://blog.sqisland.com
+            </a>
+          </li>
+          <li>
+            <a href="http://twitter.com/chiuki">
+              http://twitter.com/chiuki
+            </a>
+          </li>
+        </ul>
+
+        <br />
+        <center>
+          <img width="240" height="240"
+            src="../images/monkeywrite-icon.png" />
+          &nbsp;
+          <img width="240" height="240"
+            src="../images/qrcode/confoo-2013.png" />
+          <br/>
+          <small>Don't forget to download Monkey Write!</small>
+        </center>
+
+        <div class="joindin">
+          <div>Rate this talk</div>
+          <a href="https://joind.in/talk/view/7892">
+            http://joind.in/7892
+          </a>
+        </div>
+
+      </article>
+    </slide>
+
+  <slide class="backdrop"></slide>
+
+    </slides>
+    <section class="video" id="video">
+      
+<div id="player" style="width: 160px; height: 120px"></div>
+
+    </section>
+    <!--[if IE]>
+      <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+      <script>CFInstall.check({mode: 'overlay'});</script>
+    <![endif]-->
+  </body>
+</html>
+
