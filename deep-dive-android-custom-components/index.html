@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+
+<!--
+Google IO 2012 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahe <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+
+<html>
+  <head>
+    <title>Deep Dive into Android Custom Components</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    
+    <script>
+      function handleDomLoadedExtra() {
+      };
+    </script>
+    
+
+    <link rel="stylesheet" media="all" href="../stylesheets/slides/default.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="../stylesheets/slides/phone.css">
+    <link rel="stylesheet" media="print" href="../stylesheets/slides/print.css">
+
+    <script data-main="../javascripts/slides/config/deep-dive-android-custom-components.js"
+      src="../javascripts/require-1.0.8.min.js">
+    </script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=8788186; 
+var sc_invisible=1; 
+var sc_security="b999074c"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="click tracking"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/8788186/0/b999074c/1/"
+alt="click tracking"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+   <script type="text/javascript">
+     var clicky_site_ids = clicky_site_ids || [];
+     clicky_site_ids.push(66524020);
+     (function() {
+       var s = document.createElement('script');
+       s.type = 'text/javascript';
+       s.async = true;
+       s.src = '//static.getclicky.com/js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+      })();
+    </script>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-10372580-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+
+  <style>
+    section.video {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 1000;
+    }
+    span.highlight {
+      background-color: #ff0;
+    }
+    div.speakerrate {
+      position: absolute;
+      bottom: 100px;
+      right: 25px;
+    }
+    div.joindin {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      padding: 1em 1em 1.4em 1em;
+      background-color: #DBFD8C;
+    }
+    div.joindin div {
+      color: #3e5508;
+      font-size: 1.2em;
+    }
+  </style>
+
+  <body style="opacity: 0">
+    <slides class="layout-widescreen">
+      
+    <slide class="title-slide segue nobackground">
+      <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+      <hgroup class="auto-fadein">
+        <h1 data-config-title><!-- populated from slide_config.json --></h1>
+        <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+        <p>
+          <a href="http://chiuki.github.com/deep-dive-android-custom-components">http://is.gd/DeepDiveComp</a>
+        </p>
+        <p data-config-presenter><!-- populated from slide_config.json --></p>
+      </hgroup>
+      <article></article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Built-in Components</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>TextView</li>
+          <li>EditText</li>
+          <li>Button</li>
+          <li>Spinner</li>
+          <li>DatePicker</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Why custom components?</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Modularize repeated code</li>
+          <li>Access protected methods</li>
+          <li>Optimize rendering speed</li>
+          <li>Complete control with draw, measure and layout</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Simple view, container and compound control</h2>
+      </hgroup>
+      <article>
+        <table>
+          <tr>
+             <th>Simple View</th>
+             <th>Container</th>
+             <th>Compound Control</td>
+          </tr>
+        <tr>
+          <td style="font-weight: inherit; color: inherit; vertical-align: text-top; font-size: 24px">
+&nbsp;&nbsp;&#x21b3; TextView<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; EditText<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; Button<br />
+&nbsp;&nbsp;&#x21b3; ImageView<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; ImageButton
+</td>
+<td style="vertical-align: text-top; font-size: 24px">
+&nbsp;&nbsp;&#x21b3; AdapterView<T extends Adapter><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; ListView<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; Gallery<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; GridView<br />
+&nbsp;&nbsp;&#x21b3; LinearLayout<br />
+&nbsp;&nbsp;&#x21b3; RelativeLayout<br />
+&nbsp;&nbsp;&#x21b3; FrameLayout<br />
+&nbsp;&nbsp;&#x21b3; TableLayout
+</td>
+<td style="vertical-align: text-top; font-size: 24px">
+&nbsp;&nbsp;&#x21b3; DatePicker<br />
+&nbsp;&nbsp;&#x21b3; TwoLineListItem
+</td>
+</tr>
+</table>
+      </article>
+    </slide>
+
+<slide>
+      <hgroup>
+        <h2>Custom components</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Shortcut View and ViewGroup</li>
+          <li>Custom View</li>
+          <li>Custom ViewGroup</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Shortcut View and ViewGroup</h2>
+      </hgroup>
+      <article>
+        <p>Modularize repeated code</p>
+        <ul>
+          <li>
+            Subclass existing widget
+          </li>
+          <li>
+            Group existing widgets into compound control
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>TextView showing date</h2>
+        <h3>
+          <a href="http://github.com/chiuki/android-date-view">
+            http://github.com/chiuki/android-date-view
+          </a>
+        </h3>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="xml">
+&lt;TextView
+  android:id="@+id/date"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content" /&gt;
+</pre>
+        <pre class="prettyprint" data-lang="java">
+TextView dateView = (TextView) findViewById(R.id.date);
+SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+String today = dateFormat.format(Calendar.getInstance().getTime());
+dateView.setText(today);
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>TextView showing date: screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/deep-dive-android-custom-components/textview-showing-date-20121026.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView: constructor</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+package com.sqisland.android.dateview;
+
+public class DateView extends <b><span class="highlight">TextView</span></b> {
+  public DateView(Context context) {
+    super(context);
+  }
+
+  public DateView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
+
+  public DateView(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+  }
+}
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView: setDate</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+public class DateView extends TextView {
+  public DateView(Context context) {
+    super(context);
+    <b><span class="highlight">setDate();</span></b>
+  }
+
+  public DateView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    <b><span class="highlight">setDate();</span></b>
+  }
+
+  public DateView(
+      Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+    <b><span class="highlight">setDate();</span></b>
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView: setDate</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+private void setDate() {
+  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+  String today = dateFormat.format(Calendar.getInstance().getTime());
+  setText(today);  // self = DateView = subclass of TextView
+}
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView: create with code</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+public class DateActivity extends Activity {
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    DateView dateView = new DateView(this);
+    setContentView(dateView);
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView: create with xml</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+public class DateActivity extends Activity {
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.main);
+  }
+}</pre>
+        <pre class="prettyprint" data-lang="xml">
+&lt;com.sqisland.android.dateview.DateView
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>LengthPicker</h2>
+        <h3>
+          <a href="http://github.com/chiuki/android-length-picker">
+            http://github.com/chiuki/android-length-picker
+          </a>
+        </h3>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/length-picker.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Fully customized components</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>onLayout</li>
+          <li>onMeasure</li>
+          <li>onDraw / dispatchDraw</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Android layout procedure</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li><code>requestLayout</code> up to ViewRoot</li>
+          <li><code>measure</code> all children</li>
+          <li><code>layout</code> all children</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Custom View</h2>
+      </hgroup>
+      <article>
+        <p>Customize size and appearance of the <code>View</code></p>
+        <ul>
+          <li><code>onMeasure</code> - how big?</li>
+          <li><code>onDraw</code> - what to show?</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>onMeasure</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+void onMeasure(int widthMeasureSpec, int heightMeasureSpec);
+</pre>
+        <ul>
+          <li>Measure its own size according to measure spec</li>
+          <li>Call <code>setMeasuredDimension</code> to store results</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>MeasureSpec</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>
+            <code>UNSPECIFIED</code> - anything goes!
+          </li>
+          <li>
+            <code>AT_MOST</code> - as large as the specified size
+          </li>
+          <li>
+            <code>EXACTLY</code> - as given by parent
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>SquareView</h2>
+        <h3>
+          <a href="http://github.com/chiuki/android-square-view">
+            http://github.com/chiuki/android-square-view
+          </a>
+        </h3>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+public void onMeasure(int widthSpec, int heightSpec) {
+  super.onMeasure(widthSpec, heightSpec);
+  int size = Math.min(getMeasuredWidth(), getMeasuredHeight());
+  setMeasuredDimension(size, size);
+}</pre>
+         <br/>
+         <div style="width: 400px; margin: 0 auto; clear: both;">
+           <div style="float: left">
+             <div style="background-color: #c9f; width: 120px; height: 180px"></div>
+           </div>
+           <div style="float: left; padding: 1em; height: 150px;">
+             &rarr;
+           </div>
+           <div style="float: left">
+             <div style="background-color: #c9f; width: 120px; height: 120px"></div>
+           </div>
+         </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>onDraw</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+void onDraw(Canvas canvas);
+</pre>
+        <ul>
+          <li>drawLine</li>
+          <li>drawRect</li>
+          <li>drawCircle</li>
+          <li>drawPath</li>
+          <li>drawText</li>
+          <li>drawBitmap</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Canvas</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>clipRect</li>
+          <li>translate</li>
+          <li>rotate</li>
+          <li>scale</li>
+          <li>skew</li>
+          <li>save</li>
+          <li>restore</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Pizza</h2>
+        <h3>
+          <a href="http://github.com/chiuki/android-pizza">
+            http://github.com/chiuki/android-pizza
+          </a>
+        </h3>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/pizza.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>CharacterArea</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="800" height="500"
+            src="../images/deep-dive-android-custom-components/character.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Custom ViewGroup</h2>
+      </hgroup>
+      <article>
+        <p>Container for positioning child views</p>
+        <ul>
+          <li><code>onMeasure</code> - how big are the children?</li>
+          <li><code>onLayout</code> - where are the children?</li>
+          <li><code>dispatchDraw</code> - adjustments before or after drawing the children</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>onLayout: PhotoSpiral</h2>
+        <h3>
+          <a href="http://github.com/chiuki/android-photo-spiral">
+            http://github.com/chiuki/android-photo-spiral
+          </a>
+        </h3>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/photo-spiral.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>dispatchDraw: Monkey Write Bookshelf</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/deep-dive-android-custom-components/bookshelf.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Bookshelf building blocks</h2>
+      </hgroup>
+      <article data-timings="1238">
+        <br/>
+
+        <img width="45" height="500"
+          src="../images/fluid-android-layouts/bookshelf-left.png" />
+        &nbsp;&nbsp;&nbsp;
+        <img width="157" height="500"
+          src="../images/fluid-android-layouts/bookshelf-panel.png" />
+        &nbsp;&nbsp;&nbsp;
+        <img
+          src="../images/fluid-android-layouts/bookshelf-shelf.png" />
+        &nbsp;&nbsp;&nbsp;
+        <img width="45" height="500"
+          src="../images/fluid-android-layouts/bookshelf-right.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>BookshelfGridView</h2>
+      </hgroup>
+      <article class="smaller">
+        <pre class="prettyprint" data-lang="xml">
+public class BookshelfGridView extends GridView {
+  // Constructors etc
+
+  protected void dispatchDraw(Canvas canvas) {
+    for (int y = top; y < height; y += mWoodPanelHeight) {
+      for (int x = mLeftWidth; x < width; x += mWoodPanelWidth) {
+        canvas.drawBitmap(mWoodPanelImage, x, y, null);
+      }
+    }
+
+    for (int y = top; y < height; y += mShelfHeight) {
+      // Draw left edge
+      // Draw shelf
+      // Draw right edge
+    }
+
+    super.dispatchDraw(canvas);
+  }
+}
+</pre>
+       </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Monkey Write CharacterArea</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/deep-dive-android-custom-components/stroke.gif" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>CharacterArea</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li><code>SurfaceView</code></li>
+          <li>Always square</li>
+        </ul>
+        <pre class="prettyprint" data-lang="java">
+public void onDraw(Canvas canvas) {
+  canvas.drawColor(mBackgroundColor);
+  drawGuidelines(canvas);
+  drawCharacter(canvas);
+  drawAnimation(canvas);
+  drawPenStrokes(canvas);
+  drawStrokeNumbers(canvas);
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>onDraw</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="500" height="500"
+          src="../images/deep-dive-android-custom-components/ondraw.gif" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Stroke numbers</h2>
+      </hgroup>
+      <article>
+        <img src="../images/deep-dive-android-custom-components/stroke-numbers.png" />
+        <br /><br />
+        <pre class="prettyprint" data-lang="java">
+// CharacaterActivity.java
+mCharacterArea = (CharacterArea) findViewById(R.id.sketch_pad);
+
+mStrokeNumbersCheckBox = (CheckBox) findViewById(R.id.stroke_numbers_checkbox);
+mStrokeNumbersCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+  public void onCheckedChanged(CompoundButton view, boolean isChecked) {
+    mCharacterArea.toggleStrokeNumbers();
+  }
+});</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>toggleStrokeNumbers</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+// CharacterArea.java
+public void toggleStrokeNumbers() {
+  mShowStrokeNumbers = !mShowStrokeNumbers;
+}
+
+public void drawStrokeNumbers(Canvas canvas) {
+  if (!mShowStrokeNumbers) {
+    return;
+  }
+  // Proceed to draw stroke numbers
+}
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Stroke grade</h2>
+      </hgroup>
+      <article class="vcenter">
+        <div style="position: relative;">
+          <img class="centered alpha" width="800" height="500"
+            style="position: absolute;"
+            src="../images/deep-dive-android-custom-components/just-a-bit-more.png" />
+          <img class="centered" width="800" height="500"
+            style="position: absolute;"
+            src="../images/deep-dive-android-custom-components/feedback.png" />
+        </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Listener: CharacterArea.java</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+public void registerListener(Listener listener) {
+  mListeners.add(listener);
+}
+public void unregisterListener(Listener listener) {
+  mListeners.remove(listener);
+}
+private void notifyPenStrokeComplete(PenStroke penStroke) {
+  for (Listener listener : mListeners) {
+    listener.onPenStrokeComplete(penStroke);
+  }
+}
+
+public interface Listener {
+  public void onPenStrokeComplete(PenStroke penStroke);
+}
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Listener: CharacterActivity.java</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+public void onPenStrokeComplete(PenStroke penStroke) {
+  boolean pass = (penStroke.grade == PenStroke.Grade.PASS);
+  if (mMonkeyView != null) {
+    mMonkeyView.setImageResource(pass ?
+        R.drawable.happy_monkey : R.drawable.sad_monkey);
+  }
+
+  // Just a bit more, wrong stroke etc
+  String feedback = getFeedback(penStroke.grade);  
+  mFeedbackView.setText(feedback);
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Pen stroke</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/deep-dive-android-custom-components/pen-stroke.gif" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>onTouchEvent</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li><code>ACTION_DOWN</code>
+            <ul>
+              <li><code>stopAnimation()</code></li>
+              <li><code>new PenStroke()</code></li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <code>ACTION_DOWN</code> / <code>ACTION_MOVE</code> / <code>ACTION_UP</code><br />
+            Add point to <code>PenStroke</code>
+          </li>
+        </ul>
+        <ul>
+          <li><code>ACTION_UP</code>
+            <ul>
+              <li>Grade stroke
+              <ul>
+                <li>Update feedback</li>
+                <li><code>PASS</code>: Show next stroke</li>
+                <li><code>FAIL</code>: <code>startAnimation()</code></li>
+            </ul>
+            </ul>
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Animation: state machine with timer</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/deep-dive-android-custom-components/animation.gif" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Summary</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>
+            Shortcut View and ViewGroup: Modularize repeated code
+            <ul>
+              <li>Subclass existing widget</li>
+              <li>Group existing widgets into compound control</li>
+            </ul>
+            <br />
+          </li>
+          <li>
+            Custom View
+            <ul>
+              <li><code>onMeasure</code>: Customize size</li>
+              <li><code>onDraw</code>: Customize appearance</li>
+            </ul>
+            <br />
+          </li>
+          <li>
+            Custom ViewGroup
+            <ul>
+              <li><code>onLayout</code>: Position the children</li>
+              <li><code>dispatchDraw</code>: Adjustment before/after drawing the children</li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Monkey Write</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>
+            <code>BookshelfGridView</code>
+            <ul>
+              <li><code>onDispatchDraw</code></li>
+            </ul>
+          </li>
+          <li>
+            <code>CharacterArea</code>
+            <ul>
+              <li><code>onMeasure</code></li>
+              <li><code>onDraw</code></li>
+              <li><code>onTouchEvent</code></li>
+              <li>Custom listener</li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Thank you!</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>
+            <a href="http://chiuki.github.com/deep-dive-android-custom-components">
+              http://is.gd/DeepDiveComp
+            </a>
+          </li>
+          <li>
+            <a href="http://chiuki.github.com/android-custom-components">
+              http://is.gd/AndroidCustomComp
+            </a>
+          </li>
+          <li>
+            <a href="http://eepurl.com/lR5uD">
+              http://eepurl.com/lR5uD
+            </a>
+          </li>
+          <li>
+            <a href="http://blog.sqisland.com">
+              http://blog.sqisland.com
+            </a>
+          </li>
+          <li>
+            <a href="http://twitter.com/chiuki">
+              http://twitter.com/chiuki
+            </a>
+          </li>
+        </ul>
+
+        <br />
+        <center>
+          <img width="240" height="240"
+            src="../images/monkeywrite-icon.png" />
+          &nbsp;
+          <img width="240" height="240"
+            src="../images/deep-dive-android-custom-components/droidconuk2012-qrcode.png" />
+          <br/>
+          <small>Don't forget to download Monkey Write!</small>
+        </center>
+
+        <div class="speakerrate">
+          <script src="http://speakerrate.com/talks/17821/widget.js" id="speakerrate-widget-17821"></script>
+        </div>
+      </article>
+    </slide>
+
+    <slide class="backdrop"></slide>
+
+    </slides>
+    <section class="video" id="video">
+      
+    </section>
+    <!--[if IE]>
+      <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+      <script>CFInstall.check({mode: 'overlay'});</script>
+    <![endif]-->
+  </body>
+</html>
