@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+
+<!--
+Google IO 2012 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahe <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+
+<html>
+  <head>
+    <title>Beautiful Android on a Shoestring</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+  <script src="../javascripts/talks/popcorn-complete.min.js"></script>
+
+  <script>
+    function handleDomLoadedExtra() {
+      var pop = Popcorn.youtube(
+        "player",
+        "http://www.youtube.com/watch?v=1hQzYDCm95A");
+
+      // Title
+      pop.code({
+        start: 1,
+        slideNumber: 0,
+        onStart: function(options) {
+          window.slidedeck.gotoSlide(options.slideNumber);
+        }
+      });
+
+      var articles = document.getElementsByTagName('article');
+      for (var i = 0; i < articles.length; ++i) {
+        var article = articles[i];
+        var timings = article.getAttribute("data-timings");
+        if (timings != null) {
+          var starts = timings.split(",");
+          for (var j = 0; j < starts.length; ++j) {
+            pop.code({
+              start: parseInt(starts[j]),
+              slideNumber: i + 1,  // adjust for title slide
+              onStart: function(options) {
+                window.slidedeck.gotoSlide(options.slideNumber);
+              }
+            });
+          }
+        }
+      }
+    };
+  </script>
+
+
+    <link rel="stylesheet" media="all" href="../stylesheets/slides/default.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="../stylesheets/slides/phone.css">
+    <link rel="stylesheet" media="print" href="../stylesheets/slides/print.css">
+
+    <script data-main="../javascripts/slides/config/beautiful-android.js"
+      src="../javascripts/require-1.0.8.min.js">
+    </script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=8788186; 
+var sc_invisible=1; 
+var sc_security="b999074c"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="click tracking"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/8788186/0/b999074c/1/"
+alt="click tracking"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+  <style>
+    section.video {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 1000;
+    }
+    span.highlight {
+      background-color: #ff0;
+    }
+    div.speakerrate {
+      position: absolute;
+      bottom: 100px;
+      right: 25px;
+    }
+    div.joindin {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      padding: 1em 1em 1.4em 1em;
+      background-color: #DBFD8C;
+    }
+    div.joindin div {
+      color: #3e5508;
+      font-size: 1.2em;
+    }
+  </style>
+
+  <body style="opacity: 0">
+    <slides class="layout-widescreen">
+      
+
+  <slide class="title-slide segue nobackground">
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title style="letter-spacing: -2px"><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p>
+        <a href="http://www.sqisland.com/talks/beautiful-android">http://bit.ly/BeautifulAndroid</a>
+      </p>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+    </hgroup>
+  </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Toolbox</h2>
+      </hgroup>
+      <article data-timings="95">
+        <ul>
+          <li>Xml drawable</li>
+          <li>Tiling background</li>
+          <li>Text
+            <ul>
+              <li>Text shadow</li>
+              <li>Gradient</li>
+              <li>Custom font</li>
+            </ul>
+          </li>
+          <li>Icon font</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml drawable: shape</h2>
+      </hgroup>
+      <article data-timings="107">
+         <div style="clear: both;">
+           <div style="float: left">
+             <img class="centered alpha" width="250" height="170"
+               src="../images/beautiful-android/rectangle-shape.png" />
+             <br />
+             <code style="margin-left: 1em">rectangle</code>
+           </div>
+           <div style="float: left; margin-left: 1em">
+             <img class="centered alpha" width="250" height="170"
+               src="../images/beautiful-android/oval-shape.png" />
+             <br />
+             <code style="margin-left: 1em">oval</code>
+             <br />
+             <br />
+           </div>
+         </div>
+         <div style="clear: both">
+           <div style="float: left">
+             <img class="centered alpha" width="250" height="170"
+               src="../images/beautiful-android/line-shape.png" />
+             <br />
+             <code style="margin-left: 1em">line</code>
+           </div>
+           <div style="float: left; margin-left: 1em">
+             <img class="centered alpha" width="250" height="170"
+               src="../images/beautiful-android/ring-shape.png" />
+             <br />
+             <code style="margin-left: 1em">ring</code>
+           </div>
+         </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml rectangle</h2>
+      </hgroup>
+      <article data-timings="143,215">
+        <p><code>res/drawable/rectangle.xml</code></p>
+        <pre class="prettyprint" data-lang="xml">
+&lt;shape xmlns:android="http://schemas.android.com/apk/res/android"
+  android:shape="rectangle" &gt;
+  &lt;solid android:color="#f00" /&gt;
+&lt;/shape&gt;
+</pre>
+        <br />
+        <p><code>res/layout/activity_main.xml</code></p>
+        <pre class="prettyprint" data-lang="xml">
+&lt;View
+  android:layout_width="120dp"
+  android:layout_height="80dp"
+  android:background="@drawable/rectangle" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml rectangle: screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="208">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/beautiful-android/rectangle.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml gradient</h2>
+      </hgroup>
+      <article data-timings="238">
+        <pre class="prettyprint" data-lang="xml">
+&lt;shape xmlns:android="http://schemas.android.com/apk/res/android"
+  android:shape="rectangle" &gt;
+  &lt;<b><span class="highlight">gradient</span></b>
+    android:startColor="#0f0"
+    android:endColor="#00f" /&gt;
+&lt;/shape&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml gradient: screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="253">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/beautiful-android/gradient-0.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml gradient with angle</h2>
+      </hgroup>
+      <article data-timings="263">
+        <pre class="prettyprint" data-lang="xml">
+&lt;shape xmlns:android="http://schemas.android.com/apk/res/android"
+  android:shape="rectangle" &gt;
+  &lt;gradient
+    android:startColor="#0f0"
+    android:endColor="#00f"
+    <b><span class="highlight">android:angle="270"</span></b> /&gt;
+&lt;/shape&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml gradient with angle: screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="275">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/beautiful-android/gradient-270.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml round corners</h2>
+      </hgroup>
+      <article data-timings="298">
+        <pre class="prettyprint" data-lang="xml">
+&lt;shape xmlns:android="http://schemas.android.com/apk/res/android"
+  android:shape="rectangle" &gt;
+  &lt;gradient
+    android:startColor="#0f0"
+    android:endColor="#00f"
+    android:angle="270" /&gt;
+  &lt;<b><span class="highlight">corners</span></b> android:radius="15dp" /&gt;
+&lt;/shape&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml round corners: screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="313">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/beautiful-android/gradient-round-corners.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml button</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="323">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/beautiful-android/button.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml button</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="339">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/beautiful-android/button.png" />
+        <img class="centered alpha" width="300" height="500"
+          src="../images/beautiful-android/button-focused.png" />
+        <img class="centered alpha" width="300" height="500"
+          src="../images/beautiful-android/button-pressed.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml button: selector</h2>
+      </hgroup>
+      <article data-timings="394">
+        <p><code>res/drawable/button.xml</code></p>
+        <pre class="prettyprint" data-lang="xml">
+&lt;selector xmlns:android="http://schemas.android.com/apk/res/android" &gt;
+  &lt;item android:state_pressed="true"
+    android:drawable="@drawable/<b style="font-weight: normal;">button_pressed</b>" /&gt;
+  &lt;item android:state_focused="true"
+    android:drawable="@drawable/button_focused" /&gt;
+  &lt;item
+    android:drawable="@drawable/button_normal" /&gt;
+&lt;/selector&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml button: pressed</h2>
+      </hgroup>
+      <article data-timings="443">
+        <p><code>res/drawable/button_pressed.xml</code></p>
+        <pre class="prettyprint" data-lang="xml">
+&lt;shape xmlns:android="http://schemas.android.com/apk/res/android"
+  android:shape="rectangle" &gt;
+  &lt;gradient
+    android:startColor="#D0B5DF"
+    android:endColor="#9357B5"
+    android:angle="270" /&gt;
+  &lt;corners android:radius="5dp" /&gt;
+&lt;/shape&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml button: selector result</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="452">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/beautiful-android/button.png" />
+        <img class="centered alpha" width="300" height="500"
+          src="../images/beautiful-android/button-focused.png" />
+        <img class="centered alpha" width="300" height="500"
+          src="../images/beautiful-android/button-pressed.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml button: text color</h2>
+      </hgroup>
+      <article data-timings="479">
+        <p><code>res/drawable/text.xml</code></p>
+        <pre class="prettyprint" data-lang="xml">
+&lt;selector xmlns:android="http://schemas.android.com/apk/res/android" &gt;
+  &lt;item android:state_pressed="true"
+    android:color="#000" /&gt;
+  &lt;item android:state_focused="true"
+    android:color="#fff" /&gt;
+  &lt;item
+    android:color="#fff" /&gt;
+&lt;/selector&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml button: text color</h2>
+      </hgroup>
+      <article data-timings="509">
+        <pre class="prettyprint" data-lang="xml">
+&lt;Button
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  <b><span class="highlight">android:textColor="@drawable/text"</span></b>
+  android:background="@drawable/button"
+  android:text="@string/ok" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Xml text color</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="531">
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/button.png" />
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/button-focused.png" />
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/button-pressed-text-color.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Tiling background</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="544">
+        <img class="alpha"
+          src="../images/beautiful-android/tile.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Tile mode</h2>
+      </hgroup>
+      <article data-timings="570">
+        <table>
+          <tr>
+            <td style="font-size: inherit;">
+              <code>clamp</code><br />
+              Replicates the edge color
+            </td>
+            <td style="padding: 0.2em">
+              <img
+                alt="android:tileMode=&quot;clamp&quot;"
+                title="android:tileMode=&quot;clamp&quot;"
+                src="../images/fluid-android-layouts/tilemode-clamp.png " />
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: inherit;">
+              <code>repeat</code><br />
+              Repeats the bitmap in both direction
+            </td>
+            <td style="padding: 0.2em">
+              <img
+                alt="android:tileMode=&quot;repeat&quot;"
+                title="android:tileMode=&quot;repeat&quot;"
+                src="../images/fluid-android-layouts/tilemode-repeat.png " />
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: inherit;">
+              <code>mirror</code><br />
+              Repeats with alternating mirror images
+            </td>
+            <td style="padding: 0.2em">
+              <img
+                alt="android:tileMode=&quot;mirror&quot;"
+                title="android:tileMode=&quot;mirror&quot;"
+                src="../images/fluid-android-layouts/tilemode-mirror.png " />
+            </td>
+          </tr>
+        </table>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Tile mode: clamp, repeat, mirror</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="624">
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/tile-background-clamp.png" />
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/tile-background-repeat.png" />
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/tile-background-mirror.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Tiling xml</h2>
+      </hgroup>
+      <article data-timings="649">
+      <h3>res/layout/main.xml</h3>
+      <pre class="prettyprint" data-lang="xml">
+&lt;View xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/tile_background" /&gt;
+</pre>
+      </article>
+        <h3>res/drawable/tile_background.xml</h3>
+        <pre class="prettyprint" data-lang="xml">
+&lt;bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+  android:src="@drawable/tile"
+  android:tileMode="<b><span class="highlight">mirror</span></b>"
+  android:dither="true" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Tile mode: mirror</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="688">
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/tile-background-mirror.png" />
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/tile-background-mirror-bordered.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Text</h2>
+      </hgroup>
+      <article data-timings="707">
+        <ul>
+          <li>Text shadow</li>
+          <li>Gradient</li>
+          <li>Custom font</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Text shadow: screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="721">
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/text-shadow.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Text shadow: xml</h2>
+      </hgroup>
+      <article data-timings="740">
+      <pre class="prettyprint" data-lang="xml">
+&lt;TextView
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:textSize="48sp"
+  android:shadowColor="#fff"
+  android:shadowDx="5"
+  android:shadowDy="-5"
+  android:shadowRadius="5"
+  android:textColor="#f00"
+  android:text="Text Shadow" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Text gradient: screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="777">
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/text-gradient.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Text gradient: code</h2>
+      </hgroup>
+      <article data-timings="812">
+      <pre class="prettyprint" data-lang="java">
+Shader shader = new LinearGradient(
+    0, 0, 0, <b><span class="highlight">textView.getTextSize()</span></b>,
+    Color.RED, Color.BLUE,
+    Shader.TileMode.CLAMP);
+textView.getPaint().setShader(shader);
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Text gradient: 45 degrees</h2>
+      </hgroup>
+      <article data-timings="916">
+      <pre class="prettyprint" data-lang="java">
+Shader shader = new LinearGradient(
+    0, 0, 0, textView.getTextSize(),
+    Color.RED, Color.BLUE,
+    Shader.TileMode.<b><span class="highlight">MIRROR</span></b>);
+Matrix matrix = new Matrix();
+<b><span class="highlight">matrix.setRotate(45)</span></b></a>;
+shader.setLocalMatrix(matrix);
+textView.getPaint().setShader(shader);
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Text gradient: 45 degrees screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="949">
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/text-gradient-45.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Custom font: screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1020">
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/custom-font.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Custom font: code</h2>
+      </hgroup>
+      <article data-timings="1047">
+      <pre class="prettyprint" data-lang="java">
+Typeface typeface = Typeface.createFromAsset(
+    getAssets(), "Ruthie.ttf");
+textView.setTypeface(typeface);
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Icon font: screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1089">
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/icon-font-android.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Icon font: code</h2>
+      </hgroup>
+      <article data-timings="1150">
+      <pre class="prettyprint" data-lang="xml">
+&lt;TextView
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:textSize="144sp"
+  android:text="@string/icon_android" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Icon font with gradient</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1198">
+        <img class="alpha" width="300" height="500"
+          src="../images/beautiful-android/icon-font-android-gradient.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>IconFontView</h2>
+      </hgroup>
+      <article data-timings="1160,1228">
+      <pre class="prettyprint" data-lang="java">
+public class IconTextView extends TextView {
+  public IconTextView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    init();
+  }
+
+  private void init() {
+    Typeface typeface = Typeface.createFromAsset(
+        getContext().getAssets(), "icomoon.ttf");
+    setTypeface(typeface);
+
+    Shader shader = new LinearGradient(0, 0, 0, getTextSize(),
+        Color.LTGRAY, Color.DKGRAY, Shader.TileMode.CLAMP);
+    getPaint().setShader(shader);
+  }
+}
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>IconFontView: xml</h2>
+      </hgroup>
+      <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;com.sqisland.android.IconFontView
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:textSize="144sp"
+  android:text="@string/icon_android" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>TintedButton</h2>
+      </hgroup>
+      <article>
+      <pre class="prettyprint" data-lang="java">
+public class TintedButton extends Button {
+  public TintedButton(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    init();
+  }
+
+  private void init() {
+     getBackground().setColorFilter(
+        new LightingColorFilter(0xFFCCCCCC, 0xFFA40000));
+  }
+}
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>TintedButton: xml</h2>
+      </hgroup>
+      <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;com.sqisland.android.TintedButton
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:text="@string/start_timer" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>TintedButton: results</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+      <table>
+        <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Normal</th>
+            <th>Pressed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Default</td>
+            <td>
+              <img class="centered alpha" width="164" height="72"
+                src="../images/beautiful-android/non-tinted-button-jelly-bean.png" />
+            </td>
+            <td>
+              <img class="centered alpha" width="164" height="72"
+                src="../images/beautiful-android/non-tinted-button-pressed-jelly-bean.png" />
+            </td>
+          </tr>
+          <tr>
+            <td>Tinted</td>
+            <td>
+              <img class="centered alpha" width="164" height="72"
+                src="../images/beautiful-android/tinted-button-jelly-bean.png" />
+            </td>
+            <td>
+              <img class="centered alpha" width="164" height="72"
+                src="../images/beautiful-android/tinted-button-pressed-jelly-bean.png" />
+            </td>
+          </tr>
+          <tr>
+            <td>Default (older)</td>
+            <td>
+              <img class="centered alpha" width="122" height="62"
+                src="../images/beautiful-android/non-tinted-button-ginger-bread.png" />
+            </td>
+            <td>
+              <img class="centered alpha" width="122" height="62"
+                src="../images/beautiful-android/non-tinted-button-pressed-ginger-bread.png" />
+            </td>
+          </tr>
+          <tr>
+            <td>Tinted (older)</td>
+            <td>
+              <img class="centered alpha" width="122" height="62"
+                src="../images/beautiful-android/tinted-button-ginger-bread.png" />
+            </td>
+            <td>
+              <img class="centered alpha" width="122" height="62"
+                src="../images/beautiful-android/tinted-button-pressed-ginger-bread.png" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </article>
+    </slide>
+
+    <slide class="fill nobackground" style="background-image: url(../images/beautiful-android/cat-stretch.jpg)">
+      <footer class="source white">www.flickr.com/photos/nagillum/62550677</footer>
+      <article data-timings="1268">
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Useful websites</h2>
+      </hgroup>
+      <article data-timings="1333">
+        <ul>
+          <li>Color schemes</li>
+          <li>Fonts</li>
+          <li>Patterns</li>
+          <li>Icons</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Color variation</h2>
+        <p style="line-height: 1.3em">
+          <a href="http://0to255.com/" target="_blank">
+            0to255.com
+          </a>
+        </p>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1352">
+        <img class="alpha"
+          src="../images/beautiful-android/0to255.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Color scheme</h2>
+        <p style="line-height: 1.3em">
+          <a href="http://colorschemedesigner.com/" target="_blank">
+            colorschemedesigner.com
+          </a>
+        </p>
+      </hgroup>
+      <article data-timings="1407">
+        <ul>
+          <li>
+            Seed with single color e.g. <code>#33B4E5</code>
+          </li>
+        </ul>
+        <img class="alpha"
+          src="../images/beautiful-android/colorschemedesigner.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Font Squirrel</h2>
+        <p style="line-height: 1.3em">
+            <a href="http://www.fontsquirrel.com/" target="_blank">
+              www.fontsquirrel.com
+            </a>
+        </p>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1500">
+        <img class="alpha"
+          src="../images/beautiful-android/fontsquirrel.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Google Web Fonts</h2>
+        <p style="line-height: 1.3em">
+          <a href="http://www.google.com/webfonts" target="_blank">
+            google.com/webfonts
+          </a>
+        </p>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="alpha"
+          style="border: 1px #ddd solid"
+          src="../images/beautiful-android/googlewebfonts.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Google Web Fonts: conversion</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="html">
+&lt;link href='http://fonts.googleapis.com/css?family=Ruthie'
+  rel='stylesheet' type='text/css'&gt;
+</pre>
+        <pre class="prettyprint" data-lang="css">
+@font-face {
+  font-family: 'Ruthie';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Ruthie'), local('Ruthie-Regular'),
+    url(http://themes.googleusercontent.com/something) format('woff');
+}
+</pre>
+      <p>Convert <code>woff</code> to <code>ttf</code> or <code>otf</code>.
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Fontello</h2>
+        <p style="line-height: 1.3em">
+          <a href="http://www.fontello.com/" target="_blank">
+            fontello.com
+          </a>
+        </p>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="alpha"
+          src="../images/beautiful-android/fontello.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Fontello: codes</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="alpha"
+          src="../images/beautiful-android/fontello-codes.png" />
+        <br /><br /><br />
+        <pre class="prettyprint" data-lang="xml">
+&lt;string name="icon_fontello_sunny"&gt;1&lt;/string&gt;
+&lt;string name="icon_fontello_rainy"&gt;8&lt;/string&gt;
+&lt;string name="icon_fontello_cloudy"&gt;N&lt;/string&gt;
+&lt;string name="icon_fontello_bicycle"&gt;B&lt;/string&gt;
+&lt;string name="icon_fontello_coffee"&gt;C&lt;/string&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Subtle Patterns</h2>
+        <p style="line-height: 1.3em">
+          <a href="http://www.subtlepatterns.com/" target="_blank">
+            subtlepatterns.com
+          </a>
+        </p>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="alpha"
+          src="../images/beautiful-android/subtlepatterns.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Android Asset Studio</h2>
+        <p style="line-height: 1.3em">
+          <a href="http://android-ui-utils.googlecode.com/hg/asset-studio/dist/index.html" target="_blank">
+            http://android-ui-utils.googlecode.com/hg/asset-studio/dist/index.html
+          </a>
+        </p>
+      </hgroup>
+      <article style="clear: both" data-timings="1510">
+        <img class="alpha"
+          style="float: left; border: 1px #ccc solid"
+          src="../images/beautiful-android/launchericon.png" />
+        <img class="alpha"
+          style="float: left; margin-left: 1em;"
+          src="../images/beautiful-android/hearts.png" />
+      </article>
+    </slide>
+
+
+    <slide>
+      <hgroup>
+        <h2>Glyphish icons</h2>
+        <p style="line-height: 1.3em">
+          <a href="http://www.glyphish.com/" target="_blank">
+            glyphish.com
+          </a>
+        </p>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1542">
+        <img class="alpha"
+          src="../images/beautiful-android/glyphish.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>The Noun Project</h2>
+        <p style="line-height: 1.3em">
+          <a href="http://www.thenounproject.com/" target="_blank">
+            thenounproject.com
+          </a>
+        </p>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1571">
+        <img class="alpha"
+          src="../images/beautiful-android/thenounproject.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>The Noun Project: conversion</h2>
+      </hgroup>
+      <article data-timings="1705">
+        <p><code>svg</code> &rarr; <code>png</code></p>
+        <pre class="prettyprint" data-lang="shell">
+convert \
+  -density 100 \
+  -background none \
+  -trim \
+  cat.svg cat.png
+</pre>
+      </article>
+      Download
+      <a href="http://www.imagemagick.org/">ImageMagick</a>
+      to get <code>convert</code>.
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Open Clipart</h2>
+        <p style="line-height: 1.3em">
+          <a href="http://openclipart.org/" target="_blank">
+            openclipart.org
+          </a>
+        </p>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1790">
+        <img class="alpha"
+          style="border: 1px #ccc solid"
+          src="../images/beautiful-android/openclipart.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>IcoMoon</h2>
+        <p style="line-height: 1.3em">
+          <a href="http://www.icomoon.io/" target="_blank">
+            icomoon.io
+          </a>
+        </p>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1815">
+        <p>
+          Upload your own svg e.g. from
+          <a href="http://www.thenounproject.com">The Noun Project</a>
+        </p>
+        <img class="alpha"
+          src="../images/beautiful-android/icomoon.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>IcoMoon: codes</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1852">
+        <img class="alpha"
+          src="../images/beautiful-android/icomoon-codes.png" />
+        <br /><br /><br />
+        <pre class="prettyprint" data-lang="xml">
+&lt;string name="icomoon_camera"&gt;C&lt;/string&gt;
+&lt;string name="icomoon_water"&gt;W&lt;/string&gt;
+&lt;string name="icomoon_teapot"&gt;T&lt;/string&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>App Dev Wiki</h2>
+        <p style="line-height: 1.3em">
+          <a href="http://appdevwiki.com/" target="_blank">
+             appdevwiki.com
+          </a>
+        </p>
+      </hgroup>
+      <article data-timings="1861">
+        <ul>
+          <li>Design Patterns</li>
+          <li>UI Resources</li>
+          <li>Services</li>
+          <li>Data Storage / Databases</li>
+          <li>Libraries</li>
+          <li>Build/SCM</li>
+          <li>Mobile Web Performance</li>
+          <li>SDK and Development Frameworks</li>
+          <li>Starting Out</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Thank you!</h2>
+      </hgroup>
+      <article data-timings="1984">
+        <ul>
+          <li>
+            <a href="http://www.sqisland.com/talks/beautiful-android">
+              http://bit.ly/BeautifulAndroid
+            </a>
+          </li>
+          <li>
+            <a href="http://eepurl.com/lR5uD">
+              http://eepurl.com/lR5uD
+            </a>
+          </li>
+          <li>
+            <a href="http://blog.sqisland.com">
+              http://blog.sqisland.com
+            </a>
+          </li>
+          <li>
+            <a href="http://twitter.com/chiuki">
+              http://twitter.com/chiuki
+            </a>
+          </li>
+        </ul>
+
+        <br />
+        <center>
+          <img width="240" height="240"
+            src="../images/monkeywrite-icon.png" />
+          &nbsp;
+          <img width="240" height="240"
+            src="../images/qrcode/devfestw2013.png" />
+          <br/>
+          <small>Don't forget to download Monkey Write!</small>
+        </center>
+      </article>
+      </slide>
+
+  <slide class="backdrop"></slide>
+
+    </slides>
+    <section class="video" id="video">
+      
+<div id="player" style="width: 160px; height: 120px"></div>
+
+    </section>
+    <!--[if IE]>
+      <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+      <script>CFInstall.check({mode: 'overlay'});</script>
+    <![endif]-->
+  </body>
+</html>

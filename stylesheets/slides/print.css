@@ -1,0 +1,15 @@
+html {
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  background: transparent;
+}
+
+pre {
+  font-size: 20px;
+}
+
+#video {
+  display: none;
+}

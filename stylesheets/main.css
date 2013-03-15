@@ -1,0 +1,129 @@
+body {
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', tahoma, arial, sans-serif;
+}
+
+.hide {
+  display: none;
+}
+
+.row {
+  clear: both;
+  overflow: hidden;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.full-page {
+  height: 100%;
+}
+
+.pad {
+  padding: 1em;
+}
+
+.app-link {
+  font-size: 2em;
+  line-height: 1.2em;
+}
+
+.center {
+  text-align: center;
+}
+
+#zen-spring {
+  background-color: #9ca578;
+  color: #5d6b27;
+}
+
+#zen-spring a {
+  color:#e1e5cf;
+}
+
+#top-bar {
+  margin-bottom: 10px;
+}
+
+#message-bar {
+  background-color: #fc0;
+}
+
+#bottom-bar {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+#synced {
+  margin: 0 0 0 1em;
+}
+
+#syncing {
+  margin-bottom: 1em;
+}
+
+.check-mark {
+  color: #090;
+}
+
+.cross-mark {
+  color: #900;
+}
+
+.status-mark {
+  float: left;
+  width: 1em;
+  margin: 0 2px;
+}
+
+.secondary-text {
+  font-size: 0.9em;
+  color: #777;
+}
+
+.main-action {
+  font-size: 2em;
+  background-color:#f5f5f5;
+  border:1px solid #dedede;
+  padding: 5px;
+  margin: 10px auto;
+  width: 150px;
+  text-align: center;
+}
+
+.main-action a, .main-action a:visited {
+  text-decoration: none;
+  color: #565656;
+}
+
+.mobile-form select {
+  width: 150px;
+}
+
+#synced li {
+  list-style: none;
+}
+
+#map {
+  height: 600px;
+}
+
+#timeline {
+  height: 120px;
+}
+
+ul.spaced li {
+  margin-bottom: 1em;
+}
