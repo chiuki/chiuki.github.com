@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+<!--
+Google IO 2012 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahe <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+
+<html>
+  <head>
+    <title>Mobile Caching Strategies</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    
+    <script>
+      function handleDomLoadedExtra() {
+      };
+    </script>
+    
+
+    <link rel="stylesheet" media="all" href="../stylesheets/slides/default.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="../stylesheets/slides/phone.css">
+    <link rel="stylesheet" media="print" href="../stylesheets/slides/print.css">
+
+    <script data-main="../javascripts/slides/config/mobile-caching-strategies.js"
+      src="../javascripts/require-1.0.8.min.js">
+    </script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=5052645;
+var sc_invisible=1;
+var sc_security="f92fc67a";
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="drupal
+analytics" href="http://statcounter.com/drupal/"
+target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/5052645/0/f92fc67a/1/"
+alt="drupal analytics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+   <script type="text/javascript">
+     var clicky_site_ids = clicky_site_ids || [];
+     clicky_site_ids.push(66524020);
+     (function() {
+       var s = document.createElement('script');
+       s.type = 'text/javascript';
+       s.async = true;
+       s.src = '//static.getclicky.com/js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+      })();
+    </script>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-10372580-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+
+  <style>
+    section.video {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 1000;
+    }
+    span.highlight {
+      background-color: #ff0;
+    }
+    div.speakerrate {
+      position: absolute;
+      bottom: 100px;
+      right: 25px;
+    }
+    div.joindin {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      padding: 1em 1em 1.4em 1em;
+      background-color: #DBFD8C;
+    }
+    div.joindin div {
+      color: #3e5508;
+      font-size: 1.2em;
+    }
+  </style>
+
+  <body style="opacity: 0">
+    <slides class="layout-widescreen">
+      
+    <slide class="title-slide segue nobackground">
+      <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+      <hgroup class="auto-fadein">
+        <h1 data-config-title style="line-height: 1"><!-- populated from slide_config.json --></h1>
+        <h2 data-config-subtitle style="margin-top: 0.5em"><!-- populated from slide_config.json --></h2>
+        <p>
+          <a href="http://chiuki.github.com/mobile-caching-strategies">http://chiuki.github.com/mobile-caching-strategies</a>
+        </p>
+        <p data-config-presenter><!-- populated from slide_config.json --></p>
+      </hgroup>
+      <article></article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Always connected?</h2>
+      </hgroup>
+
+      <article>
+        <center>
+        <p>
+        <img width="280" height="210"
+          src="../images/mobile-caching-strategies/airplane-flickr-mandydale.jpg" />
+        &nbsp;
+        <img width="280" height="210"
+          src="../images/mobile-caching-strategies/tunnel-flickr-Michael-Flick.jpg" />
+        </p>
+        <p>
+        <img width="280" height="210"
+          src="../images/mobile-caching-strategies/machu-picchu.jpg" />
+        &nbsp;
+        <span style="width: 280px; height: 210px; display: inline-block; font-size: 10em; line-height: 0.1">
+         ?
+        </span></b>
+        </p>
+        </center>
+
+        <footer class="source">
+          Credits:
+          Airplane photo by <a href="http://www.flickr.com/photos/mandydale/48434178/">mandydale</a>,
+          tunnel photo by <a href="http://www.flickr.com/photos/17773534@N03/3112166020/">Michael Flick</a>
+        </footer>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Design for offline from the get go</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Snappy UI</li>
+          <li>Much harder to retrofit later</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Data availability tiers</h2>
+      </hgroup>
+      <article>
+        <div style="border: solid #ccc 1px;">
+          <div style="background-color: #0f6; font-size: 1.2em">
+            Installed
+          </div>
+          <p>
+            Always there
+          </p>
+          <div style="background-color: #0cf; border-top: solid #ccc 1px; font-size: 1.2em">
+            Permanently cached
+          </div>
+          <p>
+            Downloaded on first use, kept until updated or deleted by user
+          </p>
+          <div style="background-color: #ff3; border-top: solid #ccc 1px; font-size: 1.2em">
+            Temporarily cached
+          </div>
+          <p>
+            Stored in cache directory, periodically cleared (by system or app)
+          </p>
+          <div style="background-color: #f66; border-top: solid #ccc 1px; font-size: 1.2em">
+            Never cached
+          </div>
+          <p>
+            Needs internet to work
+          </p>
+       </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Which tier?</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>First use</li>
+          <li>Offline experience</li>
+          <li>Data expiration rate</li>
+          <li>Storage constraints</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Data fetching</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Background thread</li>
+          <li>Placeholder</li>
+          <li>Breadth first</li>
+          <li>Splash screen</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Offline-generated data</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Stored locally, then upload</li>
+          <li>Append only</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>The devil is in the details</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered"
+          src="../images/mobile-caching-strategies/devil-in-details.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Case studies</h2>
+      </hgroup>
+      <article>
+        <div style="clear: both;">
+          <img style="float: left"
+             width="240" height="240"
+             src="../images/monkeywrite-icon.png" />
+          <img style="float: left; margin-left: 28px; margin-top: 120px;"
+            width="240" height="240"
+            src="../images/mobile-caching-strategies/offlane-icon.png" />
+          <img style="float: left; margin-left: 28px; margin-top: 240px;"
+            width="240" height="240"
+            src="../images/mobile-caching-strategies/triposo-icon.png" />
+        </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Monkey Write</h2>
+        <h3>Learn to write Chinese</h3>
+      </hgroup>
+      <article>
+        <div style="border: solid #ccc 1px;">
+          <div style="background-color: #0f6; font-size: 1.2em">
+            Installed
+          </div>
+          <p>
+            Workbooks installed on device
+          </p>
+          <div style="background-color: #0cf; border-top: solid #ccc 1px; font-size: 1.2em">
+            Permanently cached
+          </div>
+          <p>
+            Workbook catalog (Bookstore)
+          </p>
+          <div style="background-color: #ff3; border-top: solid #ccc 1px; font-size: 1.2em">
+            Temporarily cached
+          </div>
+          <p>
+            Workbook cover images
+          </p>
+          <div style="background-color: #f66; border-top: solid #ccc 1px; font-size: 1.2em">
+            Never cached
+          </div>
+          <p>
+            Workbook purchasing
+          </p>
+         </div>
+         <img style="position: absolute; top: 40px; right: 60px"
+            width="100" height="100"
+            src="../images/monkeywrite-icon.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Monkey Write: Bookshelf</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/mobile-caching-strategies/bookshelf.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Monkey Write: Bookshelf data</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered" width="720" height="540"
+          src="../images/mobile-caching-strategies/bookstore-flowchart.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Monkey Write: Bookshelf with text</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/mobile-caching-strategies/bookshelf-text-summary.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Monkey Write: Google Play</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/mobile-caching-strategies/google-play.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Monkey Write: No connection at Google Play</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="800" height="500"
+          src="../images/mobile-caching-strategies/google-play-no-connection.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Offlane</h2>
+        <h3>Offline newsreader</h3>
+      </hgroup>
+      <article>
+        <div style="border: solid #ccc 1px;">
+          <div style="background-color: #0f6; font-size: 1.2em;">
+            Installed
+          </div>
+          <p>
+            None
+          </p>
+          <div style="background-color: #0cf; border-top: solid #ccc 1px; font-size: 1.2em;">
+            Permanently cached
+          </div>
+          <p>
+            Sources
+          </p>
+          <div style="background-color: #ff3; border-top: solid #ccc 1px; font-size: 1.2em;">
+            Temporarily cached
+          </div>
+          <p>
+            Articles, images
+          </p>
+          <div style="background-color: #f66; border-top: solid #ccc 1px; font-size: 1.2em;">
+            Never cached
+          </div>
+          <p>
+            None
+          </p>
+        </div>
+        <img style="position: absolute; top: 40px; right: 60px"
+            width="100" height="100"
+            src="../images/mobile-caching-strategies/offlane-icon.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Offlane: Sources</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>
+            Not bundled with app
+          </li>
+          <li>
+            Client tells server what it got, server returns new sources
+          </li>
+          <li>
+            Pre-computed list on first use for speed
+          </li>
+          <li>
+            First use: Display login screen while fetching in background
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Offlane: Sources</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="720" height="540"
+          src="../images/mobile-caching-strategies/offlane-sources.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Offlane: Breadth first fetch</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>
+            All sources in one text batch
+          </li>
+          <li>
+            30 articles per source, text only<br />
+            <small>
+              &nbsp;&nbsp; Small groups (3 cycles)<br/>
+              &nbsp;&nbsp; Round robin
+            </small>
+          </li>
+          <li>
+            Images last
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+        <slide>
+      <hgroup>
+        <h2>Offlane: Articles</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="720" height="540"
+          src="../images/mobile-caching-strategies/offlane-articles.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Offlane: Sync</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>
+            How much storage?<br />
+            <small>
+              &nbsp;&nbsp; Number of days</br>
+              &nbsp;&nbsp; Max articles per source
+            </small>
+          </li>
+          <li>
+            Sync on app launch
+          </li>
+          <li>
+            Reachability API and heart beat while in foreground<br />
+            <small>
+              &nbsp;&nbsp; Sync every 5 minutes while online
+            </small>
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Offlane: Sharing</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="720" height="540"
+          src="../images/mobile-caching-strategies/offlane-sharing.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Offlane: Sharing</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>
+            Compose offline
+          </li>
+          <li>
+            Pre-shortened urls
+          </li>
+          <li>
+            Queue for upload later
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Triposo</h2>
+        <h3>Offline guidebook</h3>
+      </hgroup>
+      <article>
+        <div style="border: solid #ccc 1px;">
+          <div style="background-color: #0f6; font-size: 1.2em;">
+            Installed
+          </div>
+          <p>
+            List of guidebooks, introductions
+          </p>
+          <div style="background-color: #0cf; border-top: solid #ccc 1px; font-size: 1.2em;">
+            Permanently cached
+          </div>
+          <p>
+            Guidebook articles, maps
+          </p>
+          <div style="background-color: #ff3; border-top: solid #ccc 1px; font-size: 1.2em;">
+            Temporarily cached
+          </div>
+          <p>
+            Weather and currency rate
+          </p>
+          <div style="background-color: #f66; border-top: solid #ccc 1px; font-size: 1.2em;">
+            Never cached
+          </div>
+          <p>
+            None
+          </p>
+        </div>
+        <img style="position: absolute; top: 40px; right: 60px"
+          width="100" height="100"
+          src="../images/mobile-caching-strategies/triposo-icon.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Triposo: List of guidebooks</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha border" width="300" height="500"
+          src="../images/mobile-caching-strategies/triposo-list.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Triposo: Netherlands download</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <center>
+        <img class="alpha border" style="width:300px; height:500px; vertical-align:middle;"
+          src="../images/mobile-caching-strategies/triposo-netherlands-intro.png" />
+        <span style="margin: 10px; font-size: 3em">&rarr;</span></b>
+        <img class="alpha border" style="width:300px; height:500px; vertical-align:middle;"
+          src="../images/mobile-caching-strategies/triposo-netherlands-downloading.png" />
+        </center>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Triposo: Currency update</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <center>
+        <img class="alpha border" style="width:300px; height:500px; vertical-align:middle;"
+          src="../images/mobile-caching-strategies/triposo-netherlands-intro.png" />
+        <span style="margin: 10px; font-size: 3em">&rarr;</span></b>
+        <span style="position: relative">
+          <img class="alpha border" style="width:300px; height:500px; vertical-align:middle;"
+            src="../images/mobile-caching-strategies/triposo-netherlands-downloading.png" />
+          <span style="position: absolute; border: solid red 5px;
+              width: 80px; height: 15px; top: 53px; left: 175px;" />
+        </span></b>
+        </center>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Triposo: Environmental data</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Sync on app launch</li>
+          <li>
+            If no connection,<br/>
+            <small>
+              &nbsp;&nbsp;Keep currency rate<br />
+              &nbsp;&nbsp;Remove weather
+            </small>
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Triposo: Guidebook and map</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <center>
+        <img class="alpha border" width="300" height="500"
+          src="../images/mobile-caching-strategies/triposo-museum-van-gogh.png" />
+        &nbsp;&nbsp;
+        <img class="alpha border" width="300" height="500"
+          src="../images/mobile-caching-strategies/triposo-map.png" />
+        </center>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Triposo: Check in</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <div style="clear: both">
+          <img class="alpha border" width="300" height="500" style="float: left"
+            src="../images/mobile-caching-strategies/triposo-check-in.png" />
+          <ul style="float: left; margin-left: 2em">
+            <li>Save locally</li>
+            <li>Upload later</li>
+            <li>Append only</li>
+          </ul>
+        </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Triposo: Edit details</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <center>
+        <img class="alpha border" width="300" height="500"
+          src="../images/mobile-caching-strategies/triposo-menu.png" />
+        &nbsp;&nbsp;
+        <img class="alpha border" width="300" height="500"
+          src="../images/mobile-caching-strategies/triposo-edit.png" />
+        </center>
+      </article>
+    </slide>
+
+   <slide>
+      <hgroup>
+        <h2>Triposo: Merge from multiple sources</h2>
+      </hgroup>
+      <article>
+        <div style="clear: both;">
+          <div style="float: left; width: 200px;">
+            <img class="centered" src="../images/mobile-caching-strategies/world66-logo.png" />
+          </div>
+          <div style="float: left; width: 200px; margin: 0 60px">
+            <img class="centered" width="120" height="42"
+              src="../images/mobile-caching-strategies/openstreetmap-logo.jpg"
+            />
+          </div>
+          <div style="float: left; width: 200px;">
+            <img class="centered" src="../images/mobile-caching-strategies/touristeye-logo.png" />
+          </div>
+        </div>
+
+        <div style="clear: both;">
+          <div style="float: left; width: 60px; font-size: 2em; line-height: 0.8em; margin-left: 160px">
+            &#x21d8;
+          </div>
+          <div style="float: left; width: 120px; font-size: 2em; line-height: 0.8em; margin-left: 80px">
+            &dArr;
+          </div>
+          <div style="float: left; font-size: 2em; line-height: 0.8em; margin-left: 20px">
+            &#x21d9;
+          </div>
+        </div>
+
+        <div style="clear: both; width: 20px; height: 20px;">
+        </div>
+
+        <div style="clear: both; line-height: 1em;">
+          <div style="float: left; width: 160px;">
+            <img class="centered" style="margin-top: 75px"
+              src="../images/mobile-caching-strategies/wikitravel-logo.png" />
+          </div>
+          <div style="float: left; width: 60px; margin-top: 75px; font-size: 2em; margin-right: 20px;">
+            &rArr;
+          </div>
+          <div style="float: left; width: 200px">
+            <img class="centered" width="160" height="160" src="../images/mobile-caching-strategies/triposo-icon.png" />
+          </div>
+          <div style="float: left; width: 60px; margin-top: 80px; font-size: 2em; color: red">
+            &lArr;
+          </div>
+          <div style="float: left; width: 200px">
+            <img class="centered" style="width: 158px; height: 120px; margin-top: 40px"
+              src="../images/mobile-caching-strategies/user.png"
+            />
+          </div>
+        </div>
+
+        <div style="clear: both; width: 20px; height: 20px;">
+        </div>
+
+        <div style="clear: both;">
+          <div style="float: left; width: 60px; font-size: 2em; line-height: 0.8em; margin-left: 160px">
+            &#x21d7;
+          </div>
+          <div style="float: left; width: 120px; font-size: 2em; line-height: 0.8em; margin-left: 80px">
+            &uArr;
+          </div>
+          <div style="float: left; font-size: 2em; line-height: 0.8em; margin-left: 20px">
+            &#x21d6;
+          </div>
+        </div>
+
+        <div style="clear: both; width: 20px; height: 20px;">
+        </div>
+
+       <div style="clear: both; line-height: 1em;">
+          <div style="float: left; width: 200px;">
+            <img class="centered"
+              width="127" height="34" src="../images/mobile-caching-strategies/wikipedia-logo.jpg" />
+          </div>
+          <div style="float: left; width: 200px; margin: 0 60px">
+            <img class="centered" src="../images/mobile-caching-strategies/dmoz-logo.gif" />
+          </div>
+          <div style="float: left; width: 200px;">
+            <img class="centered" width="100" height="39"
+              src="../images/mobile-caching-strategies/flickr-logo.jpg"
+            />
+          </div>
+        </div>
+
+        <p>
+          Save user edits in append-only log
+        </p>
+
+        <footer class="source">
+          Credits: User icon by <a href="http://thenounproject.com/noun/user/#icon-No419">The Noun Project</a>
+        </footer>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Design for offline from the get go</h2>
+      </hgroup>
+      <article>
+        <div style="border: solid #ccc 1px;">
+          <div style="background-color: #0f6; font-size: 1.2em">
+            Installed
+          </div>
+          <p>
+            Always there
+          </p>
+          <div style="background-color: #0cf; border-top: solid #ccc 1px; font-size: 1.2em">
+            Permanently cached
+          </div>
+          <p>
+            Downloaded on first use, kept until updated or deleted by user
+          </p>
+          <div style="background-color: #ff3; border-top: solid #ccc 1px; font-size: 1.2em">
+            Temporarily cached
+          </div>
+          <p>
+            Stored in cache directory, periodically cleared (by system or app)
+          </p>
+          <div style="background-color: #f66; border-top: solid #ccc 1px; font-size: 1.2em">
+            Never cached
+          </div>
+          <p>
+            Needs internet to work
+          </p>
+       </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Acknowledgements</h2>
+      </hgroup>
+      <article>
+        <p>
+          <img style="width:220px; height:220px; vertical-align:middle; margin-right:20px;"
+            src="../images/mobile-caching-strategies/offlane-icon.png" />
+          Roman Geyzer from <a href="http://www.offlane.com">Offlane</a>
+        </p>
+
+        <p>
+          <img style="width:220px; height:220px; vertical-align:middle; margin-right:20px;"
+            src="../images/mobile-caching-strategies/triposo-icon.png" />
+          Douwe Osinga from <a href="http://www.triposo.com">Triposo</a>
+        </p>
+      </article>
+    </slide>
+
+   <slide>
+      <hgroup>
+        <h2>Thank you!</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>
+            <a href="http://chiuki.github.com/mobile-caching-strategies">
+              http://chiuki.github.com/mobile-caching-strategies
+            </a>
+          </li>
+          <li>
+            <a href="http://www.monkeywriteapp.com">
+              http://www.monkeywriteapp.com
+            </a>
+          </li>
+          <li>
+            <a href="http://blog.sqisland.com">
+              http://blog.sqisland.com
+            </a>
+          </li>
+          <li>
+            <a href="http://twitter.com/chiuki">
+              http://twitter.com/chiuki
+            </a>
+          </li>
+        </ul>
+
+        <br />
+        <center>
+          <img width="240" height="240"
+            src="../images/monkeywrite-icon.png" />
+          &nbsp;
+          <img width="240" height="240"
+            src="../images/qrcode/twitteropenhouse.png" />
+          <br/>
+          <small>Don't forget to download Monkey Write!</small>
+        </center>
+      </article>
+    </slide>
+
+
+  <slide class="backdrop"></slide>
+
+    </slides>
+    <section class="video" id="video">
+      
+    </section>
+    <!--[if IE]>
+      <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+      <script>CFInstall.check({mode: 'overlay'});</script>
+    <![endif]-->
+  </body>
+</html>
