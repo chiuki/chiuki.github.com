@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+
+<!--
+Google IO 2012 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahe <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+
+<html>
+  <head>
+    <title>Progressive enhancement for Android web apps</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    
+    <script>
+      function handleDomLoadedExtra() {
+      };
+    </script>
+    
+
+    <link rel="stylesheet" media="all" href="../stylesheets/slides/default.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="../stylesheets/slides/phone.css">
+    <link rel="stylesheet" media="print" href="../stylesheets/slides/print.css">
+
+    <script data-main="../javascripts/slides/config/progressive-webview.js"
+      src="../javascripts/require-1.0.8.min.js">
+    </script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=5052645;
+var sc_invisible=1;
+var sc_security="f92fc67a";
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="drupal
+analytics" href="http://statcounter.com/drupal/"
+target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/5052645/0/f92fc67a/1/"
+alt="drupal analytics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+   <script type="text/javascript">
+     var clicky_site_ids = clicky_site_ids || [];
+     clicky_site_ids.push(66524020);
+     (function() {
+       var s = document.createElement('script');
+       s.type = 'text/javascript';
+       s.async = true;
+       s.src = '//static.getclicky.com/js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+      })();
+    </script>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-10372580-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+
+  <style>
+    section.video {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 1000;
+    }
+    span.highlight {
+      background-color: #ff0;
+    }
+    div.speakerrate {
+      position: absolute;
+      bottom: 100px;
+      right: 25px;
+    }
+    div.joindin {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      padding: 1em 1em 1.4em 1em;
+      background-color: #DBFD8C;
+    }
+    div.joindin div {
+      color: #3e5508;
+      font-size: 1.2em;
+    }
+  </style>
+
+  <body style="opacity: 0">
+    <slides class="layout-widescreen">
+      
+    <slide class="title-slide segue nobackground">
+      <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+      <hgroup class="auto-fadein">
+        <h1 data-config-title style="line-height: 1"><!-- populated from slide_config.json --></h1>
+        <h2 data-config-subtitle style="margin-top: 0.5em"><!-- populated from slide_config.json --></h2>
+        <p>
+          <a href="http://chiuki.github.com/progressive-webview">http://chiuki.github.com/progressive-webview</a>
+        </p>
+        <p data-config-presenter><!-- populated from slide_config.json --></p>
+      </hgroup>
+      <article></article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>What is progressive enhancement?</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Layered functionality</li>
+          <li>Graceful degradation</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Amazon: Drop-down menu</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img src="../images/progressive-webview/amazon-dropdown.gif" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Amazon: no javascript </h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img src="../images/progressive-webview/amazon-site-directory.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Progressive enhancement on mobile</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>HTML + Javascript &rarr; Interactive</li>
+          <li>Webpage + Mobile wrapper &rarr; Native functionalities</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>WebView</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Webkit component to show a web page in Android</li>
+          <li>Supports most HTML5 features<br />
+            <ul>
+              <li>Application cache</li>
+              <li>Canvas</li>
+              <li>Geolocation</li>
+              <li>Web storage</li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Native functionalities</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Accelerometer</li>
+          <li>Bluetooth</li>
+          <li>Camera</li>
+          <li>Contacts</li>
+          <li>Microphone</li>
+          <li>NFC</li>
+          <li>Storage</li>
+          <li>Telephony</li>
+          <li>Vibrate</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Progressive enhancement on Android</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Embed <code>WebView</code></li>
+          <li>Write a javascript bridge</li>
+          <li>Enhance webpage with Android functionalities when javascript bridge is available</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Android intro</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered" width="457" height="540"
+          src="../images/progressive-webview/android-logo.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Hello World</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+public void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+
+  WebView mWebView = new WebView(this);
+  setContentView(mWebView);
+
+  mWebView.getSettings().setJavaScriptEnabled(true);
+  mWebView.loadUrl("file:///android_asset/hello.html");
+  mWebView.addJavascriptInterface(
+    new JavaScriptBridge(this), "MyAndroid");
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>JavascriptBridge</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+private class JavaScriptBridge {
+  private Context mContext;
+
+  public JavaScriptBridge(Context context) {
+    mContext = context;
+  }
+
+  public void showToast(String msg) {
+    Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>hello.html</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="html">
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;script type="text/javascript"&gt;
+      function sayHello() {
+        <b><span class="highlight">if (typeof MyAndroid === 'undefined')</span></b> {
+          alert('Hello');
+        } else {
+          <b><span class="highlight">MyAndroid.showToast('Hello');</span></b>
+        }
+      }
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;a href="javascript:sayHello();"&gt;Say hello&lt;/a&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Hello in browser</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered" style="border: 1px #ccc solid; padding: 20px;"
+          src="../images/progressive-webview/hello-alert.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Hello in app</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="300" height="533"
+          style="border: 1px #ccc solid;"
+          src="../images/progressive-webview/hello-toast.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Access the phone book</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="html">
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;script type="text/javascript"&gt;
+      function pickContact() {
+        if (typeof MyAndroid === 'undefined') {
+          return;
+        } else {
+          <b><span class="highlight">MyAndroid.pickContact();</span></b>
+        }
+      }
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;label id="emailLabel" onClick="<b><span class="highlight">pickContact();</span></b>"&gt;Email&lt;/label&gt;
+    &lt;input id="email" type="text" /&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Android: startActivityForResult</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+private class JavaScriptBridge {
+  // Constructor omitted
+
+  public void pickContact() {
+    Intent intent = new Intent(Intent.ACTION_PICK,
+      ContactsContract.Contacts.CONTENT_URI);
+    startActivityForResult(intent, R.id.request_code_pick_contact);
+  }
+}</pre>
+        <p>res/values/ids.xml</p>
+        <pre class="prettyprint" data-lang="xml">
+&lt;resources&gt;
+  &lt;item name="request_code_pick_contact" type="id" /&gt;
+&lt;/resources&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Android: onActivityResult</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+protected void onActivityResult(int requestCode, int resultCode,
+    Intent data) {
+  if (resultCode != RESULT_OK) {
+    return;
+  }
+  switch (requestCode) {
+    case R.id.request_code_pick_contact:
+      fillEmail(data);
+      break;
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+         <h2>Android: fillEmail</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+private void fillEmail(Intent data) {
+  String id = String.valueOf(ContentUris.parseId(data.getData()));
+  Cursor cursor = getContentResolver().query(
+      Email.CONTENT_URI, null,
+      Email.CONTACT_ID + "=?",
+      new String[]{ id }, null);
+
+  if (cursor.moveToFirst()) {
+    int index = cursor.getColumnIndex(Email.DATA);
+    String email = cursor.getString(index);
+    <b><span class="highlight">mWebView.loadUrl("javascript:fillEmail('" + email + "')");</span></b>
+  } else {
+    Toast.makeText(this, R.string.email_error, Toast.LENGTH_SHORT).show();
+  }
+
+  cursor.close();
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Javascript: fillEmail</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="javascript">
+function fillEmail(email) {
+  var input = document.getElementById('email');
+  input.value = email;
+}</pre>
+        <pre class="prettyprint" data-lang="html">
+&lt;label id="emailLabel" onClick="pickContact();"&gt;Email&lt;/label&gt;
+&lt;input id="email" type="text" /&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Email field in browser</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered" style="border: 1px #ccc solid; padding: 20px;"
+          src="../images/progressive-webview/email-input.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Email field in app</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="300" height="500"
+          style="border: 1px #ccc solid;"
+          src="../images/progressive-webview/email-linked.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Android: Contacts</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="300" height="500"
+          style="border: 1px #ccc solid;"
+          src="../images/progressive-webview/email-contacts.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Email address from Contacts</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered alpha" width="300" height="500"
+          style="border: 1px #ccc solid;"
+          src="../images/progressive-webview/email-filled.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Show actionable items</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="javascript">
+function init() {
+  if (typeof MyAndroid === 'undefined') {
+    return;
+  }
+  // Make the email label look like a link in Android
+  var label = document.getElementById('emailLabel');
+  label.style.color = '#00f';
+  label.style.textDecoration = 'underline';
+}</pre>
+        <pre class="prettyprint" data-lang="html">
+&lt;body onLoad="init()"&gt;
+  &lt;label id="emailLabel" onClick="pickContact();"&gt;Email&lt;/label&gt;
+  &lt;input id="email" type="text" /&gt;
+&lt;/body&gt;
+</pre>
+      </pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Add photo</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="html">
+&lt;body&gt;
+  &lt;label&gt;Photo&lt;/label&gt;
+  &lt;input id="photoData" type="hidden" /&gt;
+  &lt;div&gt;
+    &lt;img id="photo" style="display: none;" /&gt;
+  &lt;/div&gt;
+  &lt;input type="file" value="Pick photo"
+      onClick="return pickPhoto();" /&gt;
+&lt;/body&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Add photo</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="html">
+&lt;script type="text/javascript"&gt;
+  function pickPhoto() {
+    if (typeof MyAndroid === 'undefined') {
+      return true;  // Let the browser handle it
+    }
+    MyAndroid.pickPhoto();
+    return false;
+  }
+&lt;/script&gt;</pre>
+        <pre class="prettyprint" data-lang="html">
+&lt;label&gt;Photo&lt;/label&gt;
+&lt;input id="photoData" type="hidden" /&gt;
+&lt;img id="photo" style="display: none;" /&gt;
+&lt;input type="file" value="Add photo" onClick="return pickPhoto();" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Add photo on browser</h2>
+      </hgroup>
+      <article>
+        <div class="row">
+          <img style="border: 1px #ccc solid; padding: 10px; float: left;"
+            src="../images/progressive-webview/photo-browser.png" />
+          <div style="margin: 10px 20px 0 20px; float: left">&rarr;</div>
+          <img style="border: 1px #ccc solid; padding: 10px; float: left;"
+            src="../images/progressive-webview/photo-chosen.png" />
+        </div>
+        <br />
+        <div style="clear: both">
+        <img style="border: 1px #ccc solid; padding: 10px;"
+          src="../images/progressive-webview/photo-picker.png" />
+        </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Add photo on app</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <center>
+          <img class="alpha border" style="width:300px; height:500px; vertical-align:middle;"
+            src="../images/progressive-webview/photo-app.png" />
+          <span style="margin: 10px;"></span></b>
+          <img class="alpha border" style="width:300px; height:500px; vertical-align:middle;"
+            src="../images/progressive-webview/select-photo.png" />
+        </center>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Android: Photo selected</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <center>
+          <img class="alpha border" style="width:300px; height:500px; vertical-align:middle;"
+            src="../images/progressive-webview/select-photo-album.png" />
+          <span style="margin: 10px;"></span></b>
+          <img class="alpha border" style="width:300px; height:500px; vertical-align:middle;"
+            src="../images/progressive-webview/photo-selected.png" />
+        </center>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Android: pickPhoto</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+public void pickPhoto() {
+  Intent intent = new Intent(Intent.ACTION_PICK);
+  intent.setType("image/*");
+  startActivityForResult(intent, R.id.request_code_pick_photo);
+}</pre>
+        <pre class="prettyprint" data-lang="java">
+protected void onActivityResult(int requestCode, int resultCode,
+    Intent data) {
+  if (resultCode != RESULT_OK) {
+    return;
+  }
+  switch (requestCode) {
+    case R.id.request_code_pick_photo:
+      fillPhoto(getPhotoFromGallery(data));
+      break;
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Android: getPhotoFromGallery</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+private Bitmap getPhotoFromGallery(Intent data) {
+  Uri selectedImage = data.getData();
+
+  String[] filePathColumn = { MediaStore.Images.Media.DATA };
+  Cursor cursor = getContentResolver().query(
+      selectedImage, filePathColumn, null, null, null);
+  cursor.moveToFirst();
+
+  int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+  String path = cursor.getString(columnIndex);
+  cursor.close();
+
+  return BitmapFactory.decodeFile(path);
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Pass photo to WebView</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+private void fillPhoto(Bitmap bitmap) {
+  ByteArrayOutputStream stream = new ByteArrayOutputStream();
+  bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+  byte[] byteArray = stream.toByteArray();
+  String encoded
+    = "data:image/png;base64," + Base64.encodeBytes(byteArray);
+  mWebView.loadUrl("javascript:fillPhoto('" + encoded + "');");
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Why Base64?</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li><code>String</code> is the only way to pass data to javascript</li>
+          <li><code>Base64</code> encodes binary data in an ASCII string</li>
+          <li><a href="http://iharder.net/base64">http://iharder.net/base64</a></li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Javascript: Display photo</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+function fillPhoto(data) {
+  var photoData = document.getElementById('photoData');
+  photoData.value = data;
+  var photo = document.getElementById('photo');
+  photo.src = photoData.value;
+  photo.style.display = photoData.value == '' ? 'none' : 'block';
+}</pre>
+
+        <pre class="prettyprint" data-lang="html">
+&lt;input id="photoData" type="hidden" /&gt;
+&lt;img id="photo" style="display: none;" /&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Handle orientation change</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+protected void onSaveInstanceState(Bundle outState) {
+  super.onSaveInstanceState(outState);
+  mWebView.saveState(outState);
+}
+
+protected void onRestoreInstanceState(Bundle savedInstanceState) {
+  super.onRestoreInstanceState(savedInstanceState);
+  mWebView.restoreState(savedInstanceState);
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Stash away the WebView</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+public class MainActivity extends Activity {
+  private WebView mWebView = null;
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    init();
+    setContentView(mWebView);
+  }
+
+  private void init() {
+    if (mWebView != null) {
+      return;
+    }
+    mWebView = new WebView(this);
+    mWebView.getSettings().setJavaScriptEnabled(true);
+    mWebView.loadUrl("file:///android_asset/index.html");
+    mWebView.addJavascriptInterface(
+      new JavaScriptBridge(this), "MyAndroid");
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Do not recreate Activity</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="xml">
+&lt;activity
+  android:label="@string/app_name"
+  android:name=".MainActivity"
+  android:configChanges="keyboard|keyboardHidden|orientation" &gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Back button</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+public boolean onKeyDown(int keyCode, KeyEvent event) {
+  // Check if the key event was the Back button and if there is
+  // history
+  if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) {
+    mWebView.goBack();
+    return true;
+  }
+
+  // If it wasn't the Back key or there's no web page history, bubble
+  // up to the default system behavior (probably exit the activity)
+  return super.onKeyDown(keyCode, event);
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Security</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Any web page loaded in your <code>WebView</code> has access to your native calls!</li>
+          <li>Load web pages in your domain in the <code>WebView</code></li>
+          <li>Defer to system for the rest</li>
+          <li>Bonus: Handles special urls too e.g. maps</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Restrict by domain</h2>
+      </hgroup>
+      <article>
+        <pre class="prettyprint" data-lang="java">
+private void init() {
+  // Other init omitted
+  mWebView.loadUrl(
+    "http://www.sqisland.com/talks/progressive-webview/sample");
+  mWebView.setWebViewClient(new MyWebViewClient());
+}
+
+private class MyWebViewClient extends WebViewClient {
+  public boolean shouldOverrideUrlLoading(WebView view, String url) {
+    if (Uri.parse(url).getHost().equals("www.sqisland.com")) {
+      // This is my web site, OK to load page
+      return false;
+    }
+    // Otherwise, the link is not for a page on my site, so launch
+    // another Activity that handles URLs
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+    startActivity(intent);
+    return true;
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Anyone can write an wrapper app</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Sanitize all input</li>
+          <li>Embed private key</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>So, when should I do this?</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Enhanced website</li>
+          <li>Web UI vs Native UI</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>PhoneGap</h2>
+      </hgroup>
+      <article class="flexbox vcenter">
+        <img class="centered"
+          src="../images/progressive-webview/phonegap.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>PhoneGap: load remote start url?</h2>
+      </hgroup>
+      <article>
+        <br />
+        <img style="border: 1px #ccc solid"
+          src="../images/progressive-webview/phonegap-no-remote.png" />
+        <small>
+          <a href="http://community.phonegap.com/nitobi/topics/phonegap_build_remote_start_page">
+            http://community.phonegap.com/nitobi/topics/<br />
+            phonegap_build_remote_start_page
+          </a>
+        </small>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Summary</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>Embed <code>WebView</code></li>
+          <li>Write a javascript bridge</li>
+          <li>
+            <code>if (typeof MyAndroid === 'undefined') {<br/>
+&nbsp;&nbsp;doSomethingInBrowser();<br />
+} else {<br/>
+&nbsp;&nbsp;MyAndroid.doSomething();<br />
+}</code></li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Thank you!</h2>
+      </hgroup>
+      <article>
+        <ul>
+          <li>
+            <a href="http://chiuki.github.com/progressive-webview">
+              http://chiuki.github.com/progressive-webview
+            </a>
+          </li>
+          <li>
+            <a href="http://blog.sqisland.com">
+              http://blog.sqisland.com
+            </a>
+          </li>
+          <li>
+            <a href="http://twitter.com/chiuki">
+              http://twitter.com/chiuki
+            </a>
+          </li>
+        </ul>
+
+        <br />
+        <center>
+          <img width="240" height="240"
+            src="../images/monkeywrite-icon.png" />
+          &nbsp;
+          <img width="240" height="240"
+            src="../images/qrcode/monkeywrite/dmc2012.png" />
+          <br/>
+          <small>Don't forget to download Monkey Write!</small>
+        </center>
+
+        <div class="joindin">
+          <div>Rate this talk</div>
+          <a href="https://joind.in/talk/view/6202">
+            http://joind.in/6202
+          </a>
+        </div>
+
+       </article>
+    </slide>
+
+  <slide class="backdrop"></slide>
+
+    </slides>
+    <section class="video" id="video">
+      
+    </section>
+    <!--[if IE]>
+      <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+      <script>CFInstall.check({mode: 'overlay'});</script>
+    <![endif]-->
+  </body>
+</html>
