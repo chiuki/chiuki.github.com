@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+
+<!--
+Google IO 2012 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahe <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+
+<html>
+  <head>
+    <title>Android Layout 101</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    
+    <script>
+      function handleDomLoadedExtra() {
+      };
+    </script>
+
+    <link rel="stylesheet" media="all" href="../stylesheets/slides/default.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="../stylesheets/slides/phone.css">
+    <link rel="stylesheet" media="print" href="../stylesheets/slides/print.css">
+
+    <script data-main="../javascripts/slides/config/android-layout-101.js"
+      src="../javascripts/require-1.0.8.min.js">
+    </script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=5052645;
+var sc_invisible=1;
+var sc_security="f92fc67a";
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript><div class="statcounter"><a title="drupal
+analytics" href="http://statcounter.com/drupal/"
+target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/5052645/0/f92fc67a/1/"
+alt="drupal analytics"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+   <script type="text/javascript">
+     var clicky_site_ids = clicky_site_ids || [];
+     clicky_site_ids.push(66524020);
+     (function() {
+       var s = document.createElement('script');
+       s.type = 'text/javascript';
+       s.async = true;
+       s.src = '//static.getclicky.com/js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+      })();
+    </script>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-10372580-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+
+  <style>
+    section.video {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 1000;
+    }
+    span.highlight {
+      background-color: #ff0;
+    }
+    div.speakerrate {
+      position: absolute;
+      bottom: 100px;
+      right: 25px;
+    }
+    div.joindin {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      padding: 1em 1em 1.4em 1em;
+      background-color: #DBFD8C;
+    }
+    div.joindin div {
+      color: #3e5508;
+      font-size: 1.2em;
+    }
+  </style>
+
+  <body style="opacity: 0">
+    <slides class="layout-widescreen">
+      
+
+  <slide class="title-slide segue nobackground">
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p>
+        <a href="http://chiuki.github.com/android-layout-101">http://chiuki.github.com/android-layout-101</a>
+      </p>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>What is a layout?</h2>
+      <h3>A box for your stuff!</h3>
+    </hgroup>
+    <article class="flexbox">
+      <div style="position: relative">
+        <div style="border: solid #333 3px; width: 320px; height: 360px; position: absolute;">
+          <div style="background-color: #9cf; width: 240px; height: 120px; position: absolute; left: 40px; top: 120px;">
+          </div>
+        </div>
+      <div style="border: solid #333 3px; width: 320px; height: 360px; position: absolute; left: 400px;">
+        <div style="background-color: #c9f; width: 65px; height: 320px; position: absolute; left: 20px; top: 20px;">
+        </div>
+        <div style="background-color: #ff6; width: 195px; height: 105px; position: absolute; left: 105px; top: 20px;">
+        </div>
+        <div style="background-color: #cf9; width: 195px; height: 195px; position: absolute; left: 105px; top: 145px;">
+        </div>
+      </div>
+    </div>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Hello World</h2>
+      <h3>
+        <a href="http://developer.android.com/resources/tutorials/hello-world.html">
+          http://developer.android.com/resources/tutorials/hello-world.html
+        </a>
+      </h3>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical" &gt;
+  &lt;TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/hello" /&gt;
+&lt;/LinearLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Background Color</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical" &gt;
+  &lt;TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/hello"
+    <b><span class="highlight">android:background="#60c"</span></b> /&gt;
+&lt;/LinearLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Background Color</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/purple-background.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Not too wide: screenshot</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/purple-background-tight.png" />
+    </article>
+  </slide>
+
+ <slide>
+    <hgroup>
+      <h2>Not too wide: xml</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical" &gt;
+  &lt;TextView
+    android:layout_width="<b><span class="highlight">wrap_content</span></b>"
+    android:layout_height="wrap_content"
+    android:text="@string/hello"
+    android:background="#60c" /&gt;
+&lt;/LinearLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Margin and Padding</h2>
+      <h3><code>android:layout_margin</code> vs <code>android:padding</code></h3>
+    </hgroup>
+    <article class="flexbox">
+      <center>
+        <div style="border: solid black 1px; width: 600px; height: 400px; position: relative;">
+          Margin
+          <div style="border: solid black 1px; background-color: #ccc; width: 500px; height: 300px; position: absolute; top: 50px; left: 50px;">
+            Padding
+            <div style="border: solid black 1px; width: 400px; height: 200px; position: absolute; top: 50px; left: 50px;">
+              Content
+            </div>
+          </div>
+        </div>
+      </center>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Margin or Padding: screenshot</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/margin-20.png" />
+    </article>
+  </slide>
+
+ <slide>
+    <hgroup>
+      <h2>Margin or Padding: xml</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical" &gt;
+  &lt;TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:<b><span class="highlight">layout_margin</span></b>="20dp"
+    android:text="@string/hello"
+    android:background="#60c" /&gt;
+&lt;/LinearLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Padding</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/padding-20.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Layout Gravity and Gravity</h2>
+      <h3><code>android:layout_gravity</code> vs <code>android:gravity</code></h3>
+    </hgroup>
+    <article>
+      <p>Huh? What's the difference?</p>
+      <ul>
+        <li>
+          Anything with <code>layout</code> prefix applies to the parent.
+        </li>
+        <li>
+          Think of <code>layout_margin</code> vs <code>padding</code>
+        </li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Layout Gravity or Gravity: screenshot</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/layout-gravity.png" />
+    </article>
+  </slide>
+
+ <slide>
+    <hgroup>
+      <h2>Layout Gravity or Gravity: xml</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical" &gt;
+  &lt;TextView
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    <b><span class="highlight">android:layout_gravity="center_horizontal"</span></b>
+    android:text="@string/hello"
+    android:background="#60c" /&gt;
+&lt;/LinearLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Gravity</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/gravity.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>More views</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>EditText</li>
+        <li>Button</li>
+      </ul>
+      <p>
+        Both are children of <code>TextView</code>
+      </p>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Two views</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical" &gt;
+  &lt;EditText
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="EditText" /&gt;
+  &lt;Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Button" /&gt;
+&lt;/LinearLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Two views: vertical</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/two-views-vertical.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Two views: horizontal</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/two-views-horizontal.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Two views</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="<b><span class="highlight">horizontal</span></b>" &gt;
+  &lt;EditText
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="EditText" /&gt;
+  &lt;Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Button" /&gt;
+&lt;/LinearLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Two rows: screenshot</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/two-rows.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Two rows: xml</h2>
+    </hgroup>
+    <article class="smaller">
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical" &gt;
+  &lt;EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" /&gt;
+  &lt;LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="right" &gt;
+    &lt;Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Cancel" /&gt;
+    &lt;Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Ok" /&gt;
+  &lt;/LinearLayout&gt;
+&lt;/LinearLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout</h2>
+    </hgroup>
+    <article>
+      <p>
+        Specify view positions relative to each other.
+      </p>
+      <ul>
+        <li><code>layout_above</code></li>
+        <li><code>layout_below</code></li>
+        <li><code>layout_toLeftOf</code></li>
+        <li><code>layout_toRightOf</code></li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/relative-layout-edittext.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" &gt;
+  &lt;EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" /&gt;
+&lt;/RelativeLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: add a button</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" &gt;
+  &lt;EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" /&gt;
+  &lt;Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Cancel" /&gt;
+&lt;/RelativeLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: overlapping views</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/relative-layout-overlap.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: what we want</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/relative-layout-cancel.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: specify position</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" &gt;
+  &lt;EditText
+    <b><span class="highlight">android:id="@+id/greeting"</span></b>
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" /&gt;
+  &lt;Button
+    <b><span class="highlight">android:layout_below="@id/greeting"</span></b>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Cancel" /&gt;
+&lt;/RelativeLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: align with parent</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" &gt;
+  &lt;EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" /&gt;
+  &lt;Button
+    <b><span class="highlight">android:layout_alignParentBottom="true"</span></b>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Cancel" /&gt;
+&lt;/RelativeLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: align with parent</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/relative-layout-bottom.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: another button</h2>
+    </hgroup>
+    <article class="smaller">
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" &gt;
+  &lt;EditText
+    android:id="@+id/greeting"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" /&gt;
+  &lt;Button
+    <b><span class="highlight">android:id="@+id/cancel_button"</span></b>
+    android:layout_below="@id/greeting"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Cancel" /&gt;
+  &lt;Button
+    <b><span class="highlight">android:layout_toRightOf="@id/cancel_button"</span></b>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Ok" /&gt;
+&lt;/RelativeLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: need to spell out everything</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/relative-layout-only-right.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: both below and toRightOf</h2>
+    </hgroup>
+    <article class="smaller">
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" &gt;
+  &lt;EditText
+    android:id="@+id/greeting"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" /&gt;
+  &lt;Button
+    android:id="@+id/cancel_button"
+    android:layout_below="@id/greeting"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Cancel" /&gt;
+  &lt;Button
+    <b><span class="highlight">android:layout_below="@id/greeting"</span></b>
+    android:layout_toRightOf="@id/cancel_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Ok" /&gt;
+&lt;/RelativeLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: two buttons</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/relative-layout-two-buttons.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: buttons to the right</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/relative-layout-two-buttons-right.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>RelativeLayout: buttons to the right</h2>
+    </hgroup>
+    <article class="smaller">
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" &gt;
+  &lt;EditText
+    android:id="@+id/greeting"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" /&gt;
+  &lt;Button
+    <b><span class="highlight">android:id="@+id/ok_button"</span></b>
+    android:layout_below="@id/greeting"
+    <b><span class="highlight">android:layout_alignParentRight="true"</span></b>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Ok" /&gt;
+  &lt;Button
+    android:layout_below="@id/greeting"
+    <b><span class="highlight">android:layout_toLeftOf="@id/ok_button"</span></b>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Cancel" /&gt;
+&lt;/RelativeLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>FrameLayout</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/frame-layout-center.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>FrameLayout</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" &gt;
+  &lt;TextView
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:layout_gravity="center"
+    android:text="Hello"
+    android:background="#360" /&gt;
+  &lt;TextView
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_gravity="center"
+    android:text="World"
+    android:background="#60c" /&gt;
+&lt;/FrameLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>FrameLayout: play with gravity</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/frame-layout-gravity.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>FrameLayout: play with gravity</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" &gt;
+  &lt;TextView
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:layout_gravity="<b><span class="highlight">right</span></b>"
+    android:text="Hello"
+    android:background="#360" /&gt;
+  &lt;TextView
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_gravity="center"
+    <b><span class="highlight">android:gravity="center_horizontal|bottom"</span></b>
+    android:text="World"
+    android:background="#60c" /&gt;
+&lt;/FrameLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Further Reading</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>
+          Common Layout Objects<br/>
+          <a href="http://developer.android.com/guide/topics/ui/layout-objects.html">
+            http://developer.android.com/guide/topics/ui/layout-objects.html
+          </a>
+          <br /><br />
+        </li>
+        <li>
+          Hello Linear Layout<br/>
+          <a href="http://developer.android.com/resources/tutorials/views/hello-linearlayout.html">
+            http://developer.android.com/resources/tutorials/views/hello-linearlayout.html
+          </a>
+          <br /><br />
+        </li>
+        <li>
+          Hello Relative Layout<br/>
+          <a href="http://developer.android.com/resources/tutorials/views/hello-relativelayout.html">
+            http://developer.android.com/resources/tutorials/views/hello-relativelayout.html
+          </a>
+          <br /><br />
+        </li>
+        <li>
+          API Demos: Views<br/>
+          <a href="http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/view">
+            http://developer.android.com/resources/samples/ApiDemos/
+          </a>
+          <br /><br />
+        </li>
+      </ul>
+    </article>
+  </slide>
+
+  <slide class="thank-you-slide segue nobackground">
+    <article class="flexbox vleft auto-fadein">
+      <h2>Thank you</h2>
+    </article>
+    <p class="auto-fadein" data-config-contact>
+      <!-- populated from slide_config.json -->
+    </p>
+  </slide>
+
+  <slide class="title-slide segue nobackground">
+    <hgroup class="auto-fadein">
+      <h1>Bonus Puzzles</h1>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Red Cross</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/red-cross.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Red Cross: FrameLayout</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" &gt;
+  &lt;<b><span class="highlight">View</span></b>
+    android:layout_width="50dp"
+    android:layout_height="250dp"
+    android:layout_gravity="center"
+    android:background="#f00" /&gt;
+  &lt;View
+    android:layout_width="250dp"
+    android:layout_height="50dp"
+    android:layout_gravity="center"
+    android:background="#f00" /&gt;
+&lt;/FrameLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Red Cross: RelativeLayout</h2>
+    </hgroup>
+    <article>
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" &gt;
+  &lt;View
+    android:layout_width="50dp"
+    android:layout_height="250dp"
+    <b><span class="highlight">android:layout_centerInParent="true"</span></b>
+    android:background="#f00" /&gt;
+  &lt;View
+    android:layout_width="250dp"
+    android:layout_height="50dp"
+    android:layout_centerInParent="true"
+    android:background="#f00" /&gt;
+&lt;/RelativeLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Big C</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/big-c.png" />
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Big C: RelativeLayout</h2>
+    </hgroup>
+    <article class="smaller">
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="50dp" &gt;
+  &lt;View
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_alignParentTop="true"
+    android:background="#60c" /&gt;
+  &lt;View
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_alignParentBottom="true"
+    android:background="#60c" /&gt;
+  &lt;View
+    android:layout_width="50dp"
+    android:layout_height="match_parent"
+    android:layout_alignParentLeft="true"
+    android:background="#60c" /&gt;
+&lt;/RelativeLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Big C: FrameLayout</h2>
+    </hgroup>
+    <article class="smaller">
+      <pre class="prettyprint" data-lang="xml">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="50dp"
+  <span class="highlight">android:background="#000"</span> &gt;
+  &lt;View
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#60c" /&gt;
+  &lt;View
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top"
+    android:layout_marginLeft="50dp"
+    android:layout_marginTop="50dp"
+    android:layout_marginBottom="50dp"
+    <b><span class="highlight">android:background="#000"</span></b> /&gt;
+&lt;/FrameLayout&gt;
+</pre>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Big C: FrameLayout explained</h2>
+    </hgroup>
+    <article class="flexbox vcenter">
+      <img src="../images/android-layout-101/big-c-frame-layout.png" />
+    </article>
+  </slide>
+
+  <slide class="backdrop"></slide>
+
+    </slides>
+    <section class="video" id="video">
+      
+    </section>
+    <!--[if IE]>
+      <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+      <script>CFInstall.check({mode: 'overlay'});</script>
+    <![endif]-->
+  </body>
+</html>
