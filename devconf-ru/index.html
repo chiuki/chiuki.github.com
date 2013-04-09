@@ -17,31 +17,8 @@ URL: https://code.google.com/p/io-2012-slides
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-  <script src="../javascripts/talks/popcorn-complete.min.js"></script>
-
   <script>
     function handleDomLoadedExtra() {
-      var pop = Popcorn.youtube(
-        "player",
-        "http://www.youtube.com/watch?v=DhGP4J5u_mI");
-
-      var articles = document.getElementsByTagName('article');
-      for (var i = 0; i < articles.length; ++i) {
-        var article = articles[i];
-        var timings = article.getAttribute("data-timings");
-        if (timings != null) {
-          var starts = timings.split(",");
-          for (var j = 0; j < starts.length; ++j) {
-            pop.code({
-              start: parseInt(starts[j]),
-              slideNumber: i,
-              onStart: function(options) {
-                window.slidedeck.gotoSlide(options.slideNumber);
-              }
-            });
-          }
-        }
-      }
     };
   </script>
 
