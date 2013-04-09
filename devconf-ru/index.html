@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+
+<!--
+Google IO 2012 HTML5 Slide Template
+
+Authors: Eric Bidelman <ebidel@gmail.com>
+         Luke Mahe <lukem@google.com>
+
+URL: https://code.google.com/p/io-2012-slides
+-->
+
+<html>
+  <head>
+    <title>Android Custom Components</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <script src="../javascripts/talks/popcorn-complete.min.js"></script>
+
+  <script>
+    function handleDomLoadedExtra() {
+      var pop = Popcorn.youtube(
+        "player",
+        "http://www.youtube.com/watch?v=DhGP4J5u_mI");
+
+      var articles = document.getElementsByTagName('article');
+      for (var i = 0; i < articles.length; ++i) {
+        var article = articles[i];
+        var timings = article.getAttribute("data-timings");
+        if (timings != null) {
+          var starts = timings.split(",");
+          for (var j = 0; j < starts.length; ++j) {
+            pop.code({
+              start: parseInt(starts[j]),
+              slideNumber: i,
+              onStart: function(options) {
+                window.slidedeck.gotoSlide(options.slideNumber);
+              }
+            });
+          }
+        }
+      }
+    };
+  </script>
+
+
+    <link rel="stylesheet" media="all" href="../stylesheets/slides/default.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="../stylesheets/slides/phone.css">
+    <link rel="stylesheet" media="print" href="../stylesheets/slides/print.css">
+
+    <script data-main="../javascripts/slides/config/devconf-ru.js"
+      src="../javascripts/require-1.0.8.min.js">
+    </script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=8788186; 
+var sc_invisible=1; 
+var sc_security="b999074c"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="click tracking"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/8788186/0/b999074c/1/"
+alt="click tracking"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+   <script type="text/javascript">
+     var clicky_site_ids = clicky_site_ids || [];
+     clicky_site_ids.push(66524020);
+     (function() {
+       var s = document.createElement('script');
+       s.type = 'text/javascript';
+       s.async = true;
+       s.src = '//static.getclicky.com/js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(s);
+      })();
+    </script>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-10372580-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+
+  <style>
+    section.video {
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 1000;
+    }
+    span.highlight {
+      background-color: #ff0;
+    }
+    div.speakerrate {
+      position: absolute;
+      bottom: 100px;
+      right: 25px;
+    }
+    div.joindin {
+      position: absolute;
+      top: 1em;
+      right: 1em;
+      padding: 1em 1em 1.4em 1em;
+      background-color: #DBFD8C;
+    }
+    div.joindin div {
+      color: #3e5508;
+      font-size: 1.2em;
+    }
+
+    slides > slide:not(.nobackground):after {
+      content: "";
+      position: absolute;
+      bottom: 7px;
+      right: 7px;
+      width: 300px;
+      height: 50px;
+      background-image: url(../images/logo/devconf-ru.png);
+      background-size: 300px 50px;
+      display: block;
+    }
+
+    slides > slide.backdrop {
+      z-index: -10;
+      display: block !important;
+      background: none;
+      background-color: white;
+    }
+
+    @media print {
+      slides slide {
+        display: block !important;
+        position: relative;
+        background: none;
+        background-color: white;
+        -webkit-transform: none !important;
+        -moz-transform: none !important;
+        -ms-transform: none !important;
+        -o-transform: none !important;
+        transform: none !important;
+        width: 100%;
+        height: 100%;
+        page-break-after: always;
+        top: auto !important;
+        left: auto !important;
+        margin-top: 0 !important;
+        margin-left: 0 !important;
+        opacity: 1 !important;
+        color: #555;
+     }
+
+    slides > slide.backdrop {
+      display: none;
+    }
+  }
+
+  </style>
+
+  <body style="opacity: 0">
+    <slides class="layout-widescreen">
+      
+    <slide class="title-slide segue">
+      <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+      <hgroup class="auto-fadein">
+        <h1 data-config-title><!-- populated from slide_config.json --></h1>
+        <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+        <p>
+          <a href="http://chiuki.github.com/devconf-ru">http://chiuki.github.com/devconf-ru</a>
+        </p>
+        <p data-config-presenter><!-- populated from slide_config.json --></p>
+      </hgroup>
+      <article></article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Built-in Components</h2>
+      </hgroup>
+      <article data-timings="32">
+        <ul>
+          <li>TextView</li>
+          <li>EditText</li>
+          <li>Button</li>
+          <li>Spinner</li>
+          <li>DatePicker</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Why custom components?</h2>
+      </hgroup>
+      <article data-timings="78">
+        <ul>
+          <li>Modularize repeated code</li>
+          <li>Access protected methods</li>
+          <li>Optimize rendering speed</li>
+          <li>Complete control with draw, measure and layout</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Simple view, container and compound control</h2>
+      </hgroup>
+      <article data-timings="140">
+        <table>
+          <tr>
+             <th>Simple View</th>
+             <th>Container</th>
+             <th>Compound Control</td>
+          </tr>
+        <tr>
+          <td style="font-weight: inherit; color: inherit; vertical-align: text-top; font-size: 24px">
+&nbsp;&nbsp;&#x21b3; TextView<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; EditText<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; Button<br />
+&nbsp;&nbsp;&#x21b3; ImageView<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; ImageButton
+</td>
+<td style="vertical-align: text-top; font-size: 24px">
+&nbsp;&nbsp;&#x21b3; AdapterView<T extends Adapter><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; ListView<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; Gallery<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&#x21b3; GridView<br />
+&nbsp;&nbsp;&#x21b3; LinearLayout<br />
+&nbsp;&nbsp;&#x21b3; RelativeLayout<br />
+&nbsp;&nbsp;&#x21b3; FrameLayout<br />
+&nbsp;&nbsp;&#x21b3; TableLayout
+</td>
+<td style="vertical-align: text-top; font-size: 24px">
+&nbsp;&nbsp;&#x21b3; DatePicker<br />
+&nbsp;&nbsp;&#x21b3; TwoLineListItem
+</td>
+</tr>
+</table>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>TextView showing date</h2>
+        <h3>
+          <a href="http://github.com/chiuki/android-date-view">
+            http://github.com/chiuki/android-date-view
+          </a>
+        </h3>
+      </hgroup>
+      <article data-timings="237">
+        <pre class="prettyprint" data-lang="xml">
+&lt;TextView
+  android:id="@+id/date"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content" /&gt;
+</pre>
+        <pre class="prettyprint" data-lang="java">
+TextView dateView = (TextView) findViewById(R.id.date);
+SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+String today = dateFormat.format(Calendar.getInstance().getTime());
+dateView.setText(today);
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>TextView showing date: screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="311">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/textview-showing-date-20130614.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView: constructor</h2>
+      </hgroup>
+      <article data-timings="314">
+        <pre class="prettyprint" data-lang="java">
+package com.sqisland.android.dateview;
+
+public class DateView extends <b><span class="highlight">TextView</span></b> {
+  public DateView(Context context) {
+    super(context);
+  }
+
+  public DateView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
+
+  public DateView(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+  }
+}
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView: setDate</h2>
+      </hgroup>
+      <article data-timings="406">
+        <pre class="prettyprint" data-lang="java">
+public class DateView extends TextView {
+  public DateView(Context context) {
+    super(context);
+    <b><span class="highlight">setDate();</span></b>
+  }
+
+  public DateView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    <b><span class="highlight">setDate();</span></b>
+  }
+
+  public DateView(
+      Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+    <b><span class="highlight">setDate();</span></b>
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView: setDate</h2>
+      </hgroup>
+      <article data-timings="410">
+        <pre class="prettyprint" data-lang="java">
+private void setDate() {
+  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+  String today = dateFormat.format(Calendar.getInstance().getTime());
+  setText(today);  // self = DateView = subclass of TextView
+}
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView: create with code</h2>
+      </hgroup>
+      <article data-timings="441">
+        <pre class="prettyprint" data-lang="java">
+public class DateActivity extends Activity {
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    DateView dateView = new DateView(this);
+    setContentView(dateView);
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView: create with xml</h2>
+      </hgroup>
+      <article  data-timings="460">
+        <pre class="prettyprint" data-lang="java">
+public class DateActivity extends Activity {
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.main);
+  }
+}</pre>
+        <pre class="prettyprint" data-lang="xml">
+&lt;com.sqisland.android.dateview.DateView
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content" /&gt;
+</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView: configure with TextView attributes</h2>
+      </hgroup>
+      <article  data-timings="508">
+        <pre class="prettyprint" data-lang="xml">
+&lt;com.sqisland.android.dateview.DateView
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  <b><span class="highlight">android:textColor="#0f0"</span></b>
+  <b><span class="highlight">android:textSize="40sp"</span></b> /&gt;
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>DateView with attributes: screenshot</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="522">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/dateview-with-attributes-20130614.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Compound Control</h2>
+      </hgroup>
+      <article  data-timings="537">
+        <ul>
+          <li>A group of existing controls</li>
+          <li>Encapsulate reusable functionality</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>LengthPicker</h2>
+        <h3>
+          <a href="http://github.com/chiuki/android-length-picker">
+            http://github.com/chiuki/android-length-picker
+          </a>
+        </h3>
+      </hgroup>
+      <article class="flexbox vcenter"  data-timings="556">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/length-picker.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>length_picker.xml</h2>
+      </hgroup>
+      <article data-timings="580,615">
+        <pre class="prettyprint" data-lang="xml">
+&lt;merge xmlns:android="http://schemas.android.com/apk/res/android" &gt;
+  &lt;Button android:id="@+id/minus_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/minus" /&gt;
+  &lt;TextView android:id="@+id/text"
+    android:layout_width="50dp"
+    android:layout_height="wrap_content"
+    android:gravity="center" /&gt;
+  &lt;Button android:id="@+id/plus_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/plus" /&gt;
+&lt;/merge&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>LengthPicker.java</h2>
+      </hgroup>
+      <article data-timings="601,619">
+        <pre class="prettyprint" data-lang="java">
+// Called from constructor
+private void init() {
+  LayoutInflater inflater = (LayoutInflater) getContext()
+      .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+  inflater.inflate(R.layout.length_picker, this);
+
+  mPlusButton = findViewById(R.id.plus_button);
+  mTextView = (TextView) findViewById(R.id.text);
+  mMinusButton = findViewById(R.id.minus_button);
+
+  updateControls();
+
+  mPlusButton.setOnClickListener(this);
+  mMinusButton.setOnClickListener(this);
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>updateControls</h2>
+      </hgroup>
+      <article data-timings="658">
+        <pre class="prettyprint" data-lang="java">
+private void updateControls() {
+  int feet = mNumInches / 12;
+  int inches = mNumInches % 12;
+
+  String text = String.format("%d' %d\"", feet, inches);
+  if (feet == 0) {
+    text = String.format("%d\"", inches);
+  } else {
+    if (inches == 0) {
+      text = String.format("%d'", feet);
+    }
+  }
+  mTextView.setText(text);
+
+  mMinusButton.setEnabled(mNumInches > 0);
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>onClick</h2>
+      </hgroup>
+      <article data-timings="704">
+        <pre class="prettyprint" data-lang="java">
+public void onClick(View v) {
+  switch (v.getId()) {
+  case R.id.plus_button:
+    mNumInches++;
+    updateControls();
+    break;
+  case R.id.minus_button:
+    if (mNumInches > 0) {
+      mNumInches--;
+      updateControls();
+    }
+    break;
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Expose data</h2>
+      </hgroup>
+      <article data-timings="741">
+        <pre class="prettyprint" data-lang="java">
+public int getNumInches() {
+  return mNumInches;
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Save state</h2>
+      </hgroup>
+      <article data-timings="756">
+        <pre class="prettyprint" data-lang="java">
+public Parcelable onSaveInstanceState() {
+  Bundle bundle = new Bundle();
+  bundle.putParcelable("superState", super.onSaveInstanceState());
+  bundle.putInt("numInches", mNumInches);
+  return bundle;
+}
+
+public void onRestoreInstanceState(Parcelable state) {
+  if (state instanceof Bundle) {
+    Bundle bundle = (Bundle) state;
+    mNumInches = bundle.getInt("numInches");
+    super.onRestoreInstanceState(bundle.getParcelable("superState"));
+  } else {
+    super.onRestoreInstanceState(state);
+  }
+  updateControls();
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Reusing LengthPicker</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="817">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/length-picker-area.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>main.xml</h2>
+      </hgroup>
+      <article data-timings="845">
+        <pre class="prettyprint" data-lang="xml">
+&lt;com.sqisland.android.length_picker.LengthPicker
+  android:id="@+id/width"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" /&gt;
+&lt;com.sqisland.android.length_picker.LengthPicker
+  android:id="@+id/height"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" /&gt;
+&lt;TextView
+  android:id="@+id/area"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" /&gt;
+&lt;Button
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:text="@string/compute"
+  android:onClick="updateArea" /&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Activity</h2>
+      </hgroup>
+      <article data-timings="867">
+        <pre class="prettyprint" data-lang="java">
+public void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  setContentView(R.layout.main);
+  mWidth = (LengthPicker) findViewById(R.id.width);
+  mHeight = (LengthPicker) findViewById(R.id.height);
+  mArea = (TextView) findViewById(R.id.area);
+}
+
+public void onResume() {
+  super.onResume();
+  updateArea(null);
+}
+
+public void updateArea(View v) {
+  int area = mWidth.getNumInches() * mHeight.getNumInches();
+  mArea.setText(getString(R.string.area_format, area));
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Fully customized components</h2>
+      </hgroup>
+      <article data-timings="924">
+        <ul>
+          <li>onLayout</li>
+          <li>onMeasure</li>
+          <li>onDraw / dispatchDraw</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Android layout procedure</h2>
+      </hgroup>
+      <article data-timings="998">
+        <ul>
+          <li><code>requestLayout</code> up to ViewRoot</li>
+          <li><code>measure</code> all children</li>
+          <li><code>layout</code> all children</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Customizing a View</h2>
+      </hgroup>
+      <article data-timings="1080">
+        <ul>
+          <li><code>onMeasure</code> - how big?</li>
+          <li><code>onDraw</code> - what to show?</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>onMeasure</h2>
+      </hgroup>
+      <article data-timings="1101">
+        <pre class="prettyprint" data-lang="java">
+void onMeasure(int widthMeasureSpec, int heightMeasureSpec);
+</pre>
+        <ul>
+          <li>Measure its own size according to measure spec</li>
+          <li>Call <code>setMeasuredDimension</code> to store results</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>MeasureSpec</h2>
+      </hgroup>
+      <article data-timings="1178">
+        <ul>
+          <li>
+            <code>UNSPECIFIED</code> - anything goes!
+          </li>
+          <li>
+            <code>AT_MOST</code> - as large as the specified size
+          </li>
+          <li>
+            <code>EXACTLY</code> - as given by parent
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>SquareView</h2>
+        <h3>
+          <a href="http://github.com/chiuki/android-square-view">
+            http://github.com/chiuki/android-square-view
+          </a>
+        </h3>
+      </hgroup>
+      <article data-timings="1221">
+        <pre class="prettyprint" data-lang="java">
+public void onMeasure(int widthSpec, int heightSpec) {
+  super.onMeasure(widthSpec, heightSpec);
+  int size = Math.min(getMeasuredWidth(), getMeasuredHeight());
+  setMeasuredDimension(size, size);
+}</pre>
+         <br/>
+         <div style="width: 400px; margin: 0 auto; clear: both;">
+           <div style="float: left">
+             <div style="background-color: #c9f; width: 120px; height: 180px"></div>
+           </div>
+           <div style="float: left; padding: 1em; height: 150px;">
+             &rarr;
+           </div>
+           <div style="float: left">
+             <div style="background-color: #c9f; width: 120px; height: 120px"></div>
+           </div>
+         </div>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>onDraw</h2>
+      </hgroup>
+      <article data-timings="1378">
+        <pre class="prettyprint" data-lang="java">
+void onDraw(Canvas canvas);
+</pre>
+        <ul>
+          <li>drawLine</li>
+          <li>drawRect</li>
+          <li>drawCircle</li>
+          <li>drawPath</li>
+          <li>drawText</li>
+          <li>drawBitmap</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Canvas</h2>
+      </hgroup>
+      <article data-timings="1403">
+        <ul>
+          <li>clipRect</li>
+          <li>translate</li>
+          <li>rotate</li>
+          <li>scale</li>
+          <li>skew</li>
+          <li>save</li>
+          <li>restore</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Pizza</h2>
+        <h3>
+          <a href="http://github.com/chiuki/android-pizza">
+            http://github.com/chiuki/android-pizza
+          </a>
+        </h3>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1462">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/pizza.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Pizza</h2>
+      </hgroup>
+      <article data-timings="1662">
+        <pre class="prettyprint" data-lang="java">
+private void init() {
+  mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  mPaint.setColor(Color.YELLOW);
+  mPaint.setStrokeWidth(STROKE_WIDTH);
+  mPaint.setStyle(Paint.Style.STROKE);
+}</pre>
+
+        <pre class="prettyprint" data-lang="java">
+public void onDraw(Canvas canvas) {
+  int width = getWidth() - getPaddingLeft() - getPaddingRight();
+  int height = getHeight() - getPaddingTop() - getPaddingBottom();
+  int diameter = Math.min(width, height) - STROKE_WIDTH;
+  int cx = getPaddingLeft() + width / 2;
+  int cy = getPaddingTop() + height / 2;
+  int radius = diameter / 2;
+  canvas.drawCircle(cx, cy, radius, mPaint);
+  drawPizzaCuts(canvas, cx, cy, radius);
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>drawPizzaCuts</h2>
+      </hgroup>
+      <article data-timings="1868">
+        <pre class="prettyprint" data-lang="java">
+private void drawPizzaCuts(
+    Canvas canvas, float cx, float cy, float radius) {
+  canvas.save();
+  final float degrees = 360f / NUM_WEDGES;
+  for (int i = 0; i < NUM_WEDGES; ++i) {
+    canvas.rotate(degrees, cx, cy);
+    canvas.drawLine(cx, cy, cx, cy - radius, mPaint);
+  }
+  canvas.restore();
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>main.xml</h2>
+      </hgroup>
+      <article data-timings="1900">
+        <pre class="prettyprint" data-lang="xml">
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical" &gt;
+  &lt;com.sqisland.android.pizza.Pizza
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:padding="20dp"
+    android:background="#555" /&gt;
+  &lt;com.sqisland.android.pizza.Pizza
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:layout_margin="20dp"
+    android:background="#555" /&gt;
+&lt;/LinearLayout&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Pizza: padding vs margin</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="1930">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/pizza-padding-margin.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Customizing a ViewGroup</h2>
+      </hgroup>
+      <article data-timings="1993">
+        <ul>
+          <li><code>onMeasure</code> - how big are the children?</li>
+          <li><code>onLayout</code> - where are the children?</li>
+          <li><code>dispatchDraw</code> - what to show above or below the children?</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>onLayout: PhotoSpiral</h2>
+        <h3>
+          <a href="http://github.com/chiuki/android-photo-spiral">
+            http://github.com/chiuki/android-photo-spiral
+          </a>
+        </h3>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="2103">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/photo-spiral.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>PhotoSpiral: assumptions</h2>
+      </hgroup>
+      <article data-timings="2152">
+        <ul>
+          <li>4 photos</li>
+          <li>Same dimensions</li>
+          <li>Landscape, portrait, landscape, portrait</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>PhotoSpiral: onMeasure</h2>
+      </hgroup>
+      <article data-timings="2203">
+        <pre class="prettyprint" data-lang="java">
+protected void onMeasure(int widthSpec, int heightSpec) {
+  measureChildren(widthSpec, heightSpec);
+  View first = getChildAt(0);
+  int size = first.getMeasuredWidth() + first.getMeasuredHeight();
+  int width = ViewGroup.resolveSize(size, widthSpec);
+  int height = ViewGroup.resolveSize(size, heightSpec);
+  setMeasuredDimension(width, height);
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>PhotoSpiral: onLayout</h2>
+      </hgroup>
+      <article data-timings="2308">
+        <pre class="prettyprint" data-lang="java">
+protected void onLayout(
+    boolean changed, int l, int t, int r, int b) {
+  View first = getChildAt(0);
+  final int childWidth = first.getMeasuredWidth();
+  final int childHeight = first.getMeasuredHeight();
+
+  int x = getWidth() / 2 - (childWidth - childHeight) / 2;
+  int y = getHeight() / 2 - (childWidth + childHeight) / 2;
+
+  for (int i = 0; i < getChildCount(); ++i) {
+    View child = getChildAt(i);
+    x = adjustX(i, x, childWidth, childHeight);
+    y = adjustY(i, y, childWidth, childHeight);
+    child.layout(x, y,
+        x + child.getMeasuredWidth(), y + child.getMeasuredHeight());
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>PhotoSpiral: adjustX</h2>
+      </hgroup>
+      <article data-timings="2372">
+        <pre class="prettyprint" data-lang="java">
+private int adjustX(int pos, int x, int childWidth, int childHeight) {
+  int delta = childWidth - childHeight;
+  switch (pos) {
+  case 1:
+    return x + delta;
+  case 2:
+    return x - childWidth;
+  }
+  return x;
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>PhotoSpiral: adjustY</h2>
+      </hgroup>
+      <article data-timings="2393">
+        <pre class="prettyprint" data-lang="java">
+private int adjustY(int pos, int y, int childWidth, int childHeight) {
+  int delta = childWidth - childHeight;
+  switch (pos) {
+  case 1:
+    return y + childHeight;
+  case 2:
+    return y + delta;
+  case 3:
+    return y - childWidth;
+  }
+  return y;
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>dispatchDraw: SidewaysLayout</h2>
+        <h3>
+          <a href="http://github.com/chiuki/android-sideways-layout">
+            http://github.com/chiuki/android-sideways-layout
+          </a>
+        </h3>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="2399,2688,2788">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/sideways-layout.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>SidewaysLayout: LinearLayout rotated</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="2447,2541,2679">
+        <center>
+        <img class="alpha border" style="width:300px; height:500px; vertical-align:middle;"
+          src="../images/android-custom-components/sideways-layout-before-rotation.png" />
+        <span style="margin: 10px; font-size: 3em">&rarr;</span></b>
+        <img class="alpha border" style="width:300px; height:500px; vertical-align:middle;"
+          src="../images/android-custom-components/sideways-layout-after-rotation.png" />
+        </center>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>SidewaysLayout: xml</h2>
+      </hgroup>
+      <article class="smaller" data-timings="2488,2760">
+        <pre class="prettyprint" data-lang="xml">
+&lt;com.sqisland.android.sideways_layout.SidewaysLayout
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:orientation="vertical" &gt;
+  &lt;TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#f0f12b"
+    android:text="@string/good_night_moon" /&gt;
+  &lt;TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textStyle="bold"
+    android:text="@string/green_eggs_and_ham" /&gt;
+  &lt;TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/matilda" /&gt;
+&lt;/com.sqisland.android.sideways_layout.SidewaysLayout&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>SidewaysLayout.java</h2>
+      </hgroup>
+      <article data-timings="2506,2562">
+        <pre class="prettyprint" data-lang="java">
+public class SidewaysLayout extends <b><span class="highlight">LinearLayout</span></b> {
+  // Constructors omitted
+
+  protected void onMeasure(int widthSpec, int heightSpec) {
+    super.onMeasure(widthSpec, heightSpec);
+    setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
+  }
+
+  protected void dispatchDraw(Canvas canvas) {
+    canvas.save();
+    canvas.translate(0, getHeight());
+    canvas.rotate(-90, 0, 0);
+    super.dispatchDraw(canvas);
+    canvas.restore();
+  }
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>SidewaysLayout: onMeasure</h2>
+      </hgroup>
+      <article data-timings="2610">
+        <ul>
+          <li>Swap the width and height</li>
+        </ul>
+        <pre class="prettyprint" data-lang="java">
+protected void onMeasure(int widthSpec, int heightSpec) {
+  super.onMeasure(widthSpec, heightSpec);
+  setMeasuredDimension(getMeasured<b><span class="highlight">Height</span></b>(), getMeasured<b><span class="highlight">Width</span></b>());
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>SidewaysLayout: dispatchDraw</h2>
+      </hgroup>
+      <article data-timings="2618">
+        <ul>
+          <li>onDraw: draw myself</li>
+          <li>dispatchDraw: draw children</li>
+          <li>Rotate and re-center canvas to draw sideways</li>
+        </ul>
+        <pre class="prettyprint" data-lang="java">
+protected void dispatchDraw(Canvas canvas) {
+  canvas.save();
+  canvas.translate(0, getHeight());
+  canvas.rotate(-90, 0, 0);
+  super.dispatchDraw(canvas);
+  canvas.restore();
+}</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Reusable library project</h2>
+      </hgroup>
+      <article data-timings="2634,2798">
+        <img class="centered alpha"
+    src="../images/android-custom-components/is-library.png" />
+        <br /><br />
+        <ul>
+          <li>New Android project</li>
+          <li>Change property to check "Is Library"</li>
+          <li>Store java code and xml attributes in library project</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>XML attributes</h2>
+      </hgroup>
+      <article data-timings="2838">
+        <pre class="prettyprint" data-lang="xml">
+&lt;com.sqisland.android.pizza.Pizza
+  android:layout_width="120dp"
+  android:layout_height="120dp"
+  <b><span class="highlight">pizza:color</span></b>="#f00"
+  <b><span class="highlight">pizza:num_wedges</span></b>="4" /&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>res/values/attrs.xml</h2>
+      </hgroup>
+      <article data-timings="2860">
+        <pre class="prettyprint" data-lang="xml">
+&lt;resources&gt;
+  &lt;declare-styleable name="com.sqisland.android.pizza.Pizza"&gt;
+    &lt;attr name="stroke_width" format="integer" /&gt;
+    &lt;attr name="num_wedges" format="integer" /&gt;
+    &lt;attr name="color" format="color" /&gt;
+  &lt;/declare-styleable&gt;
+&lt;/resources&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Pizza.java</h2>
+      </hgroup>
+      <article data-timings="2906">
+        <pre class="prettyprint" data-lang="java">
+private void init(AttributeSet attrs) {
+  if (attrs != null) {
+    String namespace = "http://schemas.android.com/apk/res-auto";
+    mStrokeWidth = attrs.getAttributeIntValue(
+      namespace, "stroke_width", DEFAULT_STROKE_WIDTH);
+    mNumWedges = attrs.getAttributeIntValue(
+      namespace, "num_wedges", DEFAULT_NUM_WEDGES);
+    mColor = attrs.getAttributeIntValue(
+      namespace, "color", DEFAULT_COLOR);
+}</pre>
+      <ul>
+        <li>
+          The build system replaces
+          <code>http://schemas.android.com/apk/res-auto</code> with your app package
+        </li>
+        <li>Available since ADT r17</li>
+      </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Link library in main app</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="2998">
+        <img class="centered alpha"
+          src="../images/android-custom-components/library-settings.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>main.xml</h2>
+      </hgroup>
+      <article data-timings="3020">
+        <pre class="prettyprint" data-lang="xml">
+&lt;LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  <b><span class="highlight">xmlns:pizza="http://schemas.android.com/apk/res-auto"</span></b>
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content" &gt;
+  &lt;com.sqisland.android.pizza.Pizza
+    android:layout_width="120dp"
+    android:layout_height="120dp"
+    <b><span class="highlight">pizza</span></b>:color="#f00"
+    pizza:num_wedges="4" /&gt;
+  &lt;com.sqisland.android.pizza.Pizza
+    android:layout_width="160dp"
+    android:layout_height="160dp"
+    pizza:stroke_width="15"
+    pizza:num_wedges="6" /&gt;
+&lt;/LinearLayout&gt;</pre>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Pizzeria!</h2>
+      </hgroup>
+      <article class="flexbox vcenter" data-timings="3178,3200">
+        <img class="centered alpha" width="300" height="500"
+          src="../images/android-custom-components/pizzas.png" />
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Fragments</h2>
+      </hgroup>
+      <article data-timings="3235">
+        <ul>
+          <li>Reusable sub-activities</li>
+          <li>Goes through activity cycle</li>
+          <li>Communicates with other Fragments via FragmentManager</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Summary</h2>
+      </hgroup>
+      <article data-timings="3315">
+        <ul>
+          <li>Shortcut View and ViewGroup</li>
+          <li>Custom View</li>
+          <li>Custom ViewGroup</li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Shortcut View and ViewGroup</h2>
+      </hgroup>
+      <article data-timings="3376">
+        <p>Modularize repeated code</p>
+        <ul>
+          <li>
+            Subclass existing widget<br />
+            e.g. <code>DateView extends TextView</code>
+          </li>
+          <li>
+            Group existing widgets into compound control<br />
+            e.g. <code>LengthPicker</code>
+          </li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Custom View</h2>
+      </hgroup>
+      <article data-timings="3419">
+        <p>Customize size and appearance of the <code>View</code></p>
+        <ul>
+          <li><code>onMeasure</code><br /> e.g. <code>SquareView</code></li>
+          <li><code>onDraw</code><br /> e.g. <code>Pizza</code></li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Custom ViewGroup</h2>
+      </hgroup>
+      <article data-timings="3434">
+        <p>Container for positioning child views</p>
+        <ul>
+          <li><code>onLayout</code><br /> e.g. <code>PhotoSpiral</code></li>
+          <li><code>dispatchDraw</code><br /> e.g. <code>SidewaysLayout</code></li>
+        </ul>
+      </article>
+    </slide>
+
+    <slide>
+      <hgroup>
+        <h2>Thank you!</h2>
+      </hgroup>
+      <article data-timings="3525">
+        <ul>
+          <li>
+            <a href="http://chiuki.github.com/devconf-ru">
+              http://chiuki.github.com/devconf-ru
+            </a>
+          </li>
+          <li>
+            <a href="http://eepurl.com/lR5uD">
+              http://eepurl.com/lR5uD
+            </a>
+          </li>
+          <li>
+            <a href="http://blog.sqisland.com">
+              http://blog.sqisland.com
+            </a>
+          </li>
+          <li>
+            <a href="http://twitter.com/chiuki">
+              http://twitter.com/chiuki
+            </a>
+          </li>
+        </ul>
+
+        <br />
+        <center>
+          <img width="240" height="240"
+            src="../images/monkeywrite-icon.png" />
+          &nbsp;
+          <img width="240" height="240"
+            src="../images/qrcode/monkeywrite/devconfru2013.png" />
+          <br/>
+          <small>Don't forget to download Monkey Write!</small>
+        </center>
+      </article>
+    </slide>
+
+    <slide class="backdrop"></slide>
+
+    </slides>
+    <section class="video" id="video">
+      
+<div id="player" style="width: 160px; height: 120px"></div>
+
+    </section>
+    <!--[if IE]>
+      <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+      <script>CFInstall.check({mode: 'overlay'});</script>
+    <![endif]-->
+  </body>
+</html>
