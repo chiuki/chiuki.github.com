@@ -236,7 +236,7 @@ slides > slide {
   display: none;
   font-family: 'Open Sans', Arial, sans-serif;
   font-size: 26px;
-  color: #797979;
+  color: #272727;
   width: 900px;
   height: 700px;
   margin-left: -450px;
@@ -475,7 +475,7 @@ h3 {
   letter-spacing: -1px;
   line-height: 2;
   font-weight: inherit;
-  color: #797979;
+  color: #272727;
 }
 
 /* line 331, ../scss/default.scss */
@@ -700,7 +700,7 @@ button:not(:disabled):active {
 
 /* line 490, ../scss/default.scss */
 .gray3 {
-  color: #797979;
+  color: #272727;
 }
 
 /* line 493, ../scss/default.scss */
