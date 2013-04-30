@@ -2,7 +2,7 @@ var SLIDE_CONFIG = {
   // Slide settings
   settings: {
     title: 'Beautiful Android on a Shoestring',
-    subtitle: 'March 15, 2013',
+    subtitle: 'May 2, 2013',
     useBuilds: true, // Default: true. False will turn off slide animation builds.
     usePrettify: true, // Default: true
     enableSlideAreas: true, // Default: true. False turns off the click areas on either slide of the slides.
