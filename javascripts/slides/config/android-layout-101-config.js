@@ -19,7 +19,8 @@ var SLIDE_CONFIG = {
   // Author information
   presenters: [{
     name: 'Chiu-Ki Chan',
-    gplus: 'http://plus.google.com/106114190915231601949',
+    pluralsight: 'http://pluralsight.com/courses/android-layout-fundamentals',
+    gplus: 'http://plus.google.com/+ChiuKiChan',
     twitter: 'chiuki',
     www: 'http://blog.sqisland.com',
     github: 'http://github.com/chiuki'
