@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Advanced Android TextView</title>
+
+		<meta name="description" content="Custom your TextView with Span, Paint and much more.">
+		<meta name="author" content="Chiu-Ki Chan">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="../reveal/css/reveal.min.css">
+		<link rel="stylesheet" href="../reveal/css/theme/android.css" id="theme">
+
+		<link rel="stylesheet" href="../reveal/plugin/footer/footer.css">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
+
+		<link rel="stylesheet" href="../stylesheets/main.css">
+
+<style>
+.red {
+  color: #ff2c2d;
+}
+.green {
+  color: a4c639;
+}
+.brown {
+  color: 241811
+}
+code.smaller {
+  font-size: 0.8em;
+}
+</style>
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../reveal/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="../reveal/lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-state="no-footer">
+					<h1>Advanced Android TextView</h1>
+					<p>
+						by Chiu-Ki Chan
+						<a href="http://twitter.com/chiuki">@chiuki</a>
+					</p>
+
+				</section>
+
+        <section>
+          <h2>Lint error</h2>
+          <blockquote style="text-align:left">
+<p>
+This tag and its children can be replaced by one &lt;TextView/&gt; and a compound drawable
+<p>
+A LinearLayout which contains an ImageView and a TextView can be more efficiently handled as a compound drawable
+</p>
+          </blockquote>
+        </section>
+
+        <section>
+          <h2>Compound Drawable</h2>
+          <div class="row">
+            <div class="left">
+	    				<pre style="width: auto"><code data-trim>
+&lt;TextView
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:text="@string/animation"
+  android:drawableLeft="@drawable/rotating_loading"
+  android:drawableRight="@drawable/animated_wifi"
+  android:drawableBottom="@drawable/animated_clock"/&gt;
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/animated_compound_drawable.png" alt="Compound Drawable">
+          </div>
+        </section>
+
+        <section>
+          <h2>Drawable XML</h2>
+            <pre><code data-trim>
+&lt;!-- res/drawable/rotating_loading.xml --&gt;
+&lt;animated-rotate
+  android:pivotX="50%"
+  android:pivotY="50%"
+  android:drawable="@drawable/ic_loading"
+  android:duration="500" /&gt;
+            </code></pre>
+            <pre><code data-trim>
+&lt;!-- res/drawable/animated_wifi.xml --&gt;
+&lt;animation-list&gt;
+  &lt;item android:drawable="@drawable/ic_wifi_0" android:duration="250" /&gt;
+  &lt;item android:drawable="@drawable/ic_wifi_1" android:duration="250" /&gt;
+  &lt;item android:drawable="@drawable/ic_wifi_2" android:duration="250" /&gt;
+  &lt;item android:drawable="@drawable/ic_wifi_3" android:duration="250" /&gt;
+&lt;/animation-list&gt;
+            </code></pre>
+            <pre><code data-trim>
+&lt;!-- res/drawable/animated_clock.xml --&gt;
+&lt;animated-vector android:drawable="@drawable/clock"&gt;
+  &lt;target android:name="hours"
+    android:animation="@anim/hours_rotation" /&gt;
+  &lt;target android:name="minutes"
+    android:animation="@anim/minutes_rotation" /&gt;
+&lt;/animated-vector>&gt;
+            </code></pre>
+          <div class="fragment">
+          <ul style="font-size: 0.8em">
+            <li><code>AnimatedRotateDrawable implements Animatable</code></li>
+            <li><code>AnimationDrawable implements Animatable</code></li>
+            <li><code><span class="fragment highlight-red">AnimatedVectorDrawable</span> implements Animatable</code></li>
+          </ul>
+          <p class="fragment">
+            <span class="red" style="font-size: 1.2em">Introduced in Lollipop</span>
+          </p>
+          </li>
+        </section>
+
+        <section>
+          <h2>Animatable</h2>
+          <div class="row">
+            <div class="left">
+	    				<pre style="width: auto"><code data-trim>
+&lt;TextView
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:text="@string/animation"
+  android:drawableLeft="@drawable/rotating_loading"
+  android:drawableRight="@drawable/animated_wifi"
+  android:drawableBottom="@drawable/animated_clock"/&gt;
+              </code></pre>
+					    <pre style="width: auto"><code data-trim>
+private void startAnimation(TextView textView) {
+  Drawable[] drawables = textView.getCompoundDrawables();
+  for (Drawable drawable : drawables) {
+    if (drawable != null && drawable instanceof Animatable) {
+      ((Animatable) drawable).start();
+    }
+  }
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/animated_compound_drawable.gif" alt="Animated Compound Drawable">
+          </div>
+        </section>
+        
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">More XML fun</h1>
+        </section>
+
+        <section>
+          <h2>Shadow</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+&lt;TextView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:padding="12dp"
+  android:text="@string/shadow"
+  android:textSize="80sp"
+  android:textStyle="bold"
+  android:shadowColor="#7000"
+  android:shadowDx="12"
+  android:shadowDy="12"
+  android:shadowRadius="8"/&gt;
+              </code></pre>
+              <ul class="fragment">
+<li>
+<span style="font-size: 0.75em">
+<code>shadowColor</code>,
+<span class="fragment highlight-red">
+<code>shadowDx</code>,
+<code>shadowDy</code>,
+<code>shadowRadius</code>
+</span>
+</li>
+<li class="fragment">
+<span class="red">px, not dp</span>
+</li>
+<li class="fragment">
+Add padding to accommodate shadow
+</li>
+              </ul>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/shadow.png" alt="Shadow">
+          </div>
+        </section>
+
+        <section>
+          <h2>Shadow, abused</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+&lt;TextView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:padding="12dp"
+  android:text="@string/blocky"
+  android:textColor="@color/purple"
+  android:textSize="@dimen/80sp"
+  android:textStyle="bold"
+  android:shadowColor="@color/green"
+  android:shadowDx="4"
+  android:shadowDy="-4"
+  android:shadowRadius="1"/&gt;
+              </code></pre>
+              <pre style="width: auto"><code data-trim>
+&lt;TextView
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:padding="12dp"
+  android:text="@string/glow"
+  android:textSize="80sp"
+  android:textStyle="bold"
+  android:textColor="@android:color/white"
+  android:background="@android:color/black"
+  android:shadowColor="@color/yellow"
+  android:shadowDx="0"
+  android:shadowDy="0"
+  android:shadowRadius="24"/&gt;
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/shadow_blocky_glow.png" alt="Compound Drawable">
+          </div>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">Fancy looks</h1>
+        </section>
+
+        <section>
+          <h2>Custom font</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+Typeface typeface 
+    = Typeface.createFromAsset(getAssets(), "Ruthie.ttf");
+textView.setTypeface(typeface);
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/custom_font.png" alt="Custom font">
+          </div>
+        </section>
+
+        <section>
+          <h2>Gradient</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+Shader shader = new LinearGradient(
+    0, 0, 0, textView.getTextSize(),
+    Color.RED, Color.BLUE, Shader.TileMode.CLAMP);
+textView.getPaint().setShader(shader);
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/gradient.png" alt="Text gradient">
+          </div>
+        </section>
+
+        <section>
+          <h2>Pattern</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+Bitmap bitmap = BitmapFactory.decodeResource(
+    getResources(), R.drawable.cheetah_tile);
+Shader shader = new BitmapShader(bitmap, 
+    Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+textView.getPaint().setShader(shader);
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/patterned.png" alt="Patterned Text">
+          </div>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">Multiple styles</h1>
+        </section>
+
+        <section>
+          <h2>HTML</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+<h1>Hello World</h1>
+Here is an <img src="octopus"><i>octopus</i>.<br>
+And here is a 
+<a href="http://d.android.com/reference/android/text/Html.html">
+link</a>.
+              </code></pre>
+              <pre class="fragment" style="width: auto"><code data-trim>
+&lt;string name="from_html_text"&gt;
+&lt;![CDATA[
+&lt;h1&gt;Hello World&lt;/h1&gt;
+Here is an &lt;img src="octopus"&gt;&lt;i&gt;octopus&lt;/i&gt;.&lt;br&gt;
+And here is a 
+&lt;a href="http://d.android.com/reference/android/text/Html.html"&gt;
+link&lt;/a&gt;.
+]]&gt;
+&lt;/string&gt;
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/from_html.png" alt="From HTML">
+          </div>
+        </section>
+
+        <section>
+          <h2>HTML.fromHtml</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+String html = getString(R.string.from_html_text);
+textView.setText(Html.fromHtml(
+    html, new ResouroceImageGetter(this), null));
+textView.setMovementMethod(
+    LinkMovementMethod.getInstance());
+              </code></pre>
+              <pre style="width: auto"><code data-trim>
+private static class ResouroceImageGetter 
+    implements Html.ImageGetter {
+  private final Context context;
+
+  public ResouroceImageGetter(Context context) {
+    this.context = context;
+  }
+
+  public Drawable getDrawable(String source) {
+    int path = context.getResources().getIdentifier(
+        source, "drawable", BuildConfig.APPLICATION_ID);
+    Drawable drawable 
+      = context.getResources().getDrawable(path);
+    drawable.setBounds(0, 0, 
+       drawable.getIntrinsicWidth(),
+       drawable.getIntrinsicHeight());
+    return drawable;
+  }
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/from_html.png" alt="From HTML">
+          </div>
+        </section>
+
+        <section>
+          <h2>Clickable link</h2>
+          <img width="320" height="480" src="../images/advanced-android-textview/from_html.gif" alt="From HTML">
+        </section>
+
+        <section>
+          <h2>Supported tags</h2>
+          <ul>
+            <li>Defined by platform</li>
+            <li>Can be extended with custom <code>TagHandler</code></li>
+          </ul>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">Span</h1>
+        </section>
+
+        <section>
+            <code data-trim>
+              One &lt;u&gt;two&lt;/u&gt; three
+            </code>
+            <div class="fragment">
+              <p>&darr;</p>            
+              <p><code style="font-size: 0.9em">"One two three"</code> + Underline from position 5 to 8</p>
+            </div>
+            <div class="fragment">
+              <p>&darr;</p> 
+              <p>
+                <code style="font-size: 0.9em">
+                  spannableString.setSpan(new UnderlineSpan(), 5, 8, flags);
+                </code>
+           </div>
+        </section>
+
+
+        <section>
+          <h2>CharacterStyle</h2>
+          <ul>
+            <li>Character-level text formatting</li>
+            <li>e.g. 
+              <code class="smaller">ForegroundColorSpan</code>,
+              <code class="smaller">BackgroundColorSpan</code>,
+              <code class="smaller">UnderlineSpan</code>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>ParagraphStyle</h2>
+          <ul>
+            <li>Paragraph-level text formatting</li>
+            <li>e.g. 
+              <code class="smaller">BulletSpan</code>,
+              <code class="smaller">IconMarginSpan</code>,
+              <code class="smaller">QuoteSpan</code>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Spans, a Powerful Concept</h2>
+            <p>
+              by Flavien Laurent
+            </p>
+            <p>
+              <a href="http://flavienlaurent.com/blog/2014/01/31/spans/">http://flavienlaurent.com/blog/2014/01/31/spans/</a>
+            </p>
+        </section>
+
+        <section>
+          <h2>Styled string</h2>
+            <div class="row">
+              <div class="left">
+                <pre style="width: auto"><code data-trim>
+SpannableStringBuilder builder = new SpannableStringBuilder()
+  .append(formatString(this, R.string.big_red, 
+      R.style.BigRedTextAppearance))
+  .append("\n")
+  .append(formatString(this, R.string.medium_green, 
+      R.style.MediumGreenTextAppearance))
+  .append("\n")
+  .append(formatString(this, R.string.small_blue, 
+      R.style.SmallBlueTextAppearance));
+textView.setText(builder.subSequence(0, builder.length()));
+                </code></pre>
+                <pre style="width: auto"><code data-trim>
+&lt;style name="BigRedTextAppearance" 
+    parent="@android:style/TextAppearance"&gt;
+  &lt;item name="android:textSize"&gt;56sp&lt;/item&gt;
+  &lt;item name="android:textColor"&gt;#c00&lt;/item&gt;
+&lt;/style&gt;
+                </code></pre>
+                <pre style="width: auto"><code data-trim>
+private static SpannableString formatString(
+    Context context, int textId, int style) {
+  String text = context.getString(textId);
+  SpannableString spannableString = new SpannableString(text);
+  spannableString.setSpan(
+    new TextAppearanceSpan(context, style), 0, text.length(), 0);
+  return spannableString;
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/styled_string.png" alt="Styled string">
+          </div>
+        </section>
+
+        <section>
+          <h2>AlignmentSpan</h2>
+            <div class="row">
+              <div class="left">
+                <pre style="width: auto"><code data-trim>
+public void click(View button) {
+  String text = editText.getText().toString();
+  Layout.Alignment align =
+    button.getId() == R.id.add_to_right_button ?
+      Layout.Alignment.ALIGN_OPPOSITE : 
+      Layout.Alignment.ALIGN_NORMAL;
+  appendText(text, align);
+  editText.setText(null);
+}
+                </code></pre>
+                <pre style="width: auto"><code data-trim>
+private void appendText(
+    CharSequence text, Layout.Alignment align) {
+  AlignmentSpan span = new AlignmentSpan.Standard(align);
+  SpannableString spannableString 
+    = new SpannableString(text);
+  spannableString.setSpan(span, 0, text.length(), 0);
+
+  if (textView.length() > 0) {
+    textView.append("\n\n");
+  }
+  textView.append(spannableString);
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/alignment_span.png" alt="AlignmentSpan">
+          </div>
+        </section>
+
+        <section>
+          <h2>ClickableSpan</h2>
+            <div class="row">
+              <div class="left">
+                <pre style="width: auto"><code data-trim>
+String text = textView.getText().toString();
+
+String goToSettings = getString(R.string.go_to_settings);
+int start = text.indexOf(goToSettings);
+int end = start + goToSettings.length();
+
+SpannableString spannableString = new SpannableString(text);
+spannableString.setSpan(new GoToSettingsSpan(), start, end, 0);
+textView.setText(spannableString);
+
+textView.setMovementMethod(new LinkMovementMethod());
+                </code></pre>
+                <pre style="width: auto"><code data-trim>
+private static class GoToSettingsSpan extends ClickableSpan {
+  public void onClick(View view) {
+    view.getContext().startActivity(
+      new Intent(android.provider.Settings.ACTION_SETTINGS));
+  }
+}
+                </code></pre>
+                <pre style="width: auto"><code data-trim>
+&lt;TextView
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:text="@string/clickable_span_text"
+  android:textColorLink="@color/go_to_settings"
+  android:textColorHighlight="@color/light_green"/&gt;
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/clickable_span.gif" alt="ClickableSpan">
+          </div>
+        </section>
+
+        <section>
+          <h2>Emoji</h2>
+          <img width="320" height="480" src="../images/advanced-android-textview/emoji_raw.png" alt="Emoji before rendering">
+          <img width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji after rendering">
+        </section>
+
+        <section>
+          <h2>Unicode with system font</h2>
+          <img width="320" height="480" src="../images/advanced-android-textview/emoji_raw_galaxy_nexus.png" alt="Emoji before rendering">
+          <img width="320" height="480" src="../images/advanced-android-textview/emoji_raw.png" alt="Emoji after rendering">
+        </section>
+
+        <section>
+          <h2>Unicode with custom font</h2>
+          <div class="row">
+            <div class="left">
+                <pre style="width: auto"><code data-trim>
+String text = textView.getText().toString();
+SpannableString spannableString = new SpannableString(text);
+
+IconFontSpan iconFontSpan 
+    = new IconFontSpan(textView.getContext());
+Pattern pattern = Pattern.compile("\u26F7");    // skier
+Matcher matcher = pattern.matcher(text);
+while (matcher.find()) {
+  spannableString.setSpan(iconFontSpan, 
+    matcher.start(), matcher.end(), 0);
+}
+                </code></pre>
+                <pre style="width: auto"><code data-trim>
+private static class IconFontSpan 
+    extends MetricAffectingSpan {
+  private static Typeface typeface = null;
+    public IconFontSpan(Context context) {
+      if (typeface == null) {
+        typeface = Typeface.createFromAsset(
+            context.getAssets(), "icomoon.ttf");
+      }
+    }
+    public void updateMeasureState(TextPaint textPaint) {
+       textPaint.setTypeface(typeface);
+    }
+    public void updateDrawState(TextPaint textPaint) {
+      textPaint.setTypeface(typeface);
+    }
+}
+                </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
+          </div>
+        </section>
+
+        <section>
+          <h2>ImageSpan from resources</h2>
+          <div class="row">
+            <div class="left">
+                <pre style="width: auto"><code data-trim>
+Pattern pattern = Pattern.compile(":octopus:");
+Matcher matcher = pattern.matcher(text);
+
+Bitmap octopus = null;
+int size = (int) (-textView.getPaint().ascent());
+while (matcher.find()) {
+  if (octopus == null) {
+    Bitmap bitmap = BitmapFactory.decodeResource(
+        getResources(), R.drawable.octopus);
+    octopus = Bitmap.createScaledBitmap(
+        bitmap, size, size, true);
+    bitmap.recycle();
+  }
+  ImageSpan span = new ImageSpan(
+      this, octopus, ImageSpan.ALIGN_BASELINE);
+  spannableString.setSpan(
+      span, matcher.start(), matcher.end(), 0);
+}
+                </code></pre>
+            <img class="fragment" style="background: white; border: none" src="../images/advanced-android-textview/font_metrics.png" alt="Font metrics">
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
+          </div>
+        </section>
+	
+        <section>
+          <h2>Dynamic ImageSpan</h2>
+          <div class="row">
+            <div class="left">
+                <pre style="width: auto"><code data-trim>
+// :speed_50: :speed_110:
+Pattern pattern = Pattern.compile(":speed_(\\d\\d\\d?):");
+Pattern matcher = pattern.matcher(text);
+
+while (matcher.find()) {
+  SpeedSignDrawable drawable = new SpeedSignDrawable(
+      textView, matcher.group(1));
+  ImageSpan span = new ImageSpan(
+      drawable, ImageSpan.ALIGN_BASELINE);
+  spannableString.setSpan(
+      span, matcher.start(), matcher.end(), 0);
+}
+                </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
+          </div>
+        </section>
+
+        <section>
+          <h2>SpeedSignDrawable</h2>
+          <div class="row">
+            <div class="left">
+                <pre style="width: auto"><code data-trim>
+private static class SpeedSignDrawable extends Drawable {
+  public SpeedSignDrawable(
+      TextView textView, String number) {
+    this.ascent = textView.getPaint().ascent();
+    this.descent = textView.getPaint().descent();
+    this.textSize = textView.getTextSize();
+    this.strokeWidth = textView.getPaint().getStrokeWidth();
+    this.number = number;
+    int size = (int) -ascent;
+    this.setBounds(0, 0, size, size);
+  }
+                </code></pre>
+                <pre style="width: auto"><code>  public void draw(Canvas canvas) {
+    drawYellowCircle(canvas);
+    drawRedRing(canvas);
+    drawBlackNumber(canvas);
+  }
+
+  private void drawYellowCircle(Canvas canvas) {
+    int size = (int) -ascent;
+    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    paint.setStyle(Paint.Style.FILL);
+    paint.setColor(Color.YELLOW);
+    canvas.drawCircle(size/2, size/2, size/2, paint);
+  }
+}</code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
+          </div>
+        </section>
+	
+				<section data-state="no-footer">
+					<h2>Thank you!</h2>
+					<ul>
+						<li><a href="http://bit.ly/advtext">bit.ly/advtext</a></li>
+						<li><a href="https://github.com/chiuki/advanced-textview">github.com/chiuki/advanced-textview</a></li>
+						<li><a href="http://bit.ly/pluralsight-chiuki">bit.ly/pluralsight-chiuki</a></li>
+						<li><a href="http://blog.sqisland.com">blog.sqisland.com</a></li>
+						<li><a href="http://twitter.com/chiuki">@chiuki</a></li>
+						<li><a href="http://plus.google.com/+ChiuKiChan">+ChiuKiChan</a></li>
+					</ul>
+				</section>
+
+			</div>
+
+			<footer id="footer">
+				<a href="http://twitter.com/chiuki">@chiuki</a>
+			</footer>
+		</div>
+
+		<script src="../reveal/lib/js/head.min.js"></script>
+		<script src="../reveal/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: false,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: '../reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: '../reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: '../reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: '../reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
