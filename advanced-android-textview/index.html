@@ -464,7 +464,8 @@ private static SpannableString formatString(
   String text = context.getString(textId);
   SpannableString spannableString = new SpannableString(text);
   spannableString.setSpan(
-    new TextAppearanceSpan(context, style), 0, text.length(), 0);
+      new TextAppearanceSpan(context, style), 
+      0, text.length(), 0);
   return spannableString;
 }
               </code></pre>
