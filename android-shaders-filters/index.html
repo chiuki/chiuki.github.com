@@ -1,32 +1,31 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8">
 
-	<head>
-		<meta charset="utf-8">
+    <title>Fun with Android Shaders and Filters</title>
 
-		<title>Fun with Android Shaders and Filters</title>
+    <meta name="description" content="Custom your TextView with Span, Paint and much more.">
+    <meta name="author" content="Chiu-Ki Chan">
 
-		<meta name="description" content="Android graphics effects with Shaders, Filters, and more">
-		<meta name="author" content="Chiu-Ki Chan">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="../reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="../reveal/css/theme/android.css" id="theme">
 
-		<link rel="stylesheet" href="../reveal/css/reveal.min.css">
-		<link rel="stylesheet" href="../reveal/css/theme/android.css" id="theme">
+    <link rel="stylesheet" href="../reveal/plugin/footer/footer.css">
 
-		<link rel="stylesheet" href="../reveal/plugin/footer/footer.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
-                <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
 
-		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
+    <link rel="stylesheet" href="../stylesheets/main.css">
 
-		<link rel="stylesheet" href="../stylesheets/main.css">
-
-<style>
+    <style>
 .red {
   color: #ff2c2d;
 }
@@ -80,15 +79,15 @@ function swap(el) {
           <p>
             by Chiu-Ki Chan
           </p>
-          <div class="row" style="width: 340px; margin: auto">
-            <div class="right" style="width: 50%; text-align: right">
-            <a href="http://plus.google.com/+ChiuKiChan">+ChiuKiChan</a>
-          </div>
-            <div class="left" style="width: 50%; text-align: left">
-<a href="http://twitter.com/chiuki">
-@chiuki
-</a>
-          </div>
+          <p style="width: 230px; margin: 1em auto 0 auto; text-align: left">
+            <a href="http://twitter.com/chiuki">
+              <i style="font-family: FontAwesome; margin-right: 1em" class="fa fa-twitter"></i>@chiuki
+            </a>
+            <br/>
+            <a href="http://plus.google.com/+ChiuKiChan">
+              <i style="font-family: FontAwesome; margin-right: 1em" class="fa fa-google-plus"></i>+ChiuKiChan
+            </a>
+          </p>
         </section>
 
         <section data-background="#a4c639" data-state="no-footer">
@@ -993,9 +992,17 @@ private Bitmap convolve(Bitmap original, float[] coefficients) {
 	</section>
 
       </div>
-			
+	
       <footer id="footer">
-        <a href="http://twitter.com/chiuki">@chiuki</a>
+        <p style="text-align: left">
+          <a href="http://twitter.com/chiuki">
+            <i style="font-family: FontAwesome; margin-right: 1em" class="fa fa-twitter"></i>@chiuki
+          </a>
+          <br/>
+          <a href="http://plus.google.com/+ChiuKiChan">
+            <i style="font-family: FontAwesome; margin-right: 1em" class="fa fa-google-plus"></i>+ChiuKiChan
+          </a>
+        </p>
       </footer>
     </div>
 
