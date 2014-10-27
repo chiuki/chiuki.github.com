@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Fun with Android Shaders and Filters</title>
+
+		<meta name="description" content="Android graphics effects with Shaders, Filters, and more">
+		<meta name="author" content="Chiu-Ki Chan">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="../reveal/css/reveal.min.css">
+		<link rel="stylesheet" href="../reveal/css/theme/android.css" id="theme">
+
+		<link rel="stylesheet" href="../reveal/plugin/footer/footer.css">
+
+                <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
+
+		<link rel="stylesheet" href="../stylesheets/main.css">
+
+<style>
+.red {
+  color: #ff2c2d;
+}
+.green {
+  color: a4c639;
+}
+.brown {
+  color: 241811
+}
+
+code.smaller {
+  font-size: 0.8em;
+}
+
+img.small-square {
+  width: 120px;
+  height: 120px;
+}
+</style>
+
+<script>
+function swap(el) {
+  var tmp = el.src;
+  el.src = el.getAttribute('data-swap');
+  el.dataset.swap = tmp;
+}
+</script>
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../reveal/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="../reveal/lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+    <body>
+
+       <div class="reveal">
+          <!-- Any section element inside of this container is displayed as a slide -->
+          <div class="slides">
+          <section data-state="no-footer">
+          <h1>Fun with <br/>Android Shaders and Filters</h1>
+          <p>
+            by Chiu-Ki Chan
+          </p>
+          <div class="row" style="width: 340px; margin: auto">
+            <div class="right" style="width: 50%; text-align: right">
+            <a href="http://plus.google.com/+ChiuKiChan">+ChiuKiChan</a>
+          </div>
+            <div class="left" style="width: 50%; text-align: left">
+<a href="http://twitter.com/chiuki">
+@chiuki
+</a>
+          </div>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 class="fragment" style="color: #241811">Paint</h1>
+          <img width="461" height="428" src="../images/android-shaders-filters/paint_bucket.png" alt="Paint" style="box-shadow: none; border: none; background: none">
+        </section>
+
+        <section>
+          <h2>Shader</h2>
+          <p style="width: 80%; margin: auto">
+            <code class="smaller">LinearGradient</code>,
+            <code class="smaller">RadialGradient</code>,
+            <code class="smaller">SweepGradient</code>,
+            <code class="smaller">BitmapGradient</code>,
+            <code class="smaller">ComposeGradient</code>
+          </p>
+          <br/>
+
+          <h2>ColorFilter</h2>
+          <p>
+            <code class="smaller">LightingColorFilter</code>,
+            <code class="smaller">ColorMatrixColorFilter</code>,
+            <code class="smaller">PorterDuffColorFilter</code>
+          </p>
+          <br/>
+
+          <h2>MaskFilter</h2>
+          <p>
+            <code class="smaller">BlurMaskFilter</code>,
+            <code class="smaller">EmbossMaskFilter</code>
+          </p>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">Gradient</h1>
+        </section>
+
+        <section>
+          <h2>From XML</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+&lt;shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    type="rectangle"&gt;
+  &lt;gradient
+    android:startColor="@color/blue"
+    android:centerColor="@color/white"
+    android:endColor="@color/red"
+    android:angle="45"/&gt;
+&lt;/shape&gt;
+              </code></pre>
+<code class="left">LinearGradient extends Shader</code>
+            </div>
+            <img class="right fragment" width="320" height="480" src="../images/android-shaders-filters/linear_gradient.png" alt="LinearGradient from XML">
+          </div>
+        </section>
+
+        <section>
+          <h2>More colors</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+public class RainbowTextView extends TextView {
+  protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    super.onSizeChanged(w, h, oldw, oldh);
+
+    int[] rainbow = getRainbowColors();
+    Shader shader = new LinearGradient(0, 0, 0, w, rainbow, 
+        null, Shader.TileMode.MIRROR);
+
+    Matrix matrix = new Matrix();
+    matrix.setRotate(90);
+    shader.setLocalMatrix(matrix);
+
+    getPaint().setShader(shader);
+  }
+              </code></pre>
+              <pre style="width: auto"><code data>  private int[] getRainbowColors() {
+    return new int[] {
+      getResources().getColor(R.color.rainbow_red),
+      getResources().getColor(R.color.rainbow_yellow),
+      getResources().getColor(R.color.rainbow_green),
+      getResources().getColor(R.color.rainbow_blue),
+      getResources().getColor(R.color.rainbow_purple)
+    };
+  }
+}</code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/android-shaders-filters/rainbow.png" alt="Rainbow LinearGradient">
+          </div>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">BitmapShader</h1>
+        </section>
+
+        <section>
+          <h2>From XML</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+&lt;bitmap
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@drawable/cheetah_tile"
+    android:tileMode="repeat"/>
+              </code></pre>
+<code class="fragment left">BitmapShader extends Shader</code>
+            </div>
+            <img class="right" width="320" height="480" src="../images/android-shaders-filters/cheetah_xml.png" alt="BitmapShader from XML">
+          </div>
+        </section>
+
+        <section>
+          <h2>Patterned Text</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+Bitmap bitmap = BitmapFactory.decodeResource(
+    getResources(), R.drawable.cheetah_tile);
+Shader shader = new BitmapShader(bitmap, 
+    Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+textView.getPaint().setShader(shader);
+              </code></pre>
+<table>
+<tr>
+<td style="text-align: center">
+<img style="border: none" src="../images/fluid-android-layouts/tilemode-clamp.png" alt="TileMode.CLAMP"/><br/>
+<code class="smaller">CLAMP</code>
+</td>
+<td style="text-align: center">
+<img style="border: none" src="../images/fluid-android-layouts/tilemode-repeat.png" alt="TileMode.REPEAT"/><br/>
+<code class="smaller">REPEAT</code>
+</td>
+<td style="text-align: center">
+<img style="border: none" src="../images/fluid-android-layouts/tilemode-mirror.png" alt="TileMode.MIRROR"/><br/>
+<code class="smaller">MIRROR</code>
+</td>
+</tr>
+</table>
+            </div>
+            <img class="right" width="320" height="480" src="../images/android-shaders-filters/cheetah.png" alt="TextView with BitmapShader">
+          </div>
+        </section>
+
+        <section>
+          <h2>Peek through: onTouchEvent</h2>
+          <div class="row">
+            <div class="left fragment">
+              <pre style="width: auto"><code data-trim>
+public class PeekThroughImageView extends ImageView {
+  private final float radius;
+  private Paint paint = null;
+
+  private float x;
+  private float y;
+  private boolean shouldDrawOpening = false;
+
+  public boolean onTouchEvent(MotionEvent motionEvent) {
+    int action = motionEvent.getAction();
+    shouldDrawOpening = (action == MotionEvent.ACTION_DOWN || 
+      action == MotionEvent.ACTION_MOVE);
+    x = motionEvent.getX();
+    y = motionEvent.getY();
+    invalidate();
+    return true;
+  }
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/peek_through.gif" data-swap="../images/android-shaders-filters/peek_through_original.png" alt="BitmapShader on touch area">
+          </div>
+        </section>
+
+        <section>
+          <h2>Peek through: onDraw</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+protected void onDraw(Canvas canvas) {
+  if (paint == null) {
+    Bitmap original = Bitmap.createBitmap(
+        getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+    Canvas originalCanvas = new Canvas(original);
+    super.onDraw(originalCanvas);    // ImageView
+
+    Shader shader = new BitmapShader(original, 
+        Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+
+    paint = new Paint();
+    paint.setShader(shader);
+  }
+
+  canvas.drawColor(Color.GRAY);
+  if (shouldDrawOpening) {
+    canvas.drawCircle(x, y - radius, radius, paint);
+  }
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/peek_through.gif" data-swap="../images/android-shaders-filters/peek_through_original.png" alt="BitmapShader on touch area">
+          </div>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">ColorFilter</h1>
+        </section>
+
+        <section>
+          <h2>ColorMatrix</h2>
+          <pre style="width: 170px"><code data-trim>
+[ a, b, c, d, e,
+  f, g, h, i, j,
+  k, l, m, n, o,
+  p, q, r, s, t ]
+          </code></pre>
+          <p>Apply to [R, G, B, A], after clamping:</p>
+          <pre style="width: 320px"><code data-trim>
+R' = a*R + b*G + c*B + d*A + e;
+G' = f*R + g*G + h*B + i*A + j;
+B' = k*R + l*G + m*B + n*A + o;
+A' = p*R + q*G + r*B + s*A + t;
+          </code></pre>
+          <div class="fragment">
+            <p>Identity:</p>
+              <pre style="width: 350px"><code data-trim>
+[ R,     [ 1, 0, 0, 0, 0,    [ R,
+  G,  *    0, 1, 0, 0, 0,  =   G,
+  B,       0, 0, 1, 0, 0,      B,
+  A ]      0, 0, 0, 1, 0 ]     A ]
+            </code></pre>
+          </div>
+        </section>
+
+        <section>
+          <h2>ColorMatrix: Grayscale</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+Bitmap bitmap = Bitmap.createBitmap(original.getWidth(), 
+    original.getHeight(), Bitmap.Config.ARGB_8888);
+Canvas canvas = new Canvas(bitmap);
+
+Paint paint = new Paint();
+paint.setColorFilter(new ColorMatrixColorFilter(
+    getColorMatrix()));
+canvas.drawBitmap(original, 0, 0, paint);
+
+return bitmap;
+              </code></pre>
+              <pre style="width: auto"><code data-trim>
+private ColorMatrix getColorMatrix() {
+  ColorMatrix colorMatrix = new ColorMatrix();
+  colorMatrix.setSaturation(0);
+  return colorMatrix;
+}
+              </code></pre>
+              <div class="fragment">
+                <code class="smaller">colorMatrix.setSaturation(0)</code>
+                <pre style="width: 284px"><code data-trim> 
+[ 0.213, 0.715, 0.072, 0, 0,
+  0.213, 0.715, 0.072, 0, 0, 
+  0.213, 0.715, 0.072, 0, 0,
+      0,     0,     0, 1, 0 ]
+
+// 0.213 + 0.715 + 0.072 = 1
+                </code></pre>
+              </div>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/color_matrix_grayscale.png" data-swap="../images/android-shaders-filters/color_matrix_original.png" alt="ColorMatrix: Grayscale">
+          </div>
+        </section>
+
+        <section>
+          <h2>ColorMatrix: Sepia</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+private ColorMatrix getColorMatrix() {
+  ColorMatrix colorMatrix = new ColorMatrix();
+  colorMatrix.setSaturation(0);
+
+  ColorMatrix colorScale = new ColorMatrix();
+  colorScale.setScale(1, 1, 0.8f, 1);
+
+  // Convert to grayscale, then apply brown color
+  colorMatrix.postConcat(colorScale);
+
+  return colorMatrix;
+}
+              </code></pre>
+              <div class="fragment">
+                <code class="smaller">colorMatrix.setScale(1, 1, 0.8f, 1)</code>
+                <pre style="width: 200px"><code data-trim> 
+[ 1, 0,   0, 0, 0,
+  0, 1,   0, 0, 0, 
+  0, 0, 0.8, 0, 0,
+  0, 0,   0, 1, 0 ]
+                </code></pre>
+              </div>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/color_matrix_sepia.png" data-swap="../images/android-shaders-filters/color_matrix_original.png" alt="ColorMatrix: Sepia">
+          </div>
+        </section>
+
+        <section>
+          <h2>ColorMatrix: Binary</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+private ColorMatrix getColorMatrix() {
+  ColorMatrix colorMatrix = new ColorMatrix();
+  colorMatrix.setSaturation(0);
+
+  float m = 255f;
+  float t = -255*128f;
+  ColorMatrix threshold = new ColorMatrix(new float[] {
+      m, 0, 0, 1, t,
+      0, m, 0, 1, t,
+      0, 0, m, 1, t,
+      0, 0, 0, 1, 0
+  });
+
+  // Convert to grayscale, then scale and clamp
+  colorMatrix.postConcat(threshold);
+
+  return colorMatrix;
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/color_matrix_binary.png" data-swap="../images/android-shaders-filters/color_matrix_original.png" alt="ColorMatrix: Binary">
+          </div>
+        </section>
+
+        <section>
+          <h2>ColorMatrix: Invert</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: 600px"><code data-trim>
+private ColorMatrix getColorMatrix() {
+  return new ColorMatrix(new float[] {
+      -1,  0,  0,  0, 255,
+       0, -1,  0,  0, 255,
+       0,  0, -1,  0, 255,
+       0,  0,  0,  1,   0
+  });
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/color_matrix_invert.png" data-swap="../images/android-shaders-filters/color_matrix_original.png" alt="ColorMatrix: Invert">
+          </div>
+        </section>
+
+        <section>
+          <h2>ColorMatrix: Alpha blue</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: 600px"><code data-trim>
+private ColorMatrix getColorMatrix() {
+  return new ColorMatrix(new float[] {
+         0,    0,    0, 0,   0,
+      0.3f,    0,    0, 0,  50,
+         0,    0,    0, 0, 255,
+      0.2f, 0.4f, 0.4f, 0, -30
+  });
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/color_matrix_alpha_blue.png" data-swap="../images/android-shaders-filters/color_matrix_original.png" alt="ColorMatrix: Alpha blue">
+          </div>
+        </section>
+
+        <section>
+          <h2>ColorMatrix: Alpha pink</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: 600px"><code data-trim>
+private ColorMatrix getColorMatrix() {
+  return new ColorMatrix(new float[] {
+         0,    0,    0, 0, 255,
+         0,    0,    0, 0,   0,
+      0.2f,    0,    0, 0,  50,
+      0.2f, 0.2f, 0.2f, 0, -20
+  });
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/color_matrix_alpha_pink.png" data-swap="../images/android-shaders-filters/color_matrix_original.png" alt="ColorMatrix: Alpha pink">
+          </div>
+        </section>
+
+        <section>
+          <h2>LightingColorFilter</h2>
+          <pre style="width: 700px"><code data-trim>
+/** Create a colorfilter that multiplies the RGB channels by one color, 
+    and then adds a second color. */
+LightingColorFilter(int mul, int add)
+          </code></pre>
+          <pre style="width: 700px"><code data-trim>
+R' = R * mul.R + add.R
+G' = G * mul.G + add.G
+B' = B * mul.B + add.B
+          </code></pre>
+          <div class="fragment">
+            <p>Little brother of <code>ColorMatrixColorFilter</code></p>
+            <pre style="width: 700px"><code data-trim>
+[ mul.R,     0,     0, 0, add.R
+      0, mul.G,     0, 0, add.G,
+      0,     0, mul.B, 0, add.B,
+      0,     0,     0, 1,     0 ]
+            </code></pre>
+          </div>
+          <div class="fragment">
+            <p><code>mul.R = Color.red(mul) / 255f</code></p>
+            <p>
+              e.g. <code>#ff0000 &rarr; 0xff / 255 = 255 / 255 = 1</code>
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <h2>LightingColorFilter</h2>
+          <img onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/four_colors.png" data-swap="../images/android-shaders-filters/four_colors_original.png" alt="Four colored quarters">
+          <p>Four colored quarters</p>
+        </section>
+
+        <section>
+          <h2>Four colored quarters</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+public class FourColorsImageView extends ImageView {
+  private Bitmap bitmap = null;
+
+  protected void onDraw(Canvas canvas) {
+    if (bitmap == null) {
+      Bitmap quarter = Bitmap.createBitmap(
+          getWidth()/2, getHeight()/2, Bitmap.Config.ARGB_8888);
+      Canvas quarterCanvas = new Canvas(quarter);
+      quarterCanvas.scale(0.5f, 0.5f);
+      super.onDraw(quarterCanvas);
+      quarterCanvas.scale(2, 2);
+
+      createBitmap(quarter);
+      quarter.recycle();
+    }
+
+    canvas.drawBitmap(bitmap, 0, 0, null);
+  }
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/four_colors_quarter.png" data-swap="../images/android-shaders-filters/four_colors_original.png" alt="Quarter size">
+          </div>
+        </section>
+
+        <section>
+          <h2>Four colored quarters</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code style="max-height: 480px" data-trim>
+private void createBitmap(Bitmap quarter) {
+  bitmap = Bitmap.createBitmap(
+    getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+  Canvas canvas = new Canvas(bitmap);
+
+  Paint paint = new Paint();
+
+  // Top left
+  paint.setColorFilter(new LightingColorFilter(Color.RED, 0));
+  canvas.drawBitmap(quarter, 0, 0, paint);
+
+  // Top right
+  paint.setColorFilter(new LightingColorFilter(Color.YELLOW, 0));
+  canvas.drawBitmap(quarter, getWidth()/2, 0, paint);
+
+  // Bottom left
+  paint.setColorFilter(new LightingColorFilter(Color.BLUE, 0));
+  canvas.drawBitmap(quarter, 0, getHeight()/2, paint);
+
+  // Bottom right
+  paint.setColorFilter(new LightingColorFilter(Color.GREEN, 0));
+  canvas.drawBitmap(quarter, getWidth()/2, getHeight()/2, paint);
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/four_colors.png" data-swap="../images/android-shaders-filters/four_colors_original.png" alt="LightingColorFilter, 4 colors">
+          </div>
+        </section>
+
+        <section data-background="#a4c639">
+          <img width="560" height="640" src="../images/android-shaders-filters/porter_duff.png" alt="Porter-Duff Modes">
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">Porter-Duff Modes</h1>
+        </section>
+
+        <section>
+          <h2>Circle dim around</h2>
+          <img onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/circle_dim_around.png" data-swap="../images/android-shaders-filters/porter_duff_original.png" alt="Circle dim around">
+        </section>
+
+        <section>
+          <h2>Circle Mask</h2>
+          <div class="row" style="width: 670px; margin: auto">
+            <div class="left">
+              <img width="320" height="480" src="../images/android-shaders-filters/porter_duff_original.png" alt="Original">
+              <p>DST<br/><small>(what was already there)</small></p>
+            </div>
+            <div class="right">
+              <img width="320" height="480" src="../images/android-shaders-filters/porter_duff_mask.png" alt="Mask">
+              <p>SRC<br/><small>(what we are drawing)</small></p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>DST_IN</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code style="max-height: 480px" data-trim>
+Bitmap bitmap = Bitmap.createBitmap(
+    original.getWidth(), original.getHeight(), 
+    Bitmap.Config.ARGB_8888);
+Canvas canvas = new Canvas(bitmap);
+
+// Draw the original bitmap (DST during Porter-Duff transfer)
+canvas.drawBitmap(original, 0, 0, null);
+
+// DST_IN = Whatever was there, keep the part that overlaps 
+// with what I'm drawing now
+Paint maskPaint = new Paint();
+maskPaint.setXfermode(
+    new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+canvas.drawBitmap(mask, 0, 0, maskPaint);
+              </code></pre>
+              <div class="row" style="width: 420px; margin: auto">
+                <div class="left">
+                  <img style="border: none; background: none" class="small-square" src="../images/android-shaders-filters/porter_duff_original_trimmed.png" alt="Original">
+                  <p>DST<br/><small>(what was already there)</small></p>
+                </div>
+                <div class="right">
+                  <img style="border: none; background: none" class="small-square" src="../images/android-shaders-filters/porter_duff_mask_trimmed.png" alt="Mask">
+                  <p>SRC<br/><small>(what we are drawing)</small></p>
+                </div>
+              </div>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/porter_duff_dst_in.png" data-swap="../images/android-shaders-filters/porter_duff_original.png" alt="DST_IN">
+          </div>
+        </section>
+
+        <section>
+          <h2>Dim around</h2>
+          <div class="row" style="width: 670px; margin: auto">
+            <div class="left">
+              <img width="320" height="480" src="../images/android-shaders-filters/porter_duff_dst_in.png" alt="Mask with DST_IN">
+              <p>DST<br/><small>(what was already there)</small></p>
+            </div>
+            <div class="right">
+              <img width="320" height="480" src="../images/android-shaders-filters/porter_duff_original_dimmed.png" alt="Dimmed original">
+              <p>SRC<br/><small>(what we are drawing)</small></p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>DST_OVER</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: 550px"><code style="height: 210px" data-trim>
+Paint overPaint = new Paint();
+
+// DST_OVER = Whatever was there (DST), put it over what
+// we are drawing now
+overPaint.setXfermode(
+    new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
+
+// Draw original (SRC) with dim filter
+overPaint.setColorFilter(createDimFilter());
+
+canvas.drawBitmap(original, 0, 0, overPaint);
+              </code></pre>
+              <div class="row" style="width: 420px; margin: auto">
+                <div class="left">
+                  <img style="border: none; background: none" class="small-square" src="../images/android-shaders-filters/porter_duff_dst_in_trimmed.png" alt="Mask with DST_IN">
+                  <p>DST<br/><small>(what was already there)</small></p>
+                </div>
+                <div class="right">
+                  <img style="border: none; background: none" class="small-square" src="../images/android-shaders-filters/porter_duff_original_dimmed_trimmed.png" alt="Dimmed original">
+                  <p>SRC<br/><small>(what we are drawing)</small></p>
+                </div>
+              </div>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/circle_dim_around.png" data-swap="../images/android-shaders-filters/porter_duff_dst_in.png" alt="Circle dim around">
+          </div>
+        </section>
+
+        <section>
+          <h2>DST_OVER</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: 550px"><code style="height: 210px" data-trim>
+private ColorFilter createDimFilter() {
+  ColorMatrix colorMatrix = new ColorMatrix();
+  colorMatrix.setSaturation(0f);
+  float scale = 0.5f;
+  colorMatrix.setScale(scale, scale, scale, 1f);
+  return new ColorMatrixColorFilter(colorMatrix);
+}
+              </code></pre>
+              <div class="row" style="width: 420px; margin: auto">
+                <div class="left">
+                  <img style="border: none; background: none" class="small-square" src="../images/android-shaders-filters/porter_duff_dst_in_trimmed.png" alt="Mask with DST_IN">
+                  <p>DST<br/><small>(what was already there)</small></p>
+                </div>
+                <div class="right">
+                  <img style="border: none; background: none" class="small-square" src="../images/android-shaders-filters/porter_duff_original_dimmed_trimmed.png" alt="Dimmed original">
+                  <p>SRC<br/><small>(what we are drawing)</small></p>
+                </div>
+              </div>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/circle_dim_around.png" data-swap="../images/android-shaders-filters/porter_duff_dst_in.png" alt="DST_IN">
+          </div>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">MaskFilter</h1>
+        </section>
+
+        <section>
+          <h2>EmbossMaskFilter</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+private void applyFilter(
+    TextView textView, float[] direction, float ambient, 
+    float specular, float blurRadius) {
+  if (Build.VERSION.SDK_INT >= 11) {
+    textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+  }
+  EmbossMaskFilter filter = new EmbossMaskFilter(
+    direction, ambient, specular, blurRadius);
+  textView.getPaint().setMaskFilter(filter);
+}
+              </code></pre>
+              <p class="fragment" style="text-align: left">
+                <code class="red smaller">setLayerType(View.LAYER_TYPE_SOFTWARE, null);</code><br/>
+                <span>(Not supported by hardware acceleration)</span>
+              </p>
+              <pre class="fragment" style="width: auto"><code data-trim>
+applyFilter(emboss, new float[] { 0f, 1f, 0.5f }, 0.8f, 3f, 3f);
+              </code></pre>
+              <pre class="fragment" style="width: auto"><code data-trim>
+applyFilter(deboss, new float[] { 0f, -1f, 0.5f }, 0.8f, 15f, 1f);
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/android-shaders-filters/emboss_mask_filter.png" alt="EmbossMaskFilter">
+          </div>
+        </section>
+
+        <section>
+          <h2>BlurMaskFilter</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+private void applyFilter(
+    TextView textView, BlurMaskFilter.Blur style) {
+  if (Build.VERSION.SDK_INT >= 11) {
+    textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+  }
+  textView.setText(style.name());
+  float radius = textView.getTextSize() / 10;
+  BlurMaskFilter filter = new BlurMaskFilter(radius, style);
+  textView.getPaint().setMaskFilter(filter);
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/android-shaders-filters/blur_mask_filter.png" alt="BlurMaskFilter">
+          </div>
+        </section>
+
+        <section data-background="#000000" data-state="no-footer">
+          <h1 style="color: #ffffff">
+            <small class="fragment">(Who is afraid of)</small><br/>
+            RenderScript
+          </h1>
+        </section>
+
+        <section>
+          <h1>ScriptIntrinsic</h1>
+          <p class="fragment"><span class="red">@TargetApi(17)</span></p>
+        </section>
+       
+        <section>
+          <h2>ScriptIntrinsicBlur</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code style="max-height: 480px" data-trim>
+private Bitmap blur(Bitmap original, float radius) {
+  Bitmap bitmap = Bitmap.createBitmap(
+      original.getWidth(), original.getHeight(),
+      Bitmap.Config.ARGB_8888);
+
+  RenderScript rs = RenderScript.create(this);
+
+  Allocation allocIn = Allocation.createFromBitmap(rs, original);
+  Allocation allocOut = Allocation.createFromBitmap(rs, bitmap);
+
+  ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(
+      rs, Element.U8_4(rs));
+  blur.setInput(allocIn);
+  blur.setRadius(radius);
+  blur.forEach(allocOut);
+
+  allocOut.copyTo(bitmap);
+
+  rs.destroy();
+
+  return bitmap;
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/blur_9.png" data-swap="../images/android-shaders-filters/blur_25.png" alt="ScriptIntrinsicBlur">
+          </div>
+        </section>
+
+        <section>
+          <h2>ScriptIntrinsicConvolve3x3</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code style="max-height: 480px" data-trim>
+private Bitmap convolve(Bitmap original, float[] coefficients) {
+  Bitmap bitmap = Bitmap.createBitmap(
+      original.getWidth(), original.getHeight(),
+      Bitmap.Config.ARGB_8888);
+
+  RenderScript rs = RenderScript.create(this);
+
+  Allocation allocIn = Allocation.createFromBitmap(rs, original);
+  Allocation allocOut = Allocation.createFromBitmap(rs, bitmap);
+
+  ScriptIntrinsicConvolve3x3 convolution
+      = ScriptIntrinsicConvolve3x3.create(rs, Element.U8_4(rs));
+  convolution.setInput(allocIn);
+  convolution.setCoefficients(coefficients);
+  convolution.forEach(allocOut);
+
+  allocOut.copyTo(bitmap);         // { 1, 1, 1,
+  re.destroy();                    //   1, 1, 1,
+  return bitmap;                   //   1, 1, 1  } / 9
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/box_blur.png" data-swap="../images/android-shaders-filters/convolve_original.png" alt="ScriptIntrinsicConvolve3x3">
+          </div>
+        </section>
+
+        <section>
+          <h2>Sharpen</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code style="max-height: 480px" data-trim>
+private Bitmap convolve(Bitmap original, float[] coefficients) {
+  Bitmap bitmap = Bitmap.createBitmap(
+      original.getWidth(), original.getHeight(),
+      Bitmap.Config.ARGB_8888);
+
+  RenderScript rs = RenderScript.create(this);
+
+  Allocation allocIn = Allocation.createFromBitmap(rs, original);
+  Allocation allocOut = Allocation.createFromBitmap(rs, bitmap);
+
+  ScriptIntrinsicConvolve3x3 convolution
+      = ScriptIntrinsicConvolve3x3.create(rs, Element.U8_4(rs));
+  convolution.setInput(allocIn);
+  convolution.setCoefficients(coefficients);
+  convolution.forEach(allocOut);
+
+  allocOut.copyTo(bitmap);         // {  0, -1,  0,
+  re.destroy();                    //   -1 , 5, -1,
+  return bitmap;                   //    0, -1,  0  }
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/sharpen.png" data-swap="../images/android-shaders-filters/convolve_original.png" alt="Sharpen">
+          </div>
+        </section>
+
+        <section>
+          <h2>Edge detection</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code style="max-height: 480px" data-trim>
+private Bitmap convolve(Bitmap original, float[] coefficients) {
+  Bitmap bitmap = Bitmap.createBitmap(
+      original.getWidth(), original.getHeight(),
+      Bitmap.Config.ARGB_8888);
+
+  RenderScript rs = RenderScript.create(this);
+
+  Allocation allocIn = Allocation.createFromBitmap(rs, original);
+  Allocation allocOut = Allocation.createFromBitmap(rs, bitmap);
+
+  ScriptIntrinsicConvolve3x3 convolution
+      = ScriptIntrinsicConvolve3x3.create(rs, Element.U8_4(rs));
+  convolution.setInput(allocIn);
+  convolution.setCoefficients(coefficients);
+  convolution.forEach(allocOut);
+
+  allocOut.copyTo(bitmap);         // { -1, -1, -1,
+  re.destroy();                    //   -1 , 8, -1,
+  return bitmap;                   //   -1, -1, -1  }
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/edge_detection.png" data-swap="../images/android-shaders-filters/convolve_original.png" alt="Edge detection">
+          </div>
+        </section>
+
+        <section>
+          <h2>Fuzzy glass</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code style="max-height: 480px" data-trim>
+private Bitmap convolve(Bitmap original, float[] coefficients) {
+  Bitmap bitmap = Bitmap.createBitmap(
+      original.getWidth(), original.getHeight(),
+      Bitmap.Config.ARGB_8888);
+
+  RenderScript rs = RenderScript.create(this);
+
+  Allocation allocIn = Allocation.createFromBitmap(rs, original);
+  Allocation allocOut = Allocation.createFromBitmap(rs, bitmap);
+
+  ScriptIntrinsicConvolve3x3 convolution
+      = ScriptIntrinsicConvolve3x3.create(rs, Element.U8_4(rs));
+  convolution.setInput(allocIn);
+  convolution.setCoefficients(coefficients);
+  convolution.forEach(allocOut);
+
+  allocOut.copyTo(bitmap);         // {  0,  20,  0,
+  re.destroy();                    //   20, -59, 20,
+  return bitmap;                   //    1,  13,  0  } / 7
+}
+              </code></pre>
+            </div>
+            <img class="right" onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/fuzzy_glass.png" data-swap="../images/android-shaders-filters/convolve_original.png" alt="Fuzzy glass">
+          </div>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <img width="600" height="600" src="../images/android-shaders-filters/hammer.png" alt="Hammer" style="box-shadow: none; border: none; background: none">
+        </section>
+
+        <section>
+          <h2>When?</h2>
+            <ul>
+              <li>Text styling</li>
+              <li>External images</li>
+              <li>Dynamic effects</li>
+            <ul>
+        </section>
+
+        <section>
+          <h2>Further Reading</h2>
+            <ul>
+              <li>
+                Hardware Acceleration: Unsupported Drawing Operations<br/>
+                <a href="http://developer.android.com/guide/topics/graphics/hardware-accel.html#unsupported">
+                  http://d.android.com/guide/topics/graphics/hardware-accel.html
+                </a>
+              </li>
+              <li>
+                ColorMatrix Guide<br/>
+                <a href="http://docs.rainmeter.net/tips/colormatrix-guide">http://docs.rainmeter.net/tips/colormatrix-guide</a>
+              </li>
+              <li>
+                Porter/Duff Compositing and Blend Modes<br/>
+                <a href="http://ssp.impulsetrain.com/porterduff.html">http://ssp.impulsetrain.com/porterduff.html</a>
+              </li>
+              <li>
+                ColorMatrixFilter and ConvolutionFilter<br/>
+                <a href="http://code.tutsplus.com/tutorials/active-3221">http://code.tutsplus.com/tutorials/active-3221</a>
+              </li>
+            </ul>
+	</section>
+
+        <section data-state="no-footer">
+          <h2>Thank you!</h2>
+            <ul>
+              <li><a href="http://bit.ly/shaders-filters">bit.ly/shaders-filters</a></li>
+              <li><a href="https://github.com/chiuki/android-graphics-demo">github.com/chiuki/android-graphics-demo</a></li>
+              <li><a href="http://bit.ly/pluralsight-chiuki">bit.ly/pluralsight-chiuki</a></li>
+              <li><a href="http://blog.sqisland.com">blog.sqisland.com</a></li>
+              <li><a href="http://twitter.com/chiuki">@chiuki</a></li>
+              <li><a href="http://plus.google.com/+ChiuKiChan">+ChiuKiChan</a></li>
+            </ul>
+	</section>
+
+      </div>
+			
+      <footer id="footer">
+        <a href="http://twitter.com/chiuki">@chiuki</a>
+      </footer>
+    </div>
+
+		<script src="../reveal/lib/js/head.min.js"></script>
+		<script src="../reveal/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: false,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: '../reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: '../reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: '../reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: '../reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
