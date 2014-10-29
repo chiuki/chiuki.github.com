@@ -265,9 +265,14 @@ textView.getPaint().setShader(shader);
         </section>
 
         <section>
+          <h2>Peek through</h2>
+          <img onClick="swap(this);" width="320" height="480" src="../images/android-shaders-filters/peek_through.gif" data-swap="../images/android-shaders-filters/peek_through_original.png" alt="BitmapShader on touch area">
+        </section>
+
+        <section>
           <h2>Peek through: onTouchEvent</h2>
           <div class="row">
-            <div class="left fragment">
+            <div class="left">
               <pre style="width: auto"><code data-trim>
 public class PeekThroughImageView extends ImageView {
   private final float radius;
