@@ -614,7 +614,7 @@ private void createBitmap(Bitmap quarter) {
           </div>
         </section>
 
-        <section data-background="#a4c639">
+        <section data-background="#a4c639" data-state="no-footer">
           <img width="560" height="640" src="../images/android-shaders-filters/porter_duff.png" alt="Porter-Duff Modes">
         </section>
 
@@ -840,9 +840,7 @@ private Bitmap blur(Bitmap original, float radius) {
   blur.forEach(allocOut);
 
   allocOut.copyTo(bitmap);
-
   rs.destroy();
-
   return bitmap;
 }
               </code></pre>
