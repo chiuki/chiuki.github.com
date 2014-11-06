@@ -429,13 +429,13 @@ private static class ResouroceImageGetter
             </code>
             <div class="fragment">
               <p>&darr;</p>            
-              <p><code style="font-size: 0.9em">"One two three"</code> + Underline from position 5 to 8</p>
+              <p><code style="font-size: 0.9em">"One two three"</code> + Underline from position 4 to 6</p>
             </div>
             <div class="fragment">
               <p>&darr;</p> 
               <p>
                 <code style="font-size: 0.9em">
-                  spannableString.setSpan(new UnderlineSpan(), 5, 8, flags);
+                  spannableString.setSpan(new UnderlineSpan(), 4, 6, flags);
                 </code>
            </div>
         </section>
@@ -480,6 +480,17 @@ private static class ResouroceImageGetter
             <div class="row">
               <div class="left">
                 <pre style="width: auto"><code data-trim>
+private static SpannableString formatString(
+    Context context, int textId, int styleId) {
+  String text = context.getString(textId);
+  SpannableString spannableString = new SpannableString(text);
+  spannableString.setSpan(
+      new TextAppearanceSpan(context, styleId), 
+      0, text.length(), 0);
+  return spannableString;
+}
+                </code></pre>
+                <pre style="width: auto"><code data-trim>
 SpannableStringBuilder builder = new SpannableStringBuilder()
   .append(formatString(this, R.string.big_red, 
       R.style.BigRedTextAppearance))
@@ -498,17 +509,6 @@ textView.setText(builder.subSequence(0, builder.length()));
   &lt;item name="android:textColor"&gt;#c00&lt;/item&gt;
 &lt;/style&gt;
                 </code></pre>
-                <pre style="width: auto"><code data-trim>
-private static SpannableString formatString(
-    Context context, int textId, int style) {
-  String text = context.getString(textId);
-  SpannableString spannableString = new SpannableString(text);
-  spannableString.setSpan(
-      new TextAppearanceSpan(context, style), 
-      0, text.length(), 0);
-  return spannableString;
-}
-              </code></pre>
             </div>
             <img class="right" width="320" height="480" src="../images/advanced-android-textview/styled_string.png" alt="Styled string">
           </div>
@@ -727,6 +727,22 @@ private static class SpeedSignDrawable extends Drawable {
           </div>
         </section>	
 	
+        <section>
+          <h2>Summary</h2>
+          <ul>
+            <li>Animated <code>CompoundDrawable</code></li>
+            <li>Text shadow</li>
+            <li>Custom font</li>
+            <li>Gradient text</li>
+            <li>Patterned text</li>
+            <li><code>HTML.fromHtml()</code></li>
+            <li>Styled string</li>
+            <li><code>AlignmentSpan</code></li>
+            <li><code>ClickableSpan</code></li>
+            <li>Emoji</li>
+          </ul>
+        </section>
+
         <section data-state="no-footer">
           <h2>Thank you!</h2>
           <ul style="list-style: none">
