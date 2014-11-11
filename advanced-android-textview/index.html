@@ -40,6 +40,14 @@ code.smaller {
   font-size: 0.8em;
 }
 </style>
+
+<script>
+function swap(el) {
+  var tmp = el.src;
+  el.src = el.getAttribute('data-swap');
+  el.dataset.swap = tmp;
+}
+</script>
 		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
 		<script>
 			if( window.location.search.match( /print-pdf/gi ) ) {
@@ -476,6 +484,105 @@ private static class ResouroceImageGetter
         </section>
 
         <section>
+          <h2>Stacked fractions</h2>
+          <img width="320" height="480" src="../images/advanced-android-textview/fraction_equation.png" alt="Fraction equation">
+        </section>
+
+        <section>
+          <h2>Stacked fractions</h2>
+          <div class="row">
+            <div class="left">
+              <p>TextPaint#setFontFeatureSettings</p>
+              <p class="fragment"><span class="red">@TargetApi(LOLLIPOP)</span></p>
+              <pre class="fragment" style="width: auto"><code data-trim>
+&lt;string name="from_html_text"&gt;
+&lt;![CDATA[
+1&lt;afrc&gt;1/2&lt;/afrc&gt; + &lt;afrc&gt;11/16&lt;/afrc&gt; = 2&lt;afrc&gt;3/16&lt;/afrc&gt;
+]]&gt;
+&lt;/string&gt;
+              </code></pre>
+              <pre class="fragment" style="width: auto"><code data-trim>
+Typeface typeface = Typeface.createFromAsset(
+    getAssets(), "Nutso2.otf");
+textView.setTypeface(typeface);
+              </code></pre>
+              <pre class="fragment" style="width: auto"><code data-trim>
+String html = getString(R.string.fraction_text);
+textView.setText(Html.fromHtml(
+    html, null, new FractionTagHandler()));
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/fraction_equation.png" alt="Fraction equation">
+          </div>
+        </section>
+
+        <section>
+          <h2>Stacked fractions</h2>
+            <div class="row">
+              <div class="left">
+              <pre style="width: auto"><code data-trim>
+private static class FractionTagHandler 
+    implements Html.TagHandler {
+  @Override public void handleTag(boolean opening, 
+      String tag, Editable output, XMLReader xmlReader) {
+  if (!"afrc".equalsIgnoreCase(tag)) return;
+
+  int len = output.length();
+  if (opening) {
+    output.setSpan(new FractionSpan(), len, len, 
+        Spannable.SPAN_MARK_MARK);
+  } else {
+    Object obj = getLast(output, FractionSpan.class);
+    int where = output.getSpanStart(obj);
+    output.removeSpan(obj);
+    if (where != len) {
+      output.setSpan(new FractionSpan(), where, len, 0);
+    }
+  }
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/fraction_equation.png" alt="Fraction equation">
+          </div>
+        </section>
+
+        <section>
+          <h2>Stacked fractions</h2>
+            <div class="row">
+              <div class="left">
+              <pre style="width: auto"><code data-trim>
+private Object getLast(Editable text, Class kind) {
+  Object[] objs = text.getSpans(0, text.length(), kind);
+  if (objs.length == 0) return null;
+  for (int i = objs.length - 1; i >= 0; --i) {
+    if(text.getSpanFlags(objs[i]) == Spannable.SPAN_MARK_MARK) {
+      return objs[i];
+    }
+  }
+  return null;
+}
+              </code></pre>
+              <pre style="width: auto"><code data-trim>
+private static class FractionSpan extends MetricAffectingSpan {
+  public void updateMeasureState(TextPaint textPaint) {
+    textPaint.setFontFeatureSettings("afrc");
+  }
+  public void updateDrawState(TextPaint textPaint) {
+    textPaint.setFontFeatureSettings("afrc");
+  }
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/fraction_equation.png" alt="Fraction equation">
+          </div>
+        </section>
+
+        <section>
+          <h2>Arbitrary fractions</h2>
+          <img width="320" height="480" src="../images/advanced-android-textview/fractions.png" alt="Fractions">
+        </section>
+
+        <section>
           <h2>Styled string</h2>
             <div class="row">
               <div class="left">
@@ -549,6 +656,112 @@ private void appendText(
         </section>
 
         <section>
+          <h2>Rainbow span</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+String text = textView.getText().toString();
+SpannableString spannableString = new SpannableString(text);
+int start = text.toLowerCase().indexOf(substring);
+int end = start + substring.length();
+spannableString.setSpan(new RainbowSpan(this), start, end, 0);
+              </code></pre>
+              <pre style="width: auto"><code data-trim>
+private static class RainbowSpan extends CharacterStyle 
+    implements UpdateAppearance {
+  private final int[] colors;
+  public RainbowSpan(Context context) {
+    colors = context.getResources().getIntArray(
+        R.array.rainbow);
+  }
+
+  public void updateDrawState(TextPaint paint) {
+    paint.setStyle(Paint.Style.FILL);
+    Shader shader = new LinearGradient(0, 0, 0, 
+        paint.getTextSize() * colors.length, colors, 
+        null, Shader.TileMode.MIRROR);
+    Matrix matrix = new Matrix();
+    matrix.setRotate(90);
+    shader.setLocalMatrix(matrix);
+    paint.setShader(shader);
+  }
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/rainbow.png" alt="Rainbow span">
+          </div>
+        </section>
+
+        <section>
+          <h2>Animated rainbow span</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(
+  span, ANIMATED_COLOR_SPAN_FLOAT_PROPERTY, 0, 100);
+objectAnimator.setEvaluator(new FloatEvaluator());
+objectAnimator.addUpdateListener(
+    new ValueAnimator.AnimatorUpdateListener() {
+  public void onAnimationUpdate(ValueAnimator animation) {
+    textView.setText(spannableString);
+  }
+});
+objectAnimator.setInterpolator(new LinearInterpolator());
+objectAnimator.setDuration(DateUtils.MINUTE_IN_MILLIS * 3);
+objectAnimator.setRepeatCount(ValueAnimator.INFINITE);
+objectAnimator.start();
+              </code></pre>
+              <pre style="width: auto"><code data-trim>
+private static final Property&lt;AnimatedColorSpan, Float&gt; 
+    ANIMATED_COLOR_SPAN_FLOAT_PROPERTY
+    = new Property&lt;AnimatedColorSpan, Float&gt;(
+        Float.class, "ANIMATED_COLOR_SPAN_FLOAT_PROPERTY") {
+  public void set(AnimatedColorSpan span, Float value) {
+    span.setTranslateXPercentage(value);
+  }
+  public Float get(AnimatedColorSpan span) {
+    return span.getTranslateXPercentage();
+  }
+};
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/animated_rainbow.gif" alt="Animated rainbow span">
+          </div>
+        </section>
+
+        <section>
+          <h2>Animated rainbow span</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+public void setTranslateXPercentage(float value) {
+  translateXPercentage = value;
+}
+public float getTranslateXPercentage() {
+  return translateXPercentage;
+}
+              </code></pre>
+              <pre style="width: auto"><code data-trim>
+public void updateDrawState(TextPaint paint) {
+  paint.setStyle(Paint.Style.FILL);
+  float width = paint.getTextSize() * colors.length;
+  if (this.shader == null) {
+    this.shader = new LinearGradient(0, 0, 0, width,
+        colors, null, Shader.TileMode.MIRROR);
+  }
+  this.matrix.reset();
+  this.matrix.setRotate(90);
+  this.matrix.postTranslate(width * translateXPercentage, 0);
+  this.shader.setLocalMatrix(this.matrix);
+  paint.setShader(this.shader);
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/animated_rainbow.gif" alt="Animated rainbow span">
+          </div>
+        </section>
+
+        <section>
           <h2>ClickableSpan</h2>
             <div class="row">
               <div class="left">
@@ -583,6 +796,61 @@ private static class GoToSettingsSpan extends ClickableSpan {
               </code></pre>
             </div>
             <img class="right" width="320" height="480" src="../images/advanced-android-textview/clickable_span.gif" alt="ClickableSpan">
+          </div>
+        </section>
+
+        <section>
+          <h2>Lined paper</h2>
+          <img width="320" height="480" src="../images/advanced-android-textview/lined_paper.gif" alt="Lined paper">
+        </section>
+
+        <section>
+          <h2>Lined paper</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+public class LinedEditText extends EditText {
+  // Called from constructors
+  private void init() {
+    this.paint = new Paint();
+    this.paint.setStyle(Paint.Style.STROKE);
+    this.paint.setColor(getResources().getColor(
+      R.color.paper_line));
+    this.paint.setStrokeWidth(getLineHeight() / 10);
+    this.paint.setStrokeCap(Paint.Cap.ROUND);
+  }
+}
+              </code></pre>
+            </div>
+          <img onClick="swap(this);" width="320" height="480" src="../images/advanced-android-textview/lined_paper_huge.png" data-swap="../images/advanced-android-textview/lined_paper.gif" alt="Lined paper">
+          </div>
+        </section>
+
+        <section>
+          <h2>Lined paper</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+protected void onDraw(Canvas canvas) {
+  float startX = getPaddingLeft();
+  float stopX = getWidth() - getPaddingRight();
+  float offsetY = getPaddingTop() 
+     - getPaint().getFontMetrics().top
+     + paint.getStrokeWidth() / 2;
+  for (int i = 0; i < getLineCount(); ++i) {
+    float y = offsetY + getLineHeight() * i;
+    canvas.drawLine(startX, y, stopX, y, paint);
+  }
+
+  super.onDraw(canvas);
+}
+            </code></pre>
+            <dl class="fragment" style="width: 600px; text-align: left;">
+<dt><code>fontMetrics.top</code></dt>
+<dd style="font-size: 0.7em">The maximum distance above the baseline for the tallest glyph in the font at a given text size.</dd>
+</dl>
+            </div>
+          <img onClick="swap(this);" width="320" height="480" src="../images/advanced-android-textview/lined_paper_huge.png" data-swap="../images/advanced-android-textview/lined_paper.gif" alt="Lined paper">
           </div>
         </section>
 
@@ -726,6 +994,40 @@ private static class SpeedSignDrawable extends Drawable {
             <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
           </div>
         </section>	
+
+        <section>
+          <h2>SpeedSignDrawable</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+private void drawRedRing(Canvas canvas) {
+  Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  paint.setStyle(Paint.Style.STROKE);
+  paint.setColor(Color.RED);
+  float ringWidth = size / 10;
+  paint.setStrokeWidth(ringWidth);
+  canvas.drawCircle(size/2, size/2, size/2 - ringWidth/2, paint);
+}
+              </code></pre>
+              <pre style="width: auto"><code data-trim>
+private void drawBlackNumber(Canvas canvas) {
+  float ratio = 0.4f;
+  Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  paint.setStyle(Paint.Style.FILL);
+  paint.setColor(Color.BLACK);
+  paint.setTextAlign(Paint.Align.CENTER);
+  paint.setTextSize(textSize * ratio);
+  paint.setStrokeWidth(strokeWidth);
+  paint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+  int x = size / 2;
+  int y = (int) (size/2 - ((descent + ascent)/2) * ratio);
+  canvas.drawText(number, x, y, paint);
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
+          </div>
+        </section>	
 	
         <section>
           <h2>Summary</h2>
@@ -736,9 +1038,12 @@ private static class SpeedSignDrawable extends Drawable {
             <li>Gradient text</li>
             <li>Patterned text</li>
             <li><code>HTML.fromHtml()</code></li>
+            <li><code>setFontFeatureSettings()</code></li>
             <li>Styled string</li>
             <li><code>AlignmentSpan</code></li>
             <li><code>ClickableSpan</code></li>
+            <li>Rainbow span, animated</li>
+            <li>Lined paper</li>
             <li>Emoji</li>
           </ul>
         </section>
