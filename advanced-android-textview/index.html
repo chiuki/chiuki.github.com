@@ -523,7 +523,8 @@ textView.setText(Html.fromHtml(
               <pre style="width: auto"><code data-trim>
 private static class FractionTagHandler 
     implements Html.TagHandler {
-  @Override public void handleTag(boolean opening, 
+  @Override 
+  public void handleTag(boolean opening, 
       String tag, Editable output, XMLReader xmlReader) {
   if (!"afrc".equalsIgnoreCase(tag)) return;
 
