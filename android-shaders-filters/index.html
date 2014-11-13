@@ -751,6 +751,151 @@ private ColorFilter createDimFilter() {
         </section>
 
         <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">PathEffect</h1>
+        </section>
+
+        <section>
+          <h2>Hollow Text</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+int strokeWidth = getResources().getDimensionPixelSize(
+  R.dimen.dashed_text_stroke_width);
+final HollowSpan span = new HollowSpan(strokeWidth);
+
+String text = textView.getText().toString();
+final SpannableString spannableString = new SpannableString(text);
+spannableString.setSpan(span, 0, text.length(), 0);
+              </code></pre>
+              <pre style="width: auto"><code data-trim>
+private static class HollowSpan extends ReplacementSpan {
+  private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  private final Path path = new Path();
+  private int width;
+
+  public HollowSpan(int strokeWidth) {
+    paint.setStyle(Paint.Style.STROKE);
+    paint.setStrokeWidth(strokeWidth);
+  }
+
+  public void setPathEffect(PathEffect effect) {
+    paint.setPathEffect(effect);
+  }
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/android-shaders-filters/hollow_text.png" alt="Hollow text">
+          </div>
+        </section>
+
+        <section>
+          <h2>Paint.getTextPath()</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+public int getSize(Paint paint, CharSequence text, 
+    int start, int end, Paint.FontMetricsInt fm) {
+  this.paint.setColor(paint.getColor());
+
+  width = (int) (paint.measureText(text, start, end) + 
+      this.paint.getStrokeWidth());
+  return width;
+}
+
+public void draw(
+    Canvas canvas, CharSequence text, int start, int end,
+    float x, int top, int y, int bottom, Paint paint) {
+  path.reset();
+  paint.getTextPath(text.toString(), start, end, x, y, path);
+  path.close();
+
+  canvas.translate(this.paint.getStrokeWidth() / 2, 0);
+  canvas.drawPath(path, this.paint);
+  canvas.translate(-this.paint.getStrokeWidth() / 2, 0);
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/android-shaders-filters/hollow_text.png" alt="Hollow text">
+          </div>
+        </section>
+
+        <section>
+          <h2>DashPathEffect</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+PathEffect dash = new DashPathEffect(
+    new float[] { strokeWidth * 3, strokeWidth }, 0);
+span.setPathEffect(dash);
+              </code></pre>
+              <pre style="width: auto"><code data-trim>
+private static class HollowSpan extends ReplacementSpan {
+  private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  private final Path path = new Path();
+  private int width;
+
+  public HollowSpan(int strokeWidth) {
+    paint.setStyle(Paint.Style.STROKE);
+    paint.setStrokeWidth(strokeWidth);
+  }
+
+  public void setPathEffect(PathEffect effect) {
+    paint.setPathEffect(effect);
+  }
+ 
+  // In draw, canvas.drawPath(path, this.paint);
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/android-shaders-filters/hollow_text_dash.png" alt="Hollow text with dashes">
+          </div>
+        </section>
+
+        <section>
+          <h2>ComposePathEffect</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+PathEffect dash = new DashPathEffect(
+    new float[] { strokeWidth * 3, strokeWidth }, 0);
+PathEffect corner = new CornerPathEffect(strokeWidth);
+PathEffect effect = new ComposePathEffect(dash, corner);
+span.setPathEffect(effect);
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/android-shaders-filters/hollow_text_round_dash.png" alt="Hollow text with round dashes">
+          </div>
+        </section>
+
+        <section>
+          <h2>PathDashPathEffect</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim>
+private PathEffect getTrianglePathEffect(int strokeWidth) {
+  return new PathDashPathEffect(
+      getTriangle(strokeWidth),
+      strokeWidth,
+      0.0f,
+      PathDashPathEffect.Style.ROTATE);
+}
+
+private Path getTriangle(float size) {
+  Path path = new Path();
+  float half = size / 2;
+  path.moveTo(-half, -half);
+  path.lineTo(half, -half);
+  path.lineTo(0, half);
+  path.close();
+  return path;
+}
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/android-shaders-filters/hollow_text_triangle.png" alt="Hollow text with triangles">
+          </div>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
           <h1 style="color: #241811">MaskFilter</h1>
         </section>
 
