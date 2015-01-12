@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Android Hello World</title>
+
+    <meta name="description" content="Android Hello World from the ground up.">
+    <meta name="author" content="Chiu-Ki Chan">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="../reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="../reveal/css/theme/android.css" id="theme">
+
+    <link rel="stylesheet" href="../reveal/plugin/footer/footer.css">
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
+
+    <link rel="stylesheet" href="../stylesheets/main.css">
+
+    <style>
+.red {
+  color: #ff2c2d;
+}
+.green {
+  color: a4c639;
+}
+.brown {
+  color: 241811
+}
+code.smaller {
+  font-size: 0.8em;
+}
+</style>
+
+<script>
+function swap(el) {
+  var tmp = el.src;
+  el.src = el.getAttribute('data-swap');
+  el.dataset.swap = tmp;
+}
+</script>
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../reveal/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="../reveal/lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=8788186; 
+var sc_invisible=1; 
+var sc_security="b999074c"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="click tracking"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/8788186/0/b999074c/1/"
+alt="click tracking"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-10372580-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section data-state="no-footer">
+          <h1>Android<br/>Hello World</h1>
+          <p>
+            by Chiu-Ki Chan
+          </p>
+          <p style="width: 250px; margin: 1em auto 0 auto; text-align: left">
+            <a href="http://twitter.com/chiuki">
+              <span style="font-family: FontAwesome; margin-right: 1em" class="fa fa-fw fa-twitter"></span>@chiuki
+            </a>
+            <br/>
+            <a href="http://plus.google.com/+ChiuKiChan">
+              <span style="font-family: FontAwesome; margin-right: 1em" class="fa fa-fw fa-google-plus"></span>+ChiuKiChan
+            </a>
+          </p>
+        </section>
+
+        <section>
+          <h2>Source code</h2>
+          <p>
+            <a href="https://github.com/chiuki/android-hello-world">
+              github.com/chiuki/android-hello-world
+            </a>
+          </p>
+        </section>
+
+        <section>
+          <h2>Drawable folders</h2>
+          <ul style="list-style: none">
+            <li><code>drawable-mdpi</code> <span class="fragment">(1x)</span></li>
+            <li><code>drawable-hdpi</code> <span class="fragment">(1.5x)</span></li>
+            <li><code>drawable-xhdpi</code> <span class="fragment">(2x)</span></li>
+            <li><code>drawable-xxhdpi</code> <span class="fragment">(3x)</span></li>
+            <li><code>drawable-xxxhdpi</code> <span class="fragment">(4x)</span></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Screen densities</h2>
+          <img width="161" height="161" src="../images/android-hello-world/10dpi.png" style="border:none" alt="10dpi">
+          <img width="161" height="161" src="../images/android-hello-world/10dpi-enlarged.png" style="border:none" alt="10dpi enlarged">
+          <img width="161" height="161" src="../images/android-hello-world/20dpi.png" style="border:none" alt="20dpi">
+        </section>
+
+        <section>
+          <h2>Dimens</h2>
+          <ul style="list-style: none">
+            <li><code>values/dimens.xml</code></li>
+            <li><code>values-w820dp/dimens.xml</code></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Styles</h2>
+          <ul style="list-style: none">
+            <li><code>values/styles.xml</code></li>
+            <li><code>values-v11/styles.xml</code></li>
+            <li><code>values-v14/styles.xml</code></li>
+            <li><code>values-v21/styles.xml</code></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Style: default</h2>
+          <img width="320" height="480" src="../images/android-hello-world/style-froyo.png" alt="Style: Froyo">
+        </section>
+
+        <section>
+          <h2>Style: v14 and v21</h2>
+          <img width="320" height="480" src="../images/android-hello-world/style-ics.png" alt="Style: Ice Cream Sandwich">
+          <img width="320" height="480" src="../images/android-hello-world/style-lollipop.png" alt="Style: Lollipop">
+        </section>
+
+        <section>
+          <h2>Menu</h2>
+          <img width="320" height="480" src="../images/android-hello-world/menu.png" alt="Menu">
+          <img width="320" height="480" src="../images/android-hello-world/menu-shown.png" alt="Menu shown">
+        </section>
+
+        <section>
+          <h2>Test</h2>
+          <p>
+            <a href="https://code.google.com/p/android-test-kit">
+              Espresso
+            </a>
+          </p>
+        </section>
+
+        <section data-state="no-footer">
+          <h2>Thank you!</h2>
+          <ul style="list-style: none">
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-picture-o"></span>
+              <a href="http://chiuki.github.io/android-hello-world">
+                chiuki.github.io/android-hello-world
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-github"></span>
+              <a href="https://github.com/chiuki/android-hello-world">
+                github.com/chiuki/android-hello-world
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-video-camera"></span>
+              <a href="http://bit.ly/pluralsight-chiuki">
+                bit.ly/pluralsight-chiuki
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-newspaper-o"></span>
+              <a href="http://blog.sqisland.com">
+                blog.sqisland.com
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-twitter"></span>
+              <a href="http://twitter.com/chiuki">
+                @chiuki
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-google-plus"></span>
+              <a href="http://plus.google.com/+ChiuKiChan">
+                +ChiuKiChan
+              </a>
+            </li>
+          </ul>
+        </section>
+
+      </div>
+			
+      <footer id="footer">
+        <p style="text-align: left">
+          <a href="http://twitter.com/chiuki">
+            <span style="font-family: FontAwesome; margin-right: 1em" class="fa fa-fw fa-twitter"></span>@chiuki
+          </a>
+          <br/>
+          <a href="http://plus.google.com/+ChiuKiChan">
+            <span style="font-family: FontAwesome; margin-right: 1em" class="fa fa-fw fa-google-plus"></span>+ChiuKiChan</a>
+          </a>
+        </p>
+      </footer>
+    </div>
+
+		<script src="../reveal/lib/js/head.min.js"></script>
+		<script src="../reveal/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: false,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: '../reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: '../reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: '../reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: '../reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
