@@ -127,3 +127,7 @@ body {
 ul.spaced li {
   margin-bottom: 1em;
 }
+
+.highlighter {
+  background-color: #ff0;
+}

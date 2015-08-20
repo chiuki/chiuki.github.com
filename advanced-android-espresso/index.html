@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Advanced Android Espresso</title>
+
+    <meta name="description" content="Advanced techniques for Espresso, an Android instrumentation testing framework">
+    <meta name="author" content="Chiu-Ki Chan">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="../reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="../reveal/css/theme/android.css" id="theme">
+
+    <link rel="stylesheet" href="../reveal/plugin/footer/footer.css">
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../reveal/lib/css/zenburn.css">
+
+    <link rel="stylesheet" href="../stylesheets/main.css">
+
+    <style>
+.red {
+  color: #ff2c2d;
+}
+.green {
+  color: a4c639;
+}
+.brown {
+  color: 241811
+}
+code.smaller {
+  font-size: 0.8em;
+}
+</style>
+
+<script>
+function swap(el) {
+  var tmp = el.src;
+  el.src = el.getAttribute('data-swap');
+  el.dataset.swap = tmp;
+}
+</script>
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = '../reveal/css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="../reveal/lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=8788186; 
+var sc_invisible=1; 
+var sc_security="b999074c"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="click tracking"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/8788186/0/b999074c/1/"
+alt="click tracking"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-10372580-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+	</head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section data-state="no-footer">
+          <h1>Advanced Android Espresso</h1>
+          <p>
+            by Chiu-Ki Chan
+          </p>
+          <p style="width: 250px; margin: 1em auto 0 auto; text-align: left">
+            <a href="http://twitter.com/chiuki">
+              <span style="font-family: FontAwesome; margin-right: 1em" class="fa fa-fw fa-twitter"></span>@chiuki
+            </a>
+            <br/>
+            <a href="http://plus.google.com/+ChiuKiChan">
+              <span style="font-family: FontAwesome; margin-right: 1em" class="fa fa-fw fa-google-plus"></span>+ChiuKiChan
+            </a>
+          </p>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">What is Espresso?</h1>
+        </section>
+
+        <section>
+          <h2>Automatic UI testing</h2>
+          <img class="fragment" width="320" height="320" src="../images/advanced-android-espresso/look_ma_no_hands.png" alt="Look ma, no hands!">
+        </section>
+
+        <section>
+          <h2>Espresso</h2>
+          <ul>
+            <li>Android Testing Support Library</li>
+            <li>Simulate user interactions</li>
+            <li><span class="fragment highlight-red">Automatic synchronization</span> of test actions with app UI</li>
+          </ul>
+          <p class="fragment">
+            <img width="320" height="320" src="../images/advanced-android-espresso/no_sleep.png" alt="No need to sleep"><br/>
+            No need to sleep
+          </p>
+        </section>
+        
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">Hello World</h1>
+        </section>
+
+        <section>
+          <h2>Formula</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto; font-size: 0.8em; color: #3B3B3B; background-color: #EFEFEF; padding: 1em">
+<b>onView</b>(<span style="font-weight: bold; color: #E82562;">ViewMatcher</span>)
+  .perform(<span style="font-weight: bold; color: #4888F2;">ViewAction</span>)
+  .check(<span style="font-weight: bold; color: #4EB884;">ViewAssertion</span>);           </pre>
+
+            </div>
+            <img class="right fragment" width="324" height="576" src="../images/advanced-android-espresso/hello_world.png" alt="Hello World">
+          </div>
+        </section>
+
+        <section>
+          <h2>ViewMatcher</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto; font-size: 0.8em; color: #3B3B3B; background-color: #EFEFEF; padding: 1em">
+<b>onView</b>(<span style="font-weight: bold; color: #E82562;">withId(R.id.greet_button)</span>)
+  .perform(<span style="font-weight: bold; color: #4888F2;">ViewAction</span>)
+  .check(<span style="font-weight: bold; color: #4EB884;">ViewAssertion</span>);           </pre>
+            </div>
+            <img class="right" width="324" height="576" src="../images/advanced-android-espresso/hello_world.png" alt="Hello World">
+          </div>
+        </section>
+
+        <section>
+          <h2>ViewAction</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto; font-size: 0.8em; color: #3B3B3B; background-color: #EFEFEF; padding: 1em">
+<b>onView</b>(<span style="font-weight: bold; color: #E82562;">withId(R.id.greet_button)</span>)
+  .perform(<span style="font-weight: bold; color: #4888F2;">click()</span>)
+  .check(<span style="font-weight: bold; color: #4EB884;">ViewAssertion</span>);           </pre>
+            </div>
+            <img class="right" width="324" height="576" src="../images/advanced-android-espresso/hello_world.png" alt="Hello World">
+          </div>
+        </section>
+
+        <section>
+          <h2>ViewAssertion</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto; font-size: 0.8em; color: #3B3B3B; background-color: #EFEFEF; padding: 1em">
+<b>onView</b>(<span style="font-weight: bold; color: #E82562;">withId(R.id.greet_button)</span>)
+  .perform(<span style="font-weight: bold; color: #4888F2;">click()</span>)
+  .check(<span style="font-weight: bold; color: #4EB884;">matches(not(isEnabled())</span>);</pre>
+
+            </div>
+            <img class="right" width="324" height="576" src="../images/advanced-android-espresso/hello_world_disabled.png" alt="Hello World">
+          </div>
+        </section>
+
+        <section>
+          <h2>Espresso library</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto; font-size: 0.8em; color: #3B3B3B; background-color: #EFEFEF; padding: 1em">
+<b>onView</b>(<span style="font-weight: bold; color: #E82562;"><span class="highlighter">withId</span>(R.id.greet_button)</span>)
+  .perform(<span style="font-weight: bold; color: #4888F2;"><span class="highlighter">click()</span></span>)
+  .check(<span style="font-weight: bold; color: #4EB884;"><span class="highlighter">matches</span>(not(<span class="highlighter">isEnabled()</span>)</span>);</pre>
+
+            </div>
+            <img class="right" width="324" height="576" src="../images/advanced-android-espresso/hello_world.png" alt="Hello World">
+          </div>
+        </section>
+
+        <section>
+          <h2>Hamcrest</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto; font-size: 0.8em; color: #3B3B3B; background-color: #EFEFEF; padding: 1em">
+<b>onView</b>(<span style="font-weight: bold; color: #E82562;">withId(R.id.greet_button)</span>)
+  .perform(<span style="font-weight: bold; color: #4888F2;">click()</span>)
+  .check(<span style="font-weight: bold; color: #4EB884;">matches(<span class="highlighter">not</span>(isEnabled())</span>);</pre>
+
+            </div>
+            <img class="right" width="324" height="576" src="../images/advanced-android-espresso/hello_world.png" alt="Hello World">
+          </div>
+        </section>
+
+
+        <section>
+          <h2>Espresso</h2>
+          <div class="row">
+            <img class="left" width="423" height="567" src="../images/advanced-android-espresso/view_matchers.png" alt="Espresso ViewMatchers">
+            <img class="right" width="423" height="567" src="../images/advanced-android-espresso/view_actions_assertions.png" alt="Espresso ViewActions and ViewAssertions">
+          </div>
+
+          <a style="font-size: 0.7em" href="https://code.google.com/p/android-test-kit/wiki/EspressoV2CheatSheet">https://code.google.com/p/android-test-kit/wiki/EspressoV2CheatSheet</a>
+        </section>
+
+        <section>
+          <h2>Hamcrest</h2>
+          <div class="row">
+            <img class="left" width="440" height="416" src="../images/advanced-android-espresso/hamcrest1.png" alt="Hamcrest general purpose matchers">
+            <img class="right" width="440" height="416" src="../images/advanced-android-espresso/hamcrest2.png" alt="Hamcrest: Combining multiple matches, string matchers">
+          </div>
+
+          <a style="font-size: 0.7em" href="http://www.marcphilipp.de/downloads/posts/2013-01-02-hamcrest-quick-reference/Hamcrest-1.3.pdf">http://www.marcphilipp.de/downloads/posts/2013-01-02-hamcrest-quick-reference/Hamcrest-1.3.pdf</a>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">Combining matchers</h1>
+        </section>
+
+        <section>
+          <h2>Toolbar title</h2>
+          <div class="row">
+            <img width="324" height="576" src="../images/advanced-android-espresso/my_awesome_title.png" alt="Toolbar title">
+          </div>
+        </section>
+
+        <section>
+          <h2>Hierarchy Viewer</h2>
+          <div class="row">
+            <img width="640" height="663" src="../images/advanced-android-espresso/hierarchy_viewer.png" alt="Hierarchy Viewer">
+          </div>
+        </section>
+
+        <section>
+          <h2>isAssignableFrom</h2>
+            <pre style="width: auto"><code data-trim>
+@Test
+public void toolbarTitle() {
+  CharSequence title = InstrumentationRegistry.getTargetContext()
+    .getString(R.string.my_title);
+  matchToolbarTitle(title);
+}
+
+private static ViewInteraction matchToolbarTitle(
+    CharSequence title) {
+  return onView(
+    allOf(
+        isAssignableFrom(TextView.class))),
+        withParent(isAssignableFrom(Toolbar.class))
+    .check(matches(withText(title.toString())));
+}
+            </code></pre>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">Custom matchers</h1>
+        </section>
+
+        <section>
+          <h2>toolbar.getTitle()</h2>
+            <pre style="width: auto"><code data-trim>
+private static ViewInteraction matchToolbarTitle(
+    CharSequence title) {
+  return onView(isAssignableFrom(Toolbar.class))
+      .check(matches(withToolbarTitle(is(title))));
+}
+
+private static Matcher&lt;Object&gt; withToolbarTitle(
+    final Matcher&lt;CharSequence&gt; textMatcher) {
+  return new BoundedMatcher&lt;Object, Toolbar&gt;(Toolbar.class) {
+    @Override public boolean matchesSafely(Toolbar toolbar) {
+      return textMatcher.matches(toolbar.getTitle());
+    }
+    @Override public void describeTo(Description description) {
+      description.appendText("with toolbar title: ");
+      textMatcher.describeTo(description);
+    }
+  };
+}
+            </code></pre>
+            <ul>
+              <li class="fragment">Verify the <code>Toolbar</code></li>
+              <li class="fragment">TextMatcher instead of String</li>
+            </ul>
+        </section>
+
+        <section>
+          <h2>More info</h2>
+            <ul>
+              <li><a href="http://blog.sqisland.com/2015/05/espresso-match-toolbar-title.html">blog.sqisland.com/2015/05/espresso-match-toolbar-title.html</a></li>
+              <li><a href="https://github.com/chiuki/espresso-samples/tree/master/toolbar-title">github.com/chiuki/espresso-samples</a> under <code>toolbar-title</code></li>
+            </ul>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">onData</h1>
+        </section>
+
+        <section>
+          <h2>Formula</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto; font-size: 0.8em; color: #3B3B3B; background-color: #EFEFEF; padding: 1em">
+<b>onView</b>(<span style="font-weight: bold; color: #E82562;">ViewMatcher</span>)
+  .perform(<span style="font-weight: bold; color: #4888F2;">ViewAction</span>)
+  .check(<span style="font-weight: bold; color: #4EB884;">ViewAssertion</span>);</pre>
+            </div>
+            <div class="right">
+              <pre class="fragment" style="width: auto; font-size: 0.8em; color: #3B3B3B; background-color: #EFEFEF; padding: 1em">
+<b>onData</b>(<span style="font-weight: bold; color: #E82562;">ObjectMatcher</span>)
+  .<span style="font-weight: bold; color: #8E654f;">DataOptions</span>
+  .perform(<span style="font-weight: bold; color: #4888F2;">ViewAction</span>)
+  .check(<span style="font-weight: bold; color: #4EB884;">ViewAssertion</span>);</pre>
+              <img class="fragment" width="336" height="184" src="../images/advanced-android-espresso/data_options.png" alt="Data Options">
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>ListView</h2>
+          <div class="row">
+            <img width="324" height="576" src="../images/advanced-android-espresso/list_view.png" alt="ListView">
+            <p class="fragment">
+              Item 27?
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <h2>App</h2>
+           <div class="row">
+           <div class="left">
+            <pre style="width: auto"><code data-trim>
+final Item[] items = new Item[COUNT];
+for (int i = 0; i &lt; COUNT; ++i) {
+  items[i] = new Item(i);
+}
+ArrayAdapter&lt;Item&gt; adapter = new ArrayAdapter&lt;&gt;(this,
+    android.R.layout.simple_list_item_1, items);
+listView.setAdapter(adapter);
+
+listView.setOnItemClickListener(
+    new AdapterView.OnItemClickListener() {
+  public void onItemClick(
+      AdapterView&lt;?&gt; parent, View view, int position, long id) {
+    textView.setText(items[position].toString());
+    textView.setVisibility(View.VISIBLE);
+  }
+});</code></pre>
+           <pre style="width: auto"><code data-trim>
+public static class Item {
+  private final int value;
+  public Item(int value) {
+    this.value = value;
+  }
+  public String toString() {
+    return String.valueOf(value);
+  }
+}
+            </code></pre>
+           </div>
+             <img class="right" width="324" height="576" src="../images/advanced-android-espresso/list_view_clicked.png" alt="ListView">
+           </div>
+        </section>
+
+        <section>
+          <h2>Test</h2>
+            <pre style="width: auto"><code data-trim>
+@Test
+public void clickItem() {
+  onView(withId(R.id.text))
+      .check(matches(not(isDisplayed())));
+  onData(withValue(27))
+      .inAdapterView(withId(R.id.list))
+      .perform(click());
+  onView(withId(R.id.text))
+      .check(matches(withText("27")))
+      .check(matches(isDisplayed()));
+}</code></pre>
+           <pre style="width: auto"><code data-trim>
+public static Matcher&lt;Object&gt; withValue(final int value) {
+  return new BoundedMatcher&lt;Object, MainActivity.Item&gt;(MainActivity.Item.class) {
+    @Override public void describeTo(Description description) {
+      description.appendText("has value " + value);
+    }
+    @Override public boolean matchesSafely(MainActivity.Item item) {
+      return item.toString().equals(String.valueOf(value));
+    }
+  };
+}
+            </code></pre>
+        </section>
+
+        <section>
+          <h2>RecyclerView</h2>
+            <img width="324" height="576" src="../images/advanced-android-espresso/recyclerview.png" alt="RecyclerView">
+        </section>
+
+        <section>
+          <h2>RecyclerView</h2>
+          <div style="width: 429px; padding: 1em 0; font-size: 3em; margin: 0 auto; vertical-align: middle; background-color: #EFEFEF; text-decoration: line-through; color: red">
+            <code style="color: #3B3B3B">onData</code>
+          </div>
+          <div class="fragment">
+            <img width="429" height="96" style="border: none" src="../images/advanced-android-espresso/recyclerview_not_adapterview.png" alt="RecyclerView is not an AdapterView">
+            <div>
+              <code>RecyclerView</code> is a <code>ViewGroup</code>,<br/>
+              not <code>AdapterView</code>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>RecyclerViewActions</h2>
+            <pre style="width: auto"><code data-trim>
+@Test
+public void clickItem() {
+  onView(withId(R.id.text))
+      .check(matches(not(isDisplayed())));
+  onView(withId(R.id.recycler_view))
+      .perform(RecyclerViewActions.actionOnItemAtPosition(27, click()));
+  onView(withId(R.id.text))
+      .check(matches(withText("27")))
+      .check(matches(isDisplayed()));
+}
+            </code></pre>
+            <div class="fragment">
+                <code>actionOnItemAtPosition</code></li>
+            </div>
+            <pre style="width: auto" class="fragment"><code data-trim>
+// ListView
+onData(withValue(27))
+    .inAdapterView(withId(R.id.list))
+    .perform(click());</code></pre>
+            <ul class="fragment">
+                <li><code>actionOnHolderItem</code> with <code>Matcher&lt;VH&gt;</code></li>
+                <li><code>actionOnItem</code> with <code>Matcher&lt;View&gt;</code></li>
+            </ul>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811">Idling Resource</h1>
+        </section>
+
+        <section>
+          <h2>Espresso Idle</h2>
+          <ul>
+            <li>No UI events queued</li>
+            <li>No tasks in AsyncTask thread pool</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Custom IdlingResource</h2>
+          <p>
+            Define your own condition
+          </p>
+          <p>
+            e.g. <code>IntentService</code> is not running.
+          </p>
+        </section>
+
+         <section>
+          <h2>IntentServiceIdlingResource</h2>
+           <pre style="width: auto"><code data-trim>
+          @Override
+public String getName() {
+  return IntentServiceIdlingResource.class.getName();
+}
+
+@Override
+public void registerIdleTransitionCallback(
+    ResourceCallback resourceCallback) {
+  this.resourceCallback = resourceCallback;
+}
+
+@Override
+public boolean isIdleNow() {
+  boolean idle = !isIntentServiceRunning();
+  if (idle && resourceCallback != null) {
+    resourceCallback.onTransitionToIdle();
+  }
+  return idle;
+}</code></pre>
+        </section>
+
+        <section>
+          <h2>isIntentServiceRunning()</h2>
+           <pre style="width: auto"><code data-trim>
+private boolean isIntentServiceRunning() {
+  ActivityManager manager =
+    (ActivityManager) context.getSystemService(
+      Context.ACTIVITY_SERVICE);
+  for (ActivityManager.RunningServiceInfo info :
+          manager.getRunningServices(Integer.MAX_VALUE)) {
+    if (RepeatService.class.getName().equals(
+          info.service.getClassName())) {
+      return true;
+    }
+  }
+  return false;
+}</code></pre>
+        </section>
+
+        <section>
+          <h2>Register</h2>
+           <pre style="width: auto"><code data-trim>
+@Before
+public void registerIntentServiceIdlingResource() {
+  idlingResource = new IntentServiceIdlingResource(
+    InstrumentationRegistry.getTargetContext());
+  Espresso.registerIdlingResources(idlingResource);
+}
+
+@After
+public void unregisterIntentServiceIdlingResource() {
+  Espresso.unregisterIdlingResources(idlingResource);
+}</code></pre>
+        </section>
+
+        <section>
+          <h2>More info</h2>
+            <ul>
+              <li><a href="http://blog.sqisland.com/2015/04/espresso-custom-idling-resource.html">blog.sqisland.com/2015/04/espresso-custom-idling-resource.html</a></li>
+              <li><a href="http://blog.sqisland.com/2015/06/espresso-elapsed-time.html">blog.sqisland.com/2015/06/espresso-elapsed-time.html</a></li>
+              <li><a href="http://blog.sqisland.com/2015/07/espresso-wait-for-dialog-to-dismiss.html">blog.sqisland.com/2015/07/espresso-wait-for-dialog-to-dismiss.html</a></li>
+              <li><a href="https://github.com/chiuki/espresso-samples">github.com/chiuki/espresso-samples</a></li>
+            </ul>
+        </section>
+
+        <section data-background="#a4c639" data-state="no-footer">
+          <h1 style="color: #241811; line-height: 1.2em">Dagger and Mockito</h1>
+        </section>
+
+        <section>
+          <h2>Dagger</h2>
+          <p>
+            Dependency injection.
+          </p>
+          <p class="fragment">
+            Different objects for app and test.
+          </p>
+        </section>
+
+        <section>
+          <h2>Mockito</h2>
+          <p>
+            Mock objects in test.
+          </p>
+        </section>
+
+        <section>
+          <h2>Dagger components</h2>
+           <pre style="width: auto"><code data-trim>
+public interface DemoComponent {
+  void inject(MainActivity mainActivity);
+}</code></pre>
+          <pre style="width: auto"><code data-trim>
+@Singleton
+@Component(modules = ClockModule.class)
+public interface ApplicationComponent extends DemoComponent {
+}</code></pre>
+          <pre style="width: auto"><code data-trim>
+@Singleton
+@Component(modules = MockClockModule.class)
+public interface TestComponent extends DemoComponent {
+  void inject(MainActivityTest mainActivityTest);
+}</code></pre>
+          <img class="fragment" width="560" height="200" style="border: none" src="../images/advanced-android-espresso/dagger.png" alt="Dagger"/>
+        </section>
+
+        <section>
+          <h2>Application</h2>
+           <pre style="width: auto"><code data-trim>
+        private DemoComponent component = null;
+
+@Override public void onCreate() {
+  super.onCreate();
+  if (component == null) {
+    component = DaggerDemoApplication_ApplicationComponent
+        .builder()
+        .clockModule(new ClockModule())
+        .build();
+  }
+}
+
+public void setComponent(DemoComponent component) {
+  this.component = component;
+}
+
+public DemoComponent component() {
+  return component;
+}</code></pre>
+          <p>
+            <code>setComponent(testComponent)</code> in test <span class="fragment highlight-red">before <code>onCreate()</code></span>
+          </p>
+          </section>
+
+        <section>
+          <h2>Mockito</h2>
+           <pre style="width: auto"><code data-trim>
+/* App */
+public DateTime getNow() {
+  return new DateTime();
+}</code></pre>
+           <pre style="width: auto"><code data-trim>
+/* Test */
+Mockito.when(clock.getNow())
+  .thenReturn(new DateTime(2008, 9, 23, 0, 0, 0));
+</code></pre>
+           <pre class="fragment" style="width: auto"><code data-trim>
+/* Espresso */
+onView(withId(R.id.date))
+  .check(matches(withText("2008-09-23")));
+</code></pre>
+        </section>
+
+        <section>
+          <h2>More info</h2>
+            <ul>
+              <li><a href="http://blog.sqisland.com/2015/04/dagger-2-espresso-2-mockito.html">blog.sqisland.com/2015/04/dagger-2-espresso-2-mockito.html</a></li>
+              <li><a href="https://github.com/chiuki/android-test-demo">github.com/chiuki/android-test-demo</a></li>
+              <li><a href="https://gumroad.com/l/AndroidTestSharedPref">gum.co/AndroidTestSharedPref</a></li>
+            </ul>
+        </section>
+
+        <section>
+          <h2>Summary</h2>
+          <ul>
+            <li><code>Matcher</code>, <code>ViewAction</code>, <code>ViewAssertion</code></li>
+            <li>Combining matchers</li>
+            <li>Custom matchers</li>
+            <li>ListView</li>
+            <li>RecyclerView</li>
+            <li>Idling Resource</li>
+            <li>Dagger and Mockito</li>
+          </ul>
+        </section>
+
+        <section data-state="no-footer">
+          <h2>Thank you!</h2>
+          <ul style="list-style: none">
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-picture-o"></span>
+              <a href="http://bit.ly/advtext">
+                bit.ly/advtext
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-github"></span>
+              <a href="https://github.com/chiuki/espresso-samples">
+                github.com/chiuki/espresso-samples
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-video-camera"></span>
+              <a href="http://bit.ly/pluralsight-chiuki">
+                bit.ly/pluralsight-chiuki
+              </a>
+            </li>
+             <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-archive"></span>
+              <a href="http://gumroad.com/chiuki">
+                gumroad.com/chiuki
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-microphone"></span>
+              <a href="http://tinyletter.com/techspeak">
+                tinyletter.com/techspeak
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-newspaper-o"></span>
+              <a href="http://blog.sqisland.com">
+                blog.sqisland.com
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-twitter"></span>
+              <a href="http://twitter.com/chiuki">
+                @chiuki
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-google-plus"></span>
+              <a href="http://plus.google.com/+ChiuKiChan">
+                +ChiuKiChan
+              </a>
+            </li>
+            <li>
+              <span style="font-family: FontAwesome; margin-right: 0.5em" class="fa fa-fw fa-bullhorn"></span>
+              <a href="http://tinyletter.com/sqisland">
+                tinyletter.com/sqisland
+              </a>
+            </li>
+          </ul>
+        </section>
+
+      </div>
+			
+      <footer id="footer">
+        <p style="text-align: left">
+          <a href="http://twitter.com/chiuki">
+            <span style="font-family: FontAwesome; margin-right: 1em" class="fa fa-fw fa-twitter"></span>@chiuki
+          </a>
+          <br/>
+          <a href="http://plus.google.com/+ChiuKiChan">
+            <span style="font-family: FontAwesome; margin-right: 1em" class="fa fa-fw fa-google-plus"></span>+ChiuKiChan</a>
+          </a>
+        </p>
+      </footer>
+    </div>
+
+		<script src="../reveal/lib/js/head.min.js"></script>
+		<script src="../reveal/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: false,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: '../reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: '../reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: '../reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: '../reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
