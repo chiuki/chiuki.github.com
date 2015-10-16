@@ -39,6 +39,15 @@
 code.smaller {
   font-size: 0.8em;
 }
+code.larger {
+  font-size: 1.5em;
+  line-height: 1.2em;
+}
+
+pre code {
+  background-color: #0d0906;
+}
+
 </style>
 
 <script>
@@ -65,9 +74,9 @@ function swap(el) {
 
 <!-- Start of StatCounter Code for Default Guide -->
 <script type="text/javascript">
-var sc_project=8788186; 
-var sc_invisible=1; 
-var sc_security="b999074c"; 
+var sc_project=8788186;
+var sc_invisible=1;
+var sc_security="b999074c";
 var scJsHost = (("https:" == document.location.protocol) ?
 "https://secure." : "http://www.");
 document.write("<sc"+"ript type='text/javascript' src='" +
@@ -138,7 +147,7 @@ alt="click tracking"></a></div></noscript>
             No need to sleep
           </p>
         </section>
-        
+
         <section data-background="#a4c639" data-state="no-footer">
           <h1 style="color: #241811">Hello World</h1>
         </section>
@@ -273,14 +282,12 @@ alt="click tracking"></a></div></noscript>
 
         <section>
           <h2>isAssignableFrom</h2>
-            <pre style="width: auto"><code data-trim>
-@Test
-public void toolbarTitle() {
-  CharSequence title = InstrumentationRegistry.getTargetContext()
-    .getString(R.string.my_title);
+            <pre style="width: auto"><code data-trim class="larger">
+@Test public void toolbarTitle() {
+  CharSequence title = InstrumentationRegistry
+    .getTargetContext().getString(R.string.my_title);
   matchToolbarTitle(title);
 }
-
 private static ViewInteraction matchToolbarTitle(
     CharSequence title) {
   return onView(
@@ -298,13 +305,18 @@ private static ViewInteraction matchToolbarTitle(
 
         <section>
           <h2>toolbar.getTitle()</h2>
-            <pre style="width: auto"><code data-trim>
+          <pre style="width: auto"><code data-trim class="larger">
 private static ViewInteraction matchToolbarTitle(
     CharSequence title) {
   return onView(isAssignableFrom(Toolbar.class))
       .check(matches(withToolbarTitle(is(title))));
 }
+          </code></pre>
+        </section>
 
+        <section>
+          <h2>toolbar.getTitle()</h2>
+            <pre style="width: auto"><code data-trim class="larger">
 private static Matcher&lt;Object&gt; withToolbarTitle(
     final Matcher&lt;CharSequence&gt; textMatcher) {
   return new BoundedMatcher&lt;Object, Toolbar&gt;(Toolbar.class) {
@@ -370,24 +382,26 @@ private static Matcher&lt;Object&gt; withToolbarTitle(
           <h2>App</h2>
            <div class="row">
            <div class="left">
-            <pre style="width: auto"><code data-trim>
+            <pre style="width: auto"><code data-trim class="larger">
 final Item[] items = new Item[COUNT];
 for (int i = 0; i &lt; COUNT; ++i) {
   items[i] = new Item(i);
 }
-ArrayAdapter&lt;Item&gt; adapter = new ArrayAdapter&lt;&gt;(this,
-    android.R.layout.simple_list_item_1, items);
-listView.setAdapter(adapter);
+ArrayAdapter&lt;Item&gt; adapter
+  = new ArrayAdapter&lt;&gt;(this,
+      android.R.layout.simple_list_item_1,
+      items);
+listView.setAdapter(adapter);</code></pre>
+           </div>
+             <img class="right" width="324" height="576" src="../images/advanced-android-espresso/list_view_clicked.png" alt="ListView">
+           </div>
+        </section>
 
-listView.setOnItemClickListener(
-    new AdapterView.OnItemClickListener() {
-  public void onItemClick(
-      AdapterView&lt;?&gt; parent, View view, int position, long id) {
-    textView.setText(items[position].toString());
-    textView.setVisibility(View.VISIBLE);
-  }
-});</code></pre>
-           <pre style="width: auto"><code data-trim>
+        <section>
+          <h2>App</h2>
+           <div class="row">
+           <div class="left">
+            <pre style="width: auto"><code data-trim class="larger">
 public static class Item {
   private final int value;
   public Item(int value) {
@@ -404,8 +418,29 @@ public static class Item {
         </section>
 
         <section>
+          <h2>App</h2>
+           <div class="row">
+           <div class="left">
+            <pre style="width: auto"><code data-trim class="larger">
+listView.setOnItemClickListener(
+    new AdapterView
+      .OnItemClickListener() {
+  public void onItemClick(
+      AdapterView&lt;?&gt; parent,
+      View view, int position, long id) {
+    textView.setText(
+      items[position].toString());
+    textView.setVisibility(View.VISIBLE);
+  }
+});</code></pre>
+           </div>
+             <img class="right" width="324" height="576" src="../images/advanced-android-espresso/list_view_clicked.png" alt="ListView">
+           </div>
+        </section>
+
+        <section>
           <h2>Test</h2>
-            <pre style="width: auto"><code data-trim>
+            <pre style="width: auto"><code data-trim class="larger">
 @Test
 public void clickItem() {
   onView(withId(R.id.text))
@@ -417,7 +452,11 @@ public void clickItem() {
       .check(matches(withText("27")))
       .check(matches(isDisplayed()));
 }</code></pre>
-           <pre style="width: auto"><code data-trim>
+        </section>
+
+        <section>
+          <h2>withValue</h2>
+           <pre style="width: auto"><code data-trim class="larger">
 public static Matcher&lt;Object&gt; withValue(final int value) {
   return new BoundedMatcher&lt;Object, MainActivity.Item&gt;(MainActivity.Item.class) {
     @Override public void describeTo(Description description) {
@@ -452,13 +491,13 @@ public static Matcher&lt;Object&gt; withValue(final int value) {
 
         <section>
           <h2>RecyclerViewActions</h2>
-            <pre style="width: auto"><code data-trim>
-@Test
-public void clickItem() {
+            <pre style="width: auto"><code data-trim class="larger">
+@Test public void clickItem() {
   onView(withId(R.id.text))
       .check(matches(not(isDisplayed())));
   onView(withId(R.id.recycler_view))
-      .perform(RecyclerViewActions.actionOnItemAtPosition(27, click()));
+      .perform(
+          RecyclerViewActions.actionOnItemAtPosition(27, click()));
   onView(withId(R.id.text))
       .check(matches(withText("27")))
       .check(matches(isDisplayed()));
@@ -467,7 +506,7 @@ public void clickItem() {
             <div class="fragment">
                 <code>actionOnItemAtPosition</code></li>
             </div>
-            <pre style="width: auto" class="fragment"><code data-trim>
+            <pre style="width: auto" class="fragment"><code data-trim class="larger">
 // ListView
 onData(withValue(27))
     .inAdapterView(withId(R.id.list))
@@ -510,20 +549,15 @@ onData(withValue(27))
 
          <section>
           <h2>IntentServiceIdlingResource</h2>
-           <pre style="width: auto"><code data-trim>
-          @Override
-public String getName() {
+           <pre style="width: auto"><code data-trim class="larger">
+          @Override public String getName() {
   return IntentServiceIdlingResource.class.getName();
 }
-
-@Override
-public void registerIdleTransitionCallback(
+@Override public void registerIdleTransitionCallback(
     ResourceCallback resourceCallback) {
   this.resourceCallback = resourceCallback;
 }
-
-@Override
-public boolean isIdleNow() {
+@Override public boolean isIdleNow() {
   boolean idle = !isIntentServiceRunning();
   if (idle && resourceCallback != null) {
     resourceCallback.onTransitionToIdle();
@@ -534,7 +568,7 @@ public boolean isIdleNow() {
 
         <section>
           <h2>isIntentServiceRunning()</h2>
-           <pre style="width: auto"><code data-trim>
+           <pre style="width: auto"><code data-trim class="larger">
 private boolean isIntentServiceRunning() {
   ActivityManager manager =
     (ActivityManager) context.getSystemService(
@@ -552,7 +586,7 @@ private boolean isIntentServiceRunning() {
 
         <section>
           <h2>Register</h2>
-           <pre style="width: auto"><code data-trim>
+           <pre style="width: auto"><code data-trim class="larger">
 @Before
 public void registerIntentServiceIdlingResource() {
   idlingResource = new IntentServiceIdlingResource(
@@ -599,18 +633,16 @@ public void unregisterIntentServiceIdlingResource() {
 
         <section>
           <h2>Dagger components</h2>
-           <pre style="width: auto"><code data-trim>
+           <pre style="width: auto"><code data-trim class="larger">
 public interface DemoComponent {
   void inject(MainActivity mainActivity);
 }</code></pre>
-          <pre style="width: auto"><code data-trim>
-@Singleton
-@Component(modules = ClockModule.class)
+          <pre style="width: auto"><code data-trim class="larger">
+@Singleton @Component(modules = ClockModule.class)
 public interface ApplicationComponent extends DemoComponent {
 }</code></pre>
-          <pre style="width: auto"><code data-trim>
-@Singleton
-@Component(modules = MockClockModule.class)
+          <pre style="width: auto"><code data-trim class="larger">
+@Singleton @Component(modules = MockClockModule.class)
 public interface TestComponent extends DemoComponent {
   void inject(MainActivityTest mainActivityTest);
 }</code></pre>
@@ -619,7 +651,7 @@ public interface TestComponent extends DemoComponent {
 
         <section>
           <h2>Application</h2>
-           <pre style="width: auto"><code data-trim>
+           <pre style="width: auto"><code data-trim class="larger">
         private DemoComponent component = null;
 
 @Override public void onCreate() {
@@ -630,8 +662,12 @@ public interface TestComponent extends DemoComponent {
         .clockModule(new ClockModule())
         .build();
   }
-}
+}</code></pre>
+          </section>
 
+        <section>
+          <h2>setComponent</h2>
+           <pre style="width: auto"><code data-trim class="larger">
 public void setComponent(DemoComponent component) {
   this.component = component;
 }
@@ -646,17 +682,17 @@ public DemoComponent component() {
 
         <section>
           <h2>Mockito</h2>
-           <pre style="width: auto"><code data-trim>
+           <pre style="width: auto"><code data-trim class="larger">
 /* App */
 public DateTime getNow() {
   return new DateTime();
 }</code></pre>
-           <pre style="width: auto"><code data-trim>
+           <pre style="width: auto"><code data-trim class="larger">
 /* Test */
 Mockito.when(clock.getNow())
   .thenReturn(new DateTime(2008, 9, 23, 0, 0, 0));
 </code></pre>
-           <pre class="fragment" style="width: auto"><code data-trim>
+           <pre class="fragment" style="width: auto"><code data-trim class="larger">
 /* Espresso */
 onView(withId(R.id.date))
   .check(matches(withText("2008-09-23")));
@@ -780,7 +816,7 @@ onView(withId(R.id.date))
         </section>
 
       </div>
-			
+
       <footer id="footer">
         <p style="text-align: left">
           <a href="http://twitter.com/chiuki">
