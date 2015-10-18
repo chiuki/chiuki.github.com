@@ -48,6 +48,9 @@ pre code {
   background-color: #0d0906;
 }
 
+.reveal section img {
+  border: 1px solid #333;
+}
 </style>
 
 <script>
@@ -123,6 +126,9 @@ alt="click tracking"></a></div></noscript>
             <a href="http://plus.google.com/+ChiuKiChan">
               <span style="font-family: FontAwesome; margin-right: 1em" class="fa fa-fw fa-google-plus"></span>+ChiuKiChan
             </a>
+          </p>
+          <p style="margin-top: 1.2em">
+            <a href="http://bit.ly/advesp">http://bit.ly/advesp</a>
           </p>
         </section>
 
@@ -458,11 +464,13 @@ public void clickItem() {
           <h2>withValue</h2>
            <pre style="width: auto"><code data-trim class="larger">
 public static Matcher&lt;Object&gt; withValue(final int value) {
-  return new BoundedMatcher&lt;Object, MainActivity.Item&gt;(MainActivity.Item.class) {
+  return new BoundedMatcher&lt;Object, 
+      MainActivity.Item&gt;(MainActivity.Item.class) {
     @Override public void describeTo(Description description) {
       description.appendText("has value " + value);
     }
-    @Override public boolean matchesSafely(MainActivity.Item item) {
+    @Override public boolean matchesSafely(
+        MainActivity.Item item) {
       return item.toString().equals(String.valueOf(value));
     }
   };
@@ -494,13 +502,13 @@ public static Matcher&lt;Object&gt; withValue(final int value) {
             <pre style="width: auto"><code data-trim class="larger">
 @Test public void clickItem() {
   onView(withId(R.id.text))
-      .check(matches(not(isDisplayed())));
+    .check(matches(not(isDisplayed())));
   onView(withId(R.id.recycler_view))
-      .perform(
-          RecyclerViewActions.actionOnItemAtPosition(27, click()));
+    .perform(
+      RecyclerViewActions.actionOnItemAtPosition(27, click()));
   onView(withId(R.id.text))
-      .check(matches(withText("27")))
-      .check(matches(isDisplayed()));
+    .check(matches(withText("27")))
+    .check(matches(isDisplayed()));
 }
             </code></pre>
             <div class="fragment">
@@ -552,11 +560,13 @@ onData(withValue(27))
            <pre style="width: auto"><code data-trim class="larger">
           @Override public String getName() {
   return IntentServiceIdlingResource.class.getName();
-}
+}</code></pre>
+           <pre style="width: auto"><code data-trim class="larger">
 @Override public void registerIdleTransitionCallback(
     ResourceCallback resourceCallback) {
   this.resourceCallback = resourceCallback;
-}
+}</code></pre>
+           <pre style="width: auto"><code data-trim class="larger">
 @Override public boolean isIdleNow() {
   boolean idle = !isIntentServiceRunning();
   if (idle && resourceCallback != null) {
@@ -821,10 +831,6 @@ onView(withId(R.id.date))
         <p style="text-align: left">
           <a href="http://twitter.com/chiuki">
             <span style="font-family: FontAwesome; margin-right: 1em" class="fa fa-fw fa-twitter"></span>@chiuki
-          </a>
-          <br/>
-          <a href="http://plus.google.com/+ChiuKiChan">
-            <span style="font-family: FontAwesome; margin-right: 1em" class="fa fa-fw fa-google-plus"></span>+ChiuKiChan</a>
           </a>
         </p>
       </footer>
