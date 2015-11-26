@@ -65,9 +65,9 @@ function swap(el) {
 
 <!-- Start of StatCounter Code for Default Guide -->
 <script type="text/javascript">
-var sc_project=8788186; 
-var sc_invisible=1; 
-var sc_security="b999074c"; 
+var sc_project=8788186;
+var sc_invisible=1;
+var sc_security="b999074c";
 var scJsHost = (("https:" == document.location.protocol) ?
 "https://secure." : "http://www.");
 document.write("<sc"+"ript type='text/javascript' src='" +
@@ -213,7 +213,7 @@ private void startAnimation(TextView textView) {
             <img class="right" width="320" height="480" src="../images/advanced-android-textview/animated_compound_drawable.gif" alt="Animated Compound Drawable">
           </div>
         </section>
-        
+
         <section data-background="#a4c639" data-state="no-footer">
           <h1 style="color: #241811">More XML fun</h1>
         </section>
@@ -306,7 +306,7 @@ Add padding to accommodate shadow
           <div class="row">
             <div class="left">
               <pre style="width: auto"><code data-trim>
-Typeface typeface 
+Typeface typeface
     = Typeface.createFromAsset(getAssets(), "Ruthie.ttf");
 textView.setTypeface(typeface);
               </code></pre>
@@ -337,7 +337,7 @@ textView.getPaint().setShader(shader);
               <pre style="width: auto"><code data-trim>
 Bitmap bitmap = BitmapFactory.decodeResource(
     getResources(), R.drawable.cheetah_tile);
-Shader shader = new BitmapShader(bitmap, 
+Shader shader = new BitmapShader(bitmap,
     Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
 textView.getPaint().setShader(shader);
               </code></pre>
@@ -357,7 +357,7 @@ textView.getPaint().setShader(shader);
               <pre style="width: auto"><code data-trim>
 &lt;h1&gt;Hello World&lt;/h1&gt;
 Here is an &lt;img src="octopus"&gt;&lt;i&gt;octopus&lt;/i&gt;.&lt;br&gt;
-And here is a 
+And here is a
 &lt;a href="http://d.android.com/reference/android/text/Html.html"&gt;
 link&lt;/a&gt;.
               </code></pre>
@@ -366,7 +366,7 @@ link&lt;/a&gt;.
 &lt;![CDATA[
 &lt;h1&gt;Hello World&lt;/h1&gt;
 Here is an &lt;img src="octopus"&gt;&lt;i&gt;octopus&lt;/i&gt;.&lt;br&gt;
-And here is a 
+And here is a
 &lt;a href="http://d.android.com/reference/android/text/Html.html"&gt;
 link&lt;/a&gt;.
 ]]&gt;
@@ -389,7 +389,7 @@ textView.setMovementMethod(
     LinkMovementMethod.getInstance());
               </code></pre>
               <pre style="width: auto"><code data-trim>
-private static class ResouroceImageGetter 
+private static class ResouroceImageGetter
     implements Html.ImageGetter {
   private final Context context;
 
@@ -400,9 +400,9 @@ private static class ResouroceImageGetter
   public Drawable getDrawable(String source) {
     int path = context.getResources().getIdentifier(
         source, "drawable", BuildConfig.APPLICATION_ID);
-    Drawable drawable 
+    Drawable drawable
       = context.getResources().getDrawable(path);
-    drawable.setBounds(0, 0, 
+    drawable.setBounds(0, 0,
        drawable.getIntrinsicWidth(),
        drawable.getIntrinsicHeight());
     return drawable;
@@ -436,11 +436,11 @@ private static class ResouroceImageGetter
               One &lt;u&gt;two&lt;/u&gt; three
             </code>
             <div class="fragment">
-              <p>&darr;</p>            
+              <p>&darr;</p>
               <p><code style="font-size: 0.9em">"One two three"</code> + Underline from position 4 to 6</p>
             </div>
             <div class="fragment">
-              <p>&darr;</p> 
+              <p>&darr;</p>
               <p>
                 <code style="font-size: 0.9em">
                   spannableString.setSpan(new UnderlineSpan(), 4, 6, flags);
@@ -453,7 +453,7 @@ private static class ResouroceImageGetter
           <h2>CharacterStyle</h2>
           <ul>
             <li>Character-level text formatting</li>
-            <li>e.g. 
+            <li>e.g.
               <code class="smaller">ForegroundColorSpan</code>,
               <code class="smaller">BackgroundColorSpan</code>,
               <code class="smaller">UnderlineSpan</code>
@@ -465,7 +465,7 @@ private static class ResouroceImageGetter
           <h2>ParagraphStyle</h2>
           <ul>
             <li>Paragraph-level text formatting</li>
-            <li>e.g. 
+            <li>e.g.
               <code class="smaller">BulletSpan</code>,
               <code class="smaller">IconMarginSpan</code>,
               <code class="smaller">QuoteSpan</code>
@@ -521,16 +521,16 @@ textView.setText(Html.fromHtml(
             <div class="row">
               <div class="left">
               <pre style="width: auto"><code data-trim>
-private static class FractionTagHandler 
+private static class FractionTagHandler
     implements Html.TagHandler {
-  @Override 
-  public void handleTag(boolean opening, 
+  @Override
+  public void handleTag(boolean opening,
       String tag, Editable output, XMLReader xmlReader) {
   if (!"afrc".equalsIgnoreCase(tag)) return;
 
   int len = output.length();
   if (opening) {
-    output.setSpan(new FractionSpan(), len, len, 
+    output.setSpan(new FractionSpan(), len, len,
         Spannable.SPAN_MARK_MARK);
   } else {
     Object obj = getLast(output, FractionSpan.class);
@@ -593,25 +593,25 @@ private static SpannableString formatString(
   String text = context.getString(textId);
   SpannableString spannableString = new SpannableString(text);
   spannableString.setSpan(
-      new TextAppearanceSpan(context, styleId), 
+      new TextAppearanceSpan(context, styleId),
       0, text.length(), 0);
   return spannableString;
 }
                 </code></pre>
                 <pre style="width: auto"><code data-trim>
 SpannableStringBuilder builder = new SpannableStringBuilder()
-  .append(formatString(this, R.string.big_red, 
+  .append(formatString(this, R.string.big_red,
       R.style.BigRedTextAppearance))
   .append("\n")
-  .append(formatString(this, R.string.medium_green, 
+  .append(formatString(this, R.string.medium_green,
       R.style.MediumGreenTextAppearance))
   .append("\n")
-  .append(formatString(this, R.string.small_blue, 
+  .append(formatString(this, R.string.small_blue,
       R.style.SmallBlueTextAppearance));
 textView.setText(builder.subSequence(0, builder.length()));
                 </code></pre>
                 <pre style="width: auto"><code data-trim>
-&lt;style name="BigRedTextAppearance" 
+&lt;style name="BigRedTextAppearance"
     parent="@android:style/TextAppearance"&gt;
   &lt;item name="android:textSize"&gt;56sp&lt;/item&gt;
   &lt;item name="android:textColor"&gt;#c00&lt;/item&gt;
@@ -631,7 +631,7 @@ public void click(View button) {
   String text = editText.getText().toString();
   Layout.Alignment align =
     button.getId() == R.id.add_to_right_button ?
-      Layout.Alignment.ALIGN_OPPOSITE : 
+      Layout.Alignment.ALIGN_OPPOSITE :
       Layout.Alignment.ALIGN_NORMAL;
   appendText(text, align);
   editText.setText(null);
@@ -641,7 +641,7 @@ public void click(View button) {
 private void appendText(
     CharSequence text, Layout.Alignment align) {
   AlignmentSpan span = new AlignmentSpan.Standard(align);
-  SpannableString spannableString 
+  SpannableString spannableString
     = new SpannableString(text);
   spannableString.setSpan(span, 0, text.length(), 0);
 
@@ -668,7 +668,7 @@ int end = start + substring.length();
 spannableString.setSpan(new RainbowSpan(this), start, end, 0);
               </code></pre>
               <pre style="width: auto"><code data-trim>
-private static class RainbowSpan extends CharacterStyle 
+private static class RainbowSpan extends CharacterStyle
     implements UpdateAppearance {
   private final int[] colors;
   public RainbowSpan(Context context) {
@@ -678,8 +678,8 @@ private static class RainbowSpan extends CharacterStyle
 
   public void updateDrawState(TextPaint paint) {
     paint.setStyle(Paint.Style.FILL);
-    Shader shader = new LinearGradient(0, 0, 0, 
-        paint.getTextSize() * colors.length, colors, 
+    Shader shader = new LinearGradient(0, 0, 0,
+        paint.getTextSize() * colors.length, colors,
         null, Shader.TileMode.MIRROR);
     Matrix matrix = new Matrix();
     matrix.setRotate(90);
@@ -713,7 +713,7 @@ objectAnimator.setRepeatCount(ValueAnimator.INFINITE);
 objectAnimator.start();
               </code></pre>
               <pre style="width: auto"><code data-trim>
-private static final Property&lt;AnimatedColorSpan, Float&gt; 
+private static final Property&lt;AnimatedColorSpan, Float&gt;
     ANIMATED_COLOR_SPAN_FLOAT_PROPERTY
     = new Property&lt;AnimatedColorSpan, Float&gt;(
         Float.class, "ANIMATED_COLOR_SPAN_FLOAT_PROPERTY") {
@@ -835,7 +835,7 @@ public class LinedEditText extends EditText {
 protected void onDraw(Canvas canvas) {
   float startX = getPaddingLeft();
   float stopX = getWidth() - getPaddingRight();
-  float offsetY = getPaddingTop() 
+  float offsetY = getPaddingTop()
      - getPaint().getFontMetrics().top
      + paint.getStrokeWidth() / 2;
   for (int i = 0; i < getLineCount(); ++i) {
@@ -875,17 +875,17 @@ protected void onDraw(Canvas canvas) {
 String text = textView.getText().toString();
 SpannableString spannableString = new SpannableString(text);
 
-IconFontSpan iconFontSpan 
+IconFontSpan iconFontSpan
     = new IconFontSpan(textView.getContext());
 Pattern pattern = Pattern.compile("\u26F7");    // skier
 Matcher matcher = pattern.matcher(text);
 while (matcher.find()) {
-  spannableString.setSpan(iconFontSpan, 
+  spannableString.setSpan(iconFontSpan,
     matcher.start(), matcher.end(), 0);
 }
                 </code></pre>
                 <pre style="width: auto"><code data-trim>
-private static class IconFontSpan 
+private static class IconFontSpan
     extends MetricAffectingSpan {
   private static Typeface typeface = null;
     public IconFontSpan(Context context) {
@@ -936,7 +936,7 @@ while (matcher.find()) {
             <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
           </div>
         </section>
-	
+
         <section>
           <h2>Dynamic ImageSpan</h2>
           <div class="row">
@@ -994,7 +994,7 @@ private static class SpeedSignDrawable extends Drawable {
             </div>
             <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
           </div>
-        </section>	
+        </section>
 
         <section>
           <h2>SpeedSignDrawable</h2>
@@ -1028,8 +1028,8 @@ private void drawBlackNumber(Canvas canvas) {
             </div>
             <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
           </div>
-        </section>	
-	
+        </section>
+
         <section>
           <h2>Summary</h2>
           <ul>
@@ -1047,6 +1047,15 @@ private void drawBlackNumber(Canvas canvas) {
             <li>Lined paper</li>
             <li>Emoji</li>
           </ul>
+        </section>
+
+        <section>
+          <h2>Beautiful Typography on <span style="font-family: FontAwesome" class="fa fa-fw fa-android"></span>
+</h2>
+          <a href="https://www.youtube.com/watch?v=7GFRpP9a-eQ">
+            <img style="border: none" width="640" height="360" src="../images/advanced-android-textview/lisawray.png" alt="Beautiful Typography on Android"/>
+          </a>
+          <a href="https://www.youtube.com/watch?v=7GFRpP9a-eQ">https://www.youtube.com/watch?v=7GFRpP9a-eQ</a>
         </section>
 
         <section data-state="no-footer">
@@ -1099,7 +1108,7 @@ private void drawBlackNumber(Canvas canvas) {
         </section>
 
       </div>
-			
+
       <footer id="footer">
         <p style="text-align: left">
           <a href="http://twitter.com/chiuki">
