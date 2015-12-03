@@ -39,6 +39,14 @@
 code.smaller {
   font-size: 0.8em;
 }
+code.large {
+  font-size: 1.3em;
+  line-height: 1.1em;
+}
+code.larger {
+  font-size: 1.5em;
+  line-height: 1.2em;
+}
 </style>
 
 <script>
@@ -135,14 +143,17 @@ A LinearLayout which contains an ImageView and a TextView can be more efficientl
           <h2>Compound Drawable</h2>
           <div class="row">
             <div class="left">
-	    				<pre style="width: auto"><code data-trim>
+	    				<pre style="width: auto"><code data-trim class="larger">
 &lt;TextView
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:text="@string/animation"
-  android:drawableLeft="@drawable/rotating_loading"
-  android:drawableRight="@drawable/animated_wifi"
-  android:drawableBottom="@drawable/animated_clock"/&gt;
+  android:drawableLeft=
+    "@drawable/rotating_loading"
+  android:drawableRight=
+    "@drawable/animated_wifi"
+  android:drawableBottom=
+    "@drawable/animated_clock"/&gt;
               </code></pre>
             </div>
             <img class="right" width="320" height="480" src="../images/advanced-android-textview/animated_compound_drawable.png" alt="Compound Drawable">
@@ -150,8 +161,8 @@ A LinearLayout which contains an ImageView and a TextView can be more efficientl
         </section>
 
         <section>
-          <h2>Drawable XML</h2>
-            <pre><code data-trim>
+          <h2>AnimatedRotateDrawable</h2>
+            <pre><code data-trim class="larger">
 &lt;!-- res/drawable/rotating_loading.xml --&gt;
 &lt;animated-rotate
   android:pivotX="50%"
@@ -159,16 +170,34 @@ A LinearLayout which contains an ImageView and a TextView can be more efficientl
   android:drawable="@drawable/ic_loading"
   android:duration="500" /&gt;
             </code></pre>
-            <pre><code data-trim>
+          <p>
+            <code>AnimatedRotateDrawable implements Animatable</code>
+          </p>
+        </section>
+
+        <section>
+          <h2>AnimationDrawable</h2>
+            <pre><code data-trim class="larger">
 &lt;!-- res/drawable/animated_wifi.xml --&gt;
 &lt;animation-list&gt;
-  &lt;item android:drawable="@drawable/ic_wifi_0" android:duration="250" /&gt;
-  &lt;item android:drawable="@drawable/ic_wifi_1" android:duration="250" /&gt;
-  &lt;item android:drawable="@drawable/ic_wifi_2" android:duration="250" /&gt;
-  &lt;item android:drawable="@drawable/ic_wifi_3" android:duration="250" /&gt;
+  &lt;item android:drawable="@drawable/ic_wifi_0"
+      android:duration="250" /&gt;
+  &lt;item android:drawable="@drawable/ic_wifi_1"
+      android:duration="250" /&gt;
+  &lt;item android:drawable="@drawable/ic_wifi_2"
+      android:duration="250" /&gt;
+  &lt;item android:drawable="@drawable/ic_wifi_3"
+      android:duration="250" /&gt;
 &lt;/animation-list&gt;
             </code></pre>
-            <pre><code data-trim>
+            <p>
+              <code>AnimationDrawable implements Animatable</code>
+            </p>
+        </section>
+
+        <section>
+          <h2>AnimatedVectorDrawable</h2>
+            <pre><code data-trim class="larger">
 &lt;!-- res/drawable/animated_clock.xml --&gt;
 &lt;animated-vector android:drawable="@drawable/clock"&gt;
   &lt;target android:name="hours"
@@ -177,36 +206,26 @@ A LinearLayout which contains an ImageView and a TextView can be more efficientl
     android:animation="@anim/minutes_rotation" /&gt;
 &lt;/animated-vector&gt;
             </code></pre>
-          <div class="fragment">
-          <ul style="font-size: 0.8em">
-            <li><code>AnimatedRotateDrawable implements Animatable</code></li>
-            <li><code>AnimationDrawable implements Animatable</code></li>
-            <li><code><span class="fragment highlight-red">AnimatedVectorDrawable</span> implements Animatable</code></li>
-          </ul>
+          <p>
+            <code><span class="fragment highlight-red">AnimatedVectorDrawable</span> implements Animatable</code>
+          </p>
           <p class="fragment">
             <span class="red" style="font-size: 1.2em">Introduced in Lollipop</span>
           </p>
-          </li>
         </section>
 
         <section>
           <h2>Animatable</h2>
           <div class="row">
             <div class="left">
-	    				<pre style="width: auto"><code data-trim>
-&lt;TextView
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:text="@string/animation"
-  android:drawableLeft="@drawable/rotating_loading"
-  android:drawableRight="@drawable/animated_wifi"
-  android:drawableBottom="@drawable/animated_clock"/&gt;
-              </code></pre>
-					    <pre style="width: auto"><code data-trim>
-private void startAnimation(TextView textView) {
-  Drawable[] drawables = textView.getCompoundDrawables();
+					    <pre style="width: auto"><code data-trim class="larger">
+private void startAnimation(
+    TextView textView) {
+  Drawable[] drawables
+      = textView.getCompoundDrawables();
   for (Drawable drawable : drawables) {
-    if (drawable != null && drawable instanceof Animatable) {
+    if (drawable != null &&
+        drawable instanceof Animatable) {
       ((Animatable) drawable).start();
     }
   }
@@ -225,9 +244,8 @@ private void startAnimation(TextView textView) {
           <h2>Shadow</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
+              <pre style="width: auto"><code data-trim class="larger">
 &lt;TextView
-  xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:padding="12dp"
@@ -265,9 +283,8 @@ Add padding to accommodate shadow
           <h2>Shadow, abused</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
+              <pre style="width: auto"><code data-trim class="larger">
 &lt;TextView
-  xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:padding="12dp"
@@ -280,7 +297,17 @@ Add padding to accommodate shadow
   android:shadowDy="-4"
   android:shadowRadius="1"/&gt;
               </code></pre>
-              <pre style="width: auto"><code data-trim>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/shadow_blocky_glow.png" alt="Compound Drawable">
+          </div>
+        </section>
+
+
+                <section>
+                  <h2>Shadow, abused</h2>
+                  <div class="row">
+                    <div class="left">
+                      <pre style="width: auto"><code data-trim class="larger">
 &lt;TextView
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
@@ -294,11 +321,11 @@ Add padding to accommodate shadow
   android:shadowDx="0"
   android:shadowDy="0"
   android:shadowRadius="24"/&gt;
-              </code></pre>
-            </div>
-            <img class="right" width="320" height="480" src="../images/advanced-android-textview/shadow_blocky_glow.png" alt="Compound Drawable">
-          </div>
-        </section>
+                      </code></pre>
+                    </div>
+                    <img class="right" width="320" height="480" src="../images/advanced-android-textview/shadow_blocky_glow.png" alt="Compound Drawable">
+                  </div>
+                </section>
 
         <section data-background="#a4c639" data-state="no-footer">
           <h1 style="color: #241811">Fancy looks</h1>
@@ -308,9 +335,10 @@ Add padding to accommodate shadow
           <h2>Custom font</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
+              <pre style="width: auto"><code data-trim class="larger">
 Typeface typeface
-    = Typeface.createFromAsset(getAssets(), "Ruthie.ttf");
+    = Typeface.createFromAsset(
+        getAssets(), "Ruthie.ttf");
 textView.setTypeface(typeface);
               </code></pre>
             </div>
@@ -322,10 +350,11 @@ textView.setTypeface(typeface);
           <h2>Gradient</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
+              <pre style="width: auto"><code data-trim class="larger">
 Shader shader = new LinearGradient(
     0, 0, 0, textView.getTextSize(),
-    Color.RED, Color.BLUE, Shader.TileMode.CLAMP);
+    Color.RED, Color.BLUE,
+    Shader.TileMode.CLAMP);
 textView.getPaint().setShader(shader);
               </code></pre>
             </div>
@@ -337,11 +366,15 @@ textView.getPaint().setShader(shader);
           <h2>Pattern</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
-Bitmap bitmap = BitmapFactory.decodeResource(
-    getResources(), R.drawable.cheetah_tile);
-Shader shader = new BitmapShader(bitmap,
-    Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+              <pre style="width: auto"><code data-trim class="larger">
+Bitmap bitmap
+    = BitmapFactory.decodeResource(
+    getResources(),
+    R.drawable.cheetah_tile);
+Shader shader = new BitmapShader(
+    bitmap,
+    Shader.TileMode.REPEAT,
+    Shader.TileMode.REPEAT);
 textView.getPaint().setShader(shader);
               </code></pre>
             </div>
@@ -357,20 +390,22 @@ textView.getPaint().setShader(shader);
           <h2>HTML</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
+              <pre style="width: auto"><code data-trim class="larger">
 &lt;h1&gt;Hello World&lt;/h1&gt;
-Here is an &lt;img src="octopus"&gt;&lt;i&gt;octopus&lt;/i&gt;.&lt;br&gt;
+Here is an
+&lt;img src="octopus"&gt;&lt;i&gt;octopus&lt;/i&gt;.&lt;br&gt;
 And here is a
-&lt;a href="http://d.android.com/reference/android/text/Html.html"&gt;
+&lt;a href="http://d.android.com"&gt;
 link&lt;/a&gt;.
               </code></pre>
-              <pre class="fragment" style="width: auto"><code data-trim>
+              <pre class="fragment" style="width: auto"><code data-trim class="larger">
 &lt;string name="from_html_text"&gt;
 &lt;![CDATA[
 &lt;h1&gt;Hello World&lt;/h1&gt;
-Here is an &lt;img src="octopus"&gt;&lt;i&gt;octopus&lt;/i&gt;.&lt;br&gt;
+Here is an
+&lt;img src="octopus"&gt;&lt;i&gt;octopus&lt;/i&gt;.&lt;br&gt;
 And here is a
-&lt;a href="http://d.android.com/reference/android/text/Html.html"&gt;
+&lt;a href="http://d.android.com"&gt;
 link&lt;/a&gt;.
 ]]&gt;
 &lt;/string&gt;
@@ -381,25 +416,22 @@ link&lt;/a&gt;.
         </section>
 
         <section>
-          <h2>HTML.fromHtml</h2>
-          <div class="row">
-            <div class="left">
-              <pre style="width: auto"><code data-trim>
+          <h2>setMovementMethod</h2>
+              <pre style="width: auto"><code data-trim class="larger">
 String html = getString(R.string.from_html_text);
-textView.setText(Html.fromHtml(
-    html, new ResouroceImageGetter(this), null));
 textView.setMovementMethod(
     LinkMovementMethod.getInstance());
+textView.setText(Html.fromHtml(
+    html, new ResouroceImageGetter(this), null));
               </code></pre>
-              <pre style="width: auto"><code data-trim>
+        </section>
+
+        <section>
+          <h2>ResouroceImageGetter</h2>
+              <pre style="width: auto"><code data-trim class="larger">
 private static class ResouroceImageGetter
     implements Html.ImageGetter {
-  private final Context context;
-
-  public ResouroceImageGetter(Context context) {
-    this.context = context;
-  }
-
+  // Constructor takes a Context
   public Drawable getDrawable(String source) {
     int path = context.getResources().getIdentifier(
         source, "drawable", BuildConfig.APPLICATION_ID);
@@ -412,9 +444,6 @@ private static class ResouroceImageGetter
   }
 }
               </code></pre>
-            </div>
-            <img class="right" width="320" height="480" src="../images/advanced-android-textview/from_html.png" alt="From HTML">
-          </div>
         </section>
 
         <section>
@@ -492,27 +521,18 @@ private static class ResouroceImageGetter
         </section>
 
         <section>
-          <h2>Stacked fractions</h2>
+          <h2>Custom Tag</h2>
           <div class="row">
             <div class="left">
               <p>TextPaint#setFontFeatureSettings</p>
               <p class="fragment"><span class="red">@TargetApi(LOLLIPOP)</span></p>
-              <pre class="fragment" style="width: auto"><code data-trim>
+              <pre class="fragment" style="width: auto"><code data-trim class="larger">
 &lt;string name="fraction_text"&gt;
 &lt;![CDATA[
-1&lt;afrc&gt;1/2&lt;/afrc&gt; + &lt;afrc&gt;11/16&lt;/afrc&gt; = 2&lt;afrc&gt;3/16&lt;/afrc&gt;
+1&lt;afrc&gt;1/2&lt;/afrc&gt; + &lt;afrc&gt;11/16&lt;/afrc&gt;
+= 2&lt;afrc&gt;3/16&lt;/afrc&gt;
 ]]&gt;
 &lt;/string&gt;
-              </code></pre>
-              <pre class="fragment" style="width: auto"><code data-trim>
-Typeface typeface = Typeface.createFromAsset(
-    getAssets(), "Nutso2.otf");
-textView.setTypeface(typeface);
-              </code></pre>
-              <pre class="fragment" style="width: auto"><code data-trim>
-String html = getString(R.string.fraction_text);
-textView.setText(Html.fromHtml(
-    html, null, new FractionTagHandler()));
               </code></pre>
             </div>
             <img class="right" width="320" height="480" src="../images/advanced-android-textview/fraction_equation.png" alt="Fraction equation">
@@ -520,17 +540,34 @@ textView.setText(Html.fromHtml(
         </section>
 
         <section>
-          <h2>Stacked fractions</h2>
-            <div class="row">
-              <div class="left">
-              <pre style="width: auto"><code data-trim>
-private static class FractionTagHandler
-    implements Html.TagHandler {
-  @Override
+          <h2>Custom Tag Handler</h2>
+          <div class="row">
+            <div class="left">
+              <pre class="fragment" style="width: auto"><code data-trim class="larger">
+Typeface typeface
+    = Typeface.createFromAsset(
+      getAssets(), "Nutso2.otf");
+textView.setTypeface(typeface);
+              </code></pre>
+              <pre class="fragment" style="width: auto"><code data-trim class="larger">
+String html = getString(
+  R.string.fraction_text);
+textView.setText(Html.fromHtml(
+    html, null,
+    new FractionTagHandler()));
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/fraction_equation.png" alt="Fraction equation">
+          </div>
+        </section>
+
+        <section>
+          <h2>Custom Tag Handler</h2>
+              <pre style="width: auto"><code data-trim style="font-size: 1.3em; line-height: 1.1em;">
+private static class FractionTagHandler implements Html.TagHandler {
   public void handleTag(boolean opening,
       String tag, Editable output, XMLReader xmlReader) {
   if (!"afrc".equalsIgnoreCase(tag)) return;
-
   int len = output.length();
   if (opening) {
     output.setSpan(new FractionSpan(), len, len,
@@ -545,16 +582,11 @@ private static class FractionTagHandler
   }
 }
               </code></pre>
-            </div>
-            <img class="right" width="320" height="480" src="../images/advanced-android-textview/fraction_equation.png" alt="Fraction equation">
-          </div>
         </section>
 
         <section>
-          <h2>Stacked fractions</h2>
-            <div class="row">
-              <div class="left">
-              <pre style="width: auto"><code data-trim>
+          <h2>getLast</h2>
+              <pre style="width: auto"><code data-trim class="larger">
 private Object getLast(Editable text, Class kind) {
   Object[] objs = text.getSpans(0, text.length(), kind);
   if (objs.length == 0) return null;
@@ -566,7 +598,11 @@ private Object getLast(Editable text, Class kind) {
   return null;
 }
               </code></pre>
-              <pre style="width: auto"><code data-trim>
+        </section>
+
+        <section>
+          <h2>FractionSpan</h2>
+              <pre style="width: auto"><code data-trim class="larger">
 private static class FractionSpan extends MetricAffectingSpan {
   public void updateMeasureState(TextPaint textPaint) {
     textPaint.setFontFeatureSettings("afrc");
@@ -576,9 +612,6 @@ private static class FractionSpan extends MetricAffectingSpan {
   }
 }
               </code></pre>
-            </div>
-            <img class="right" width="320" height="480" src="../images/advanced-android-textview/fraction_equation.png" alt="Fraction equation">
-          </div>
         </section>
 
         <section>
@@ -590,34 +623,65 @@ private static class FractionSpan extends MetricAffectingSpan {
           <h2>Styled string</h2>
             <div class="row">
               <div class="left">
-                <pre style="width: auto"><code data-trim>
-private static SpannableString formatString(
-    Context context, int textId, int styleId) {
+                <pre style="width: auto"><code data-trim class="larger">
+static SpannableString formatString(
+    Context context,
+    int textId, int styleId) {
   String text = context.getString(textId);
-  SpannableString spannableString = new SpannableString(text);
+  SpannableString spannableString
+    = new SpannableString(text);
   spannableString.setSpan(
-      new TextAppearanceSpan(context, styleId),
+      new TextAppearanceSpan(
+        context, styleId),
       0, text.length(), 0);
   return spannableString;
 }
                 </code></pre>
-                <pre style="width: auto"><code data-trim>
-SpannableStringBuilder builder = new SpannableStringBuilder()
-  .append(formatString(this, R.string.big_red,
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/styled_string.png" alt="Styled string">
+          </div>
+        </section>
+
+        <section>
+          <h2>Styled string</h2>
+            <div class="row">
+              <div class="left">
+                <pre style="width: auto"><code data-trim class="larger">
+SpannableStringBuilder builder
+    = new SpannableStringBuilder()
+  .append(formatString(
+      this, R.string.big_red,
       R.style.BigRedTextAppearance))
   .append("\n")
-  .append(formatString(this, R.string.medium_green,
+  .append(formatString(
+      this, R.string.medium_green,
       R.style.MediumGreenTextAppearance))
   .append("\n")
-  .append(formatString(this, R.string.small_blue,
+  .append(formatString(
+      this, R.string.small_blue,
       R.style.SmallBlueTextAppearance));
-textView.setText(builder.subSequence(0, builder.length()));
                 </code></pre>
-                <pre style="width: auto"><code data-trim>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/styled_string.png" alt="Styled string">
+          </div>
+        </section>
+
+        <section>
+          <h2>Styled string</h2>
+            <div class="row">
+              <div class="left">
+                <pre style="width: auto"><code data-trim class="larger">
+textView.setText(
+  builder.subSequence(
+    0, builder.length()));
+                </code></pre>
+                <pre style="width: auto"><code data-trim class="larger">
 &lt;style name="BigRedTextAppearance"
     parent="@android:style/TextAppearance"&gt;
-  &lt;item name="android:textSize"&gt;56sp&lt;/item&gt;
-  &lt;item name="android:textColor"&gt;#c00&lt;/item&gt;
+  &lt;item name="android:textSize"&gt;
+    56sp&lt;/item&gt;
+  &lt;item name="android:textColor"&gt;
+    #c00&lt;/item&gt;
 &lt;/style&gt;
                 </code></pre>
             </div>
@@ -629,25 +693,38 @@ textView.setText(builder.subSequence(0, builder.length()));
           <h2>AlignmentSpan</h2>
             <div class="row">
               <div class="left">
-                <pre style="width: auto"><code data-trim>
+                <pre style="width: auto"><code data-trim class="larger">
 public void click(View button) {
-  String text = editText.getText().toString();
+  String text
+      = editText.getText().toString();
   Layout.Alignment align =
-    button.getId() == R.id.add_to_right_button ?
+    button.getId() ==
+        R.id.add_to_right_button ?
       Layout.Alignment.ALIGN_OPPOSITE :
       Layout.Alignment.ALIGN_NORMAL;
   appendText(text, align);
   editText.setText(null);
 }
                 </code></pre>
-                <pre style="width: auto"><code data-trim>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/alignment_span.png" alt="AlignmentSpan">
+          </div>
+        </section>
+
+        <section>
+          <h2>AlignmentSpan</h2>
+            <div class="row">
+              <div class="left">
+                <pre style="width: auto"><code data-trim class="larger">
 private void appendText(
-    CharSequence text, Layout.Alignment align) {
-  AlignmentSpan span = new AlignmentSpan.Standard(align);
+    CharSequence text,
+    Layout.Alignment align) {
+  AlignmentSpan span
+    = new AlignmentSpan.Standard(align);
   SpannableString spannableString
     = new SpannableString(text);
-  spannableString.setSpan(span, 0, text.length(), 0);
-
+  spannableString.setSpan(
+    span, 0, text.length(), 0);
   if (textView.length() > 0) {
     textView.append("\n\n");
   }
@@ -663,32 +740,60 @@ private void appendText(
           <h2>Rainbow span</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
-String text = textView.getText().toString();
-SpannableString spannableString = new SpannableString(text);
-int start = text.toLowerCase().indexOf(substring);
-int end = start + substring.length();
-spannableString.setSpan(new RainbowSpan(this), start, end, 0);
+              <pre style="width: auto"><code data-trim class="larger">
+String text 
+  = textView.getText().toString();
+SpannableString spannableString 
+  = new SpannableString(text);
+int start 
+  = text.toLowerCase().indexOf(substring);
+int end 
+  = start + substring.length();
+spannableString.setSpan(
+  new RainbowSpan(this), start, end, 0);
               </code></pre>
-              <pre style="width: auto"><code data-trim>
-private static class RainbowSpan extends CharacterStyle
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/rainbow.png" alt="Rainbow span">
+          </div>
+        </section>
+
+        <section>
+          <h2>Rainbow span</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim class="larger">
+private static class RainbowSpan
+    extends CharacterStyle
     implements UpdateAppearance {
   private final int[] colors;
   public RainbowSpan(Context context) {
-    colors = context.getResources().getIntArray(
+    colors = context.getResources()
+      .getIntArray(
         R.array.rainbow);
   }
+              </code></pre>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/rainbow.png" alt="Rainbow span">
+          </div>
+        </section>
 
-  public void updateDrawState(TextPaint paint) {
-    paint.setStyle(Paint.Style.FILL);
-    Shader shader = new LinearGradient(0, 0, 0,
-        paint.getTextSize() * colors.length, colors,
-        null, Shader.TileMode.MIRROR);
-    Matrix matrix = new Matrix();
-    matrix.setRotate(90);
-    shader.setLocalMatrix(matrix);
-    paint.setShader(shader);
-  }
+        <section>
+          <h2>Rainbow span</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim class="larger">
+public void updateDrawState(
+    TextPaint paint) {
+  paint.setStyle(Paint.Style.FILL);
+  Shader shader = new LinearGradient(
+      0, 0, 0,
+      paint.getTextSize() * colors.length, 
+      colors, null,
+      Shader.TileMode.MIRROR);
+  Matrix matrix = new Matrix();
+  matrix.setRotate(90);
+  shader.setLocalMatrix(matrix);
+  paint.setShader(shader);
 }
               </code></pre>
             </div>
@@ -700,27 +805,49 @@ private static class RainbowSpan extends CharacterStyle
           <h2>Animated rainbow span</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
-ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(
-  span, ANIMATED_COLOR_SPAN_FLOAT_PROPERTY, 0, 100);
-objectAnimator.setEvaluator(new FloatEvaluator());
+              <pre style="width: auto"><code data-trim style="font-size: 1.3em; line-height: 1.1em">
+ObjectAnimator objectAnimator 
+  = ObjectAnimator.ofFloat(
+    span, 
+    ANIMATED_COLOR_SPAN_FLOAT_PROPERTY, 
+    0, 100);
+objectAnimator.setEvaluator(
+  new FloatEvaluator());
 objectAnimator.addUpdateListener(
     new ValueAnimator.AnimatorUpdateListener() {
-  public void onAnimationUpdate(ValueAnimator animation) {
+  public void onAnimationUpdate(
+      ValueAnimator animation) {
     textView.setText(spannableString);
   }
 });
-objectAnimator.setInterpolator(new LinearInterpolator());
-objectAnimator.setDuration(DateUtils.MINUTE_IN_MILLIS * 3);
-objectAnimator.setRepeatCount(ValueAnimator.INFINITE);
+              </code></pre>
+              <pre style="width: auto"><code data-trim style="font-size: 1.3em; line-height: 1.1em">
+objectAnimator.setInterpolator(
+  new LinearInterpolator());
+objectAnimator.setDuration(
+  DateUtils.MINUTE_IN_MILLIS * 3);
+objectAnimator.setRepeatCount(
+  ValueAnimator.INFINITE);
 objectAnimator.start();
               </code></pre>
-              <pre style="width: auto"><code data-trim>
-private static final Property&lt;AnimatedColorSpan, Float&gt;
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/animated_rainbow.gif" alt="Animated rainbow span">
+          </div>
+        </section>
+
+        <section>
+          <h2>Animated rainbow span</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim style="font-size: 1.3em; line-height:1.1em">
+private static final 
+  Property&lt;AnimatedColorSpan, Float&gt;
     ANIMATED_COLOR_SPAN_FLOAT_PROPERTY
     = new Property&lt;AnimatedColorSpan, Float&gt;(
-        Float.class, "ANIMATED_COLOR_SPAN_FLOAT_PROPERTY") {
-  public void set(AnimatedColorSpan span, Float value) {
+        Float.class, 
+        "ANIMATED_COLOR_SPAN_FLOAT_PROPERTY") {
+  public void set(
+      AnimatedColorSpan span, Float value) {
     span.setTranslateXPercentage(value);
   }
   public Float get(AnimatedColorSpan span) {
@@ -732,30 +859,44 @@ private static final Property&lt;AnimatedColorSpan, Float&gt;
             <img class="right" width="320" height="480" src="../images/advanced-android-textview/animated_rainbow.gif" alt="Animated rainbow span">
           </div>
         </section>
-
+	
         <section>
           <h2>Animated rainbow span</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
-public void setTranslateXPercentage(float value) {
+              <pre style="width: auto"><code data-trim class="larger">
+public void setTranslateXPercentage(
+    float value) {
   translateXPercentage = value;
 }
 public float getTranslateXPercentage() {
   return translateXPercentage;
 }
               </code></pre>
-              <pre style="width: auto"><code data-trim>
-public void updateDrawState(TextPaint paint) {
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/animated_rainbow.gif" alt="Animated rainbow span">
+          </div>
+        </section>
+
+        <section>
+          <h2>Animated rainbow span</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim style="font-size: 1.3em; line-height: 1.1em">
+public void updateDrawState(
+    TextPaint paint) {
   paint.setStyle(Paint.Style.FILL);
-  float width = paint.getTextSize() * colors.length;
+  float width 
+    = paint.getTextSize() * colors.length;
   if (this.shader == null) {
-    this.shader = new LinearGradient(0, 0, 0, width,
-        colors, null, Shader.TileMode.MIRROR);
+    this.shader = new LinearGradient(
+        0, 0, 0, width, colors, null, 
+        Shader.TileMode.MIRROR);
   }
   this.matrix.reset();
   this.matrix.setRotate(90);
-  this.matrix.postTranslate(width * translateXPercentage, 0);
+  this.matrix.postTranslate(
+    width * translateXPercentage, 0);
   this.shader.setLocalMatrix(this.matrix);
   paint.setShader(this.shader);
 }
@@ -767,9 +908,12 @@ public void updateDrawState(TextPaint paint) {
 
         <section>
           <h2>ClickableSpan</h2>
-            <div class="row">
-              <div class="left">
-                <pre style="width: auto"><code data-trim>
+          <img width="320" height="480" src="../images/advanced-android-textview/clickable_span.gif" alt="ClickableSpan">
+        </section>
+
+        <section>
+          <h2>ClickableSpan</h2>
+          <pre style="width: auto"><code data-trim class="larger">
 String text = textView.getText().toString();
 
 String goToSettings = getString(R.string.go_to_settings);
@@ -781,26 +925,36 @@ spannableString.setSpan(new GoToSettingsSpan(), start, end, 0);
 textView.setText(spannableString);
 
 textView.setMovementMethod(new LinkMovementMethod());
-                </code></pre>
-                <pre style="width: auto"><code data-trim>
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>ClickableSpan</h2>
+          <pre style="width: auto"><code data-trim class="larger">
 private static class GoToSettingsSpan extends ClickableSpan {
   public void onClick(View view) {
     view.getContext().startActivity(
       new Intent(android.provider.Settings.ACTION_SETTINGS));
   }
 }
-                </code></pre>
-                <pre style="width: auto"><code data-trim>
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>ClickableSpan</h2>
+          <pre style="width: auto"><code data-trim class="larger">
 &lt;TextView
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:text="@string/clickable_span_text"
   android:textColorLink="@color/go_to_settings"
   android:textColorHighlight="@color/light_green"/&gt;
-              </code></pre>
-            </div>
-            <img class="right" width="320" height="480" src="../images/advanced-android-textview/clickable_span.gif" alt="ClickableSpan">
-          </div>
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>ClickableSpan</h2>
+          <img width="320" height="480" src="../images/advanced-android-textview/clickable_span.gif" alt="ClickableSpan">
         </section>
 
         <section>
@@ -812,16 +966,18 @@ private static class GoToSettingsSpan extends ClickableSpan {
           <h2>Lined paper</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
-public class LinedEditText extends EditText {
-  // Called from constructors
+              <pre style="width: auto"><code data-trim class="larger">
+public class LinedEditText 
+    extends EditText {
   private void init() {
     this.paint = new Paint();
-    this.paint.setStyle(Paint.Style.STROKE);
-    this.paint.setColor(getResources().getColor(
-      R.color.paper_line));
-    this.paint.setStrokeWidth(getLineHeight() / 10);
-    this.paint.setStrokeCap(Paint.Cap.ROUND);
+    paint.setStyle(Paint.Style.STROKE);
+    paint.setColor(
+      getResources().getColor(
+        R.color.paper_line));
+    paint.setStrokeWidth(
+        getLineHeight() / 10);
+    paint.setStrokeCap(Paint.Cap.ROUND);
   }
 }
               </code></pre>
@@ -834,16 +990,18 @@ public class LinedEditText extends EditText {
           <h2>Lined paper</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
+              <pre style="width: auto"><code data-trim style="font-size: 1.3em; line-height: 1.1em">
 protected void onDraw(Canvas canvas) {
   float startX = getPaddingLeft();
-  float stopX = getWidth() - getPaddingRight();
+  float stopX 
+    = getWidth() - getPaddingRight();
   float offsetY = getPaddingTop()
      - getPaint().getFontMetrics().top
      + paint.getStrokeWidth() / 2;
   for (int i = 0; i < getLineCount(); ++i) {
     float y = offsetY + getLineHeight() * i;
-    canvas.drawLine(startX, y, stopX, y, paint);
+    canvas.drawLine(
+      startX, y, stopX, y, paint);
   }
 
   super.onDraw(canvas);
@@ -874,35 +1032,49 @@ protected void onDraw(Canvas canvas) {
           <h2>Unicode with custom font</h2>
           <div class="row">
             <div class="left">
-                <pre style="width: auto"><code data-trim>
-String text = textView.getText().toString();
-SpannableString spannableString = new SpannableString(text);
-
+                <pre style="width: auto"><code data-trim class="larger">
+String text 
+  = textView.getText().toString();
+SpannableString spannableString 
+  = new SpannableString(text);
 IconFontSpan iconFontSpan
-    = new IconFontSpan(textView.getContext());
-Pattern pattern = Pattern.compile("\u26F7");    // skier
+  = new IconFontSpan(
+    textView.getContext());
+Pattern pattern 
+  = Pattern.compile("\u26F7");  // skier
 Matcher matcher = pattern.matcher(text);
 while (matcher.find()) {
   spannableString.setSpan(iconFontSpan,
     matcher.start(), matcher.end(), 0);
 }
                 </code></pre>
-                <pre style="width: auto"><code data-trim>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
+          </div>
+        </section>
+
+        <section>
+          <h2>Unicode with custom font</h2>
+          <div class="row">
+            <div class="left">
+                <pre style="width: auto"><code data-trim style="font-size: 1.3em; line-height: 1.1em">
 private static class IconFontSpan
     extends MetricAffectingSpan {
   private static Typeface typeface = null;
-    public IconFontSpan(Context context) {
-      if (typeface == null) {
-        typeface = Typeface.createFromAsset(
-            context.getAssets(), "icomoon.ttf");
+  public IconFontSpan(Context context) {
+    if (typeface == null) {
+      typeface = Typeface.createFromAsset(
+        context.getAssets(), "icomoon.ttf");
       }
     }
-    public void updateMeasureState(TextPaint textPaint) {
-       textPaint.setTypeface(typeface);
-    }
-    public void updateDrawState(TextPaint textPaint) {
-      textPaint.setTypeface(typeface);
-    }
+  public void updateMeasureState(
+      TextPaint textPaint) {
+    textPaint.setTypeface(typeface);
+  }
+  public void updateDrawState(
+      TextPaint textPaint) {
+    textPaint.setTypeface(typeface);
+  }
 }
                 </code></pre>
             </div>
@@ -914,10 +1086,9 @@ private static class IconFontSpan
           <h2>ImageSpan from resources</h2>
           <div class="row">
             <div class="left">
-                <pre style="width: auto"><code data-trim>
+                <pre style="width: auto"><code data-trim style="font-size: 1.3em; line-height: 1.1em">
 Pattern pattern = Pattern.compile(":octopus:");
 Matcher matcher = pattern.matcher(text);
-
 Bitmap octopus = null;
 int size = (int) (-textView.getPaint().ascent());
 while (matcher.find()) {
@@ -944,13 +1115,14 @@ while (matcher.find()) {
           <h2>Dynamic ImageSpan</h2>
           <div class="row">
             <div class="left">
-                <pre style="width: auto"><code data-trim>
+                <pre style="width: auto"><code data-trim class="large">
 // :speed_50: :speed_110:
-Pattern pattern = Pattern.compile(":speed_(\\d\\d\\d?):");
+Pattern pattern 
+  = Pattern.compile(":speed_(\\d\\d\\d?):");
 Pattern matcher = pattern.matcher(text);
-
 while (matcher.find()) {
-  SpeedSignDrawable drawable = new SpeedSignDrawable(
+  SpeedSignDrawable drawable 
+    = new SpeedSignDrawable(
       textView, matcher.group(1));
   ImageSpan span = new ImageSpan(
       drawable, ImageSpan.ALIGN_BASELINE);
@@ -967,32 +1139,46 @@ while (matcher.find()) {
           <h2>SpeedSignDrawable</h2>
           <div class="row">
             <div class="left">
-                <pre style="width: auto"><code data-trim>
-private static class SpeedSignDrawable extends Drawable {
+                <pre style="width: auto"><code data-trim class="large">
+private static class SpeedSignDrawable 
+    extends Drawable {
   public SpeedSignDrawable(
       TextView textView, String number) {
-    this.ascent = textView.getPaint().ascent();
-    this.descent = textView.getPaint().descent();
+    this.ascent 
+      = textView.getPaint().ascent();
+    this.descent 
+      = textView.getPaint().descent();
     this.textSize = textView.getTextSize();
-    this.strokeWidth = textView.getPaint().getStrokeWidth();
+    this.strokeWidth 
+      = textView.getPaint().getStrokeWidth();
     this.number = number;
     int size = (int) -ascent;
     this.setBounds(0, 0, size, size);
   }
                 </code></pre>
-                <pre style="width: auto"><code>  public void draw(Canvas canvas) {
-    drawYellowCircle(canvas);
-    drawRedRing(canvas);
-    drawBlackNumber(canvas);
-  }
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
+          </div>
+        </section>
 
-  private void drawYellowCircle(Canvas canvas) {
-    int size = (int) -ascent;
-    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    paint.setStyle(Paint.Style.FILL);
-    paint.setColor(Color.YELLOW);
-    canvas.drawCircle(size/2, size/2, size/2, paint);
-  }
+        <section>
+          <h2>SpeedSignDrawable</h2>
+          <div class="row">
+            <div class="left">
+                <pre style="width: auto"><code data-trim class="large">
+public void draw(Canvas canvas) {
+  drawYellowCircle(canvas);
+  drawRedRing(canvas);
+  drawBlackNumber(canvas);
+}
+
+private void drawYellowCircle(Canvas canvas) {
+  int size = (int) -ascent;
+  Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  paint.setStyle(Paint.Style.FILL);
+  paint.setColor(Color.YELLOW);
+  canvas.drawCircle(
+    size/2, size/2, size/2, paint);
 }</code></pre>
             </div>
             <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
@@ -1003,28 +1189,41 @@ private static class SpeedSignDrawable extends Drawable {
           <h2>SpeedSignDrawable</h2>
           <div class="row">
             <div class="left">
-              <pre style="width: auto"><code data-trim>
+              <pre style="width: auto"><code data-trim class="large">
 private void drawRedRing(Canvas canvas) {
   Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
   paint.setStyle(Paint.Style.STROKE);
   paint.setColor(Color.RED);
   float ringWidth = size / 10;
   paint.setStrokeWidth(ringWidth);
-  canvas.drawCircle(size/2, size/2, size/2 - ringWidth/2, paint);
+  canvas.drawCircle(
+    size/2, size/2, size/2 - ringWidth/2, paint);
 }
               </code></pre>
-              <pre style="width: auto"><code data-trim>
+            </div>
+            <img class="right" width="320" height="480" src="../images/advanced-android-textview/emoji.png" alt="Emoji">
+          </div>
+        </section>
+
+        <section>
+          <h2>SpeedSignDrawable</h2>
+          <div class="row">
+            <div class="left">
+              <pre style="width: auto"><code data-trim class="large">
 private void drawBlackNumber(Canvas canvas) {
   float ratio = 0.4f;
-  Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  Paint paint = new Paint(
+    Paint.ANTI_ALIAS_FLAG);
   paint.setStyle(Paint.Style.FILL);
   paint.setColor(Color.BLACK);
   paint.setTextAlign(Paint.Align.CENTER);
   paint.setTextSize(textSize * ratio);
   paint.setStrokeWidth(strokeWidth);
-  paint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+  paint.setTypeface(
+    Typeface.defaultFromStyle(Typeface.BOLD));
   int x = size / 2;
-  int y = (int) (size/2 - ((descent + ascent)/2) * ratio);
+  int y = (int) (size/2 
+    - ((descent + ascent)/2) * ratio);
   canvas.drawText(number, x, y, paint);
 }
               </code></pre>
