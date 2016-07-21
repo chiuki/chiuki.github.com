@@ -422,21 +422,20 @@ String html = getString(R.string.from_html_text);
 textView.setMovementMethod(
     LinkMovementMethod.getInstance());
 textView.setText(Html.fromHtml(
-    html, new ResouroceImageGetter(this), null));
+    html, new ResourceImageGetter(this), null));
               </code></pre>
         </section>
 
         <section>
-          <h2>ResouroceImageGetter</h2>
+          <h2>ResourceImageGetter</h2>
               <pre style="width: auto"><code data-trim class="larger">
-private static class ResouroceImageGetter
+private static class ResourceImageGetter
     implements Html.ImageGetter {
   // Constructor takes a Context
   public Drawable getDrawable(String source) {
     int path = context.getResources().getIdentifier(
-        source, "drawable", BuildConfig.APPLICATION_ID);
-    Drawable drawable
-      = context.getResources().getDrawable(path);
+        source, "drawable", context.getPackageName());
+    Drawable drawable = ContextCompat.getDrawable(context, path);
     drawable.setBounds(0, 0,
        drawable.getIntrinsicWidth(),
        drawable.getIntrinsicHeight());
