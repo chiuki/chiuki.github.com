@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0 maximum-scale=1.0 user-scalable=0" />
+  <title>Espresso View Hierarchy Visualizer</title>
+  <link rel="stylesheet" href="/stylesheets/main.css" />
+
+  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+  <style>
+    body {
+      padding-top: 60px;
+      padding-bottom: 40px;
+    }
+  </style>
+  <link rel="stylesheet" href="/stylesheets/bootstrap-responsive.min.css" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+  <script>
+    $(function () {
+      $('#jstree').jstree({
+        'core': { 'data' : [] },
+        'types' : {
+          'alert' : {
+            'icon' : "glyphicon glyphicon-exclamation-sign"
+          }
+        },
+        'plugins' : [ 'types' ]
+      })
+      $('#visualize').click(function() {
+        refresh($('#hierarchy').val())
+      })
+    });
+    function refresh(text) {
+       var parsed = parseHierarchy(text)
+       var data = generateData(parsed)
+       $('#jstree').jstree(true).settings.core.data = data
+       $('#jstree').jstree(true).refresh()
+       $('#exception').text(parsed.exception)
+    }
+    function generateData(parsed) {
+     var data = []
+     var nodes = []
+
+     var views = parsed.views
+     for (var i = 0; i < views.length; ++i) {
+       var view = views[i]
+       var depth = view['depth']
+       var node = createNode(view)
+
+       if (depth == 0) {
+         data.push(node)
+       } else {
+         var parent = findParent(nodes, views, i, depth - 1)
+         parent['children'].push(node)
+       }
+
+       nodes.push(node)
+     }
+
+     return data
+    }
+    function createNode(view) {
+      var node = {
+        'text' : view['name'] + '' + view['info'],
+        'state' : {
+          opened : true
+        },
+        'children' : [ ]
+      }
+      if (view['info'].indexOf('****MATCHES****') != -1) {
+        node['type'] = 'alert'
+      }
+      return node
+    }
+    function findParent(nodes, views, pos, depth) {
+      for (var i = pos - 1; i >= 0; --i) {
+        var view = views[i]
+        if (view['depth'] == depth) {
+          return nodes[i]
+        }
+      }
+    }
+    function parseHierarchy(hierarchy) {
+      var views = []
+      var exception = ''
+      var lines = hierarchy.split('\n')
+      for (var i = 0; i < lines.length; ++i) {
+        line = lines[i]
+        if (line.indexOf('Exception') != -1) {
+          exception = line
+        }
+        if (line[0] != '+') {
+          continue
+        }
+        var arrow = line.indexOf('>')
+        var brace = line.indexOf('{')
+        views.push({
+          name : line.substring(arrow+1, brace),
+          info : line.substring(brace, line.length),
+          depth : arrow - 1
+        })
+        var last = views[views.length - 1]
+      }
+      return { views: views, exception: exception }
+    }
+    function load(filename) {
+     $.ajax({
+       url: filename + '.txt',
+       success: function(text) {
+         $('#hierarchy').val(text)
+         refresh(text)
+       }
+     });
+    }
+  </script>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=8788186;
+var sc_invisible=1;
+var sc_security="b999074c";
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="click tracking"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/8788186/0/b999074c/1/"
+alt="click tracking"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+</head>
+<body>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button"class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="http://www.sqisland.com">Square Island</a>
+        <ul class="nav">
+          <li>
+            <a href="/">Talks</a>
+          </li>
+          <li>
+            <a href="http://pluralsight.com/training/Authors/Details/chiuki-chan">Courses</a>
+          </li>
+          <li>
+            <a href="http://blog.sqisland.com">Blog</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="hero-unit">
+        <div class="row-fluid">
+          <div class="span12">
+            <h1>Espresso View Hierarchy Visualizer</h1>
+            <p>
+              Paste the view hierarchy from Espresso.
+            </p>
+            <p>Examples:
+              <a href="javascript:load('not_found')">Not found</a>,
+              <a href="javascript:load('multiple_matches')">Multiple matches</a>
+            </p>
+            <form>
+            <textarea id="hierarchy" style="width:100%; height: 10em;"></textarea>
+            <br/>
+            <input id="visualize" type="button" value="Visualize"/>
+           </form>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="exception"></h3>
+  <div id="jstree"></div>
+</body>
+</html>
