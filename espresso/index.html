@@ -27,8 +27,10 @@
 
   <script>
     $(function () {
+     var parsed = parseHierarchy($('#hierarchy').val())
+     var data = generateData(parsed)
       $('#jstree').jstree({
-        'core': { 'data' : [] },
+        'core': { 'data' : data },
         'types' : {
           'alert' : {
             'icon' : "glyphicon glyphicon-exclamation-sign"
