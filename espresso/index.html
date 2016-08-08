@@ -43,6 +43,9 @@
       $('#visualize').click(function() {
         refresh($('#hierarchy').val())
       })
+      $('input[type=radio][name=style]').change(function() {
+        refresh($('#hierarchy').val())       
+      })
     });
     function refresh(text) {
        var parsed = parseHierarchy(text)
@@ -74,17 +77,32 @@
      return data
     }
     function createNode(view) {
+      var abridged = $('input[name=style][value=abridged]').is(':checked')
+      var shortText = view['name'] + ' ' + formatAttrs(view['attrs'], ['res-name', 'visibility']) + ' ' + view['suffix']
+      var longText = view['name'] + ' ' + view['attrsStr'] + ' ' + view['suffix']
       var node = {
-        'text' : view['name'] + '' + view['info'],
+        'text' : abridged ? shortText : longText,
+        'shortText' : shortText,
+        'longText' : longText,
         'state' : {
           opened : true
         },
         'children' : [ ]
       }
-      if (view['info'].indexOf('****MATCHES****') != -1) {
+      if (view['suffix'].indexOf('****MATCHES****') != -1) {
         node['type'] = 'alert'
       }
       return node
+    }
+    function formatAttrs(attrs, names) {
+      var fields = []
+      for (var i = 0; i < names.length; ++i) {
+        var name = names[i]
+        if (name in attrs) {
+          fields.push(name + '=' + attrs[name])
+        }
+      }
+      return '{' + fields.join(', ') + '}'
     }
     function findParent(nodes, views, pos, depth) {
       for (var i = pos - 1; i >= 0; --i) {
@@ -107,15 +125,28 @@
           continue
         }
         var arrow = line.indexOf('>')
-        var brace = line.indexOf('{')
+        var braceStart = line.indexOf('{')
+        var braceEnd = line.indexOf('}')
+        var attrsStr = line.substring(braceStart + 1, braceEnd)
         views.push({
-          name : line.substring(arrow+1, brace),
-          info : line.substring(brace, line.length),
+          name : line.substring(arrow + 1, braceStart),
+          attrsStr : attrsStr,
+          attrs : parseAttrs(attrsStr),
+          suffix : line.substring(braceEnd + 2, line.length),
           depth : arrow - 1
         })
         var last = views[views.length - 1]
       }
       return { views: views, exception: exception }
+    }
+    function parseAttrs(text) {
+      var attrs = {}
+      var pairs = text.split(', ')
+      for (var i = 0; i < pairs.length; ++i) {
+        var parts = pairs[i].split('=')
+        attrs[parts[0]] = parts[1]
+      }
+      return attrs
     }
     function load(filename) {
      $.ajax({
@@ -186,8 +217,10 @@ alt="click tracking"></a></div></noscript>
             <form>
             <textarea id="hierarchy" style="width:100%; height: 10em;"></textarea>
             <br/><br/>
-            <input id="visualize" type="button" value="Visualize"/>
-            <small style="padding: 0 2em">Powered by <a href="https://www.jstree.com">jsTree</a></small>
+            <input id="visualize" type="button" value="Visualize" style="margin-right: 1em"/>
+            <label><input type="radio" style="vertical-align: middle; margin: 0px;" name="style" value="abridged" checked="checked">Abridged</label>
+            <label><input type="radio" style="vertical-align: middle; margin: 0px;" name="style" value="complete">Complete</label>
+            <small style="margin: 0 2em">Powered by <a href="https://www.jstree.com">jsTree</a></small>
            </form>
           </div>
       </div>
