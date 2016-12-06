@@ -301,8 +301,8 @@ private static ViewInteraction matchToolbarTitle(
     CharSequence title) {
   return onView(
     allOf(
-        isAssignableFrom(TextView.class))),
-        withParent(isAssignableFrom(Toolbar.class))
+        isAssignableFrom(TextView.class),
+        withParent(isAssignableFrom(Toolbar.class))))
     .check(matches(withText(title.toString())));
 }
             </code></pre>
