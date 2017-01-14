@@ -1,7 +1,8 @@
 /**
- * Black theme for reveal.js.
+ * Android theme for reveal.js.
  *
  * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
+ * Copyright (C) 2014 Chiu-Ki Chan, http://www.sqisland.com
  */
 
 
@@ -17,16 +18,18 @@
 
 
 // Override theme settings (see ../template/settings.scss)
-$backgroundColor: #111;
-
+$mainColor: #A4C639;
+$headingColor: $mainColor;
+$headingTextShadow: none;
+$backgroundColor: #241811;
 $mainFont: 'Open Sans', sans-serif;
-$linkColor: #e7ad52;
-$linkColorHover: lighten( $linkColor, 20% );
+$linkColor: #E3C88F;
+$linkColorHover: lighten($linkColor, 20%);
 $headingFont: 'Montserrat', Impact, sans-serif;
 $headingTextShadow: none;
 $headingLetterSpacing: -0.03em;
 $headingTextTransform: none;
-$selectionBackgroundColor: #e7ad52;
+$selectionBackgroundColor: #D2691E;
 $mainFontSize: 30px;
 
 

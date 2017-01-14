@@ -1,0 +1,21 @@
+#footer
+{
+	opacity: 1;
+	position: fixed;
+        bottom: 0px;
+        margin: 1em;
+        font-size: 0.9em;
+        z-index: 1;
+}
+
+.no-footer #footer
+{
+	opacity: 0;
+}
+
+.overview #footer
+{
+	opacity: 0;
+}
+
+
